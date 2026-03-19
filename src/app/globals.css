@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --bg-cream: #F3EBE2;
+  --bg-sand: #C5BEB6;
+  --bg-teal: #C3DED8;
+  --bg-blue: #C4CFDE;
+  --bg-olive: #D5DCBA;
+  --bg-dark: #1A1A1A;
+  --bg-card: #EDE5DC;
+  --text-primary: #1A1A1A;
+  --text-secondary: #3D3D3D;
+  --text-muted: #6B6B6B;
+  --text-placeholder: #9E9690;
+  --accent: #D4916E;
+  --border: #C5BEB6;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  .font-funnel {
+    font-family: "Funnel Sans", sans-serif;
+  }
+}
