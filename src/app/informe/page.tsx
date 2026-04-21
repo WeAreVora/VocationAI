@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -25,6 +25,38 @@ type InformeData = {
   dimensions: Dimension[]; aiAnalysis: string[]; workStyle: string[];
   careers: Career[]; roadmap: [RoadmapPhase, RoadmapPhase]; closing: string;
 };
+
+const UNIVERSITY_URLS: Record<string, string> = {
+  "ITBA (Argentina)": "https://www.itba.edu.ar/",
+  "Tec de Monterrey (México)": "https://tec.mx/",
+  "PUC (Chile)": "https://www.uc.cl/",
+  "UBA (Argentina)": "https://www.uba.ar/",
+  "UNAM (México)": "https://www.unam.mx/",
+  "U. de Chile": "https://www.uchile.cl/",
+  "UTN (Argentina)": "https://utn.edu.ar/",
+  "IPN (México)": "https://www.ipn.mx/",
+  "UAI (Chile)": "https://www.uai.cl/",
+  "UNSAM (Argentina)": "https://www.unsam.edu.ar/",
+  "ITAM (México)": "https://www.itam.mx/",
+  "U. de los Andes (Colombia)": "https://uniandes.edu.co/",
+  "CENPAT–CONICET (Argentina)": "https://www.conicet.gov.ar/centros-cientificos-tecnologicos/cct-conicet-cenpat/",
+  "U. de Concepción (Chile)": "https://www.udec.cl/",
+  "UP (Argentina)": "https://www.palermo.edu/",
+  "IBERO (México)": "https://ibero.mx/",
+  "UBA – FADU (Argentina)": "https://www.fadu.uba.ar/",
+  "Duoc UC (Chile)": "https://www.duoc.cl/",
+  "Da Vinci (Argentina)": "https://davinci.edu.ar/",
+  "Centro de Diseño (México)": "https://centro.edu.mx/",
+  "ARCOS (Chile)": "https://www.arcos.cl/",
+  "UCA (Argentina)": "https://www.uca.edu.ar/",
+  "UNLP (Argentina)": "https://unlp.edu.ar/",
+  "UCEMA (Argentina)": "https://ucema.edu.ar/",
+  "ITESM (México)": "https://tec.mx/",
+};
+
+function getUniversityHref(university: string): string {
+  return UNIVERSITY_URLS[university] ?? `https://www.google.com/search?q=${encodeURIComponent(university)}`;
+}
 
 // ─── Profile Data ─────────────────────────────────────────────────────────────
 const INFORMES: Record<string, InformeData> = {
@@ -106,7 +138,7 @@ const INFORMES: Record<string, InformeData> = {
       { name: "Oceanografía / Geografía", match: "87%", projection: "8/10", summary: "Explorás y documentás los sistemas físicos del planeta.", image: "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?auto=format&fit=crop&w=600&q=80", badge: "Especializado", duration: "5 años", salary: "$1.5k – $3k USD/mes", queEstudia: "Ciencias del mar, climatología, SIG (sistemas de información geográfica) y geomorfología.", queHace: "Estudia procesos oceánicos y terrestres, crea mapas de riesgo y asesora sobre cambio climático.", universities: ["CENPAT–CONICET (Argentina)", "UNAM (México)", "U. de Concepción (Chile)"] },
     ],
     roadmap: [
-      { step: "1", color: "bg-tertiary", title: "Ahora (Conexión con la naturaleza)", items: [{ title: "Voluntariado ambiental", desc: "Sumarte a un grupo de restauración ecológica o monitoreo de fauna te da experiencia real e invaluable." }, { title: "Aprendé a identificar especies", desc: "Usá iNaturalist para registrar biodiversidad local. Es ciencia ciudadana real que va a tu CV." }], extras: [{ icon: "eco", label: "iNaturalist App" }, { icon: "forest", label: "Voluntariado FARN" }] },
+      { step: "1", color: "bg-tertiary-dim", title: "Ahora (Conexión con la naturaleza)", items: [{ title: "Voluntariado ambiental", desc: "Sumarte a un grupo de restauración ecológica o monitoreo de fauna te da experiencia real e invaluable." }, { title: "Aprendé a identificar especies", desc: "Usá iNaturalist para registrar biodiversidad local. Es ciencia ciudadana real que va a tu CV." }], extras: [{ icon: "eco", label: "iNaturalist App" }, { icon: "forest", label: "Voluntariado FARN" }] },
       { step: "2", color: "bg-secondary", title: "Antes de Matricularte", items: [{ title: "Participá en campamentos científicos", desc: "Muchas universidades ofrecen programas de verano en campo para pre-universitarios." }, { title: "Aprendé GIS básico", desc: "QGIS es gratuito y una de las habilidades más demandadas en ciencias ambientales." }], extras: [{ icon: "map", label: "QGIS Tutorials" }, { icon: "groups", label: "Campamento Científico UBA" }] },
     ],
     closing: "El planeta necesita urgentemente personas con tu perfil: que lo entiendan, lo respeten y puedan diseñar soluciones reales. Tu vocación tiene el propósito más grande de todos. Salí, explorá, registrá.",
@@ -438,9 +470,15 @@ function CareerCard({ career, isFirst, expanded, onToggle }: {
               <p className="text-xs font-bold text-on-surface-variant mb-3">DÓNDE ESTUDIAR (TOP LATAM)</p>
               <div className="flex flex-wrap gap-3">
                 {career.universities.map((u) => (
-                  <span key={u} className="text-xs bg-surface-container px-3 py-2 rounded-lg border border-outline-variant/20 flex items-center gap-2">
+                  <a
+                    key={u}
+                    href={getUniversityHref(u)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs bg-surface-container px-3 py-2 rounded-lg border border-outline-variant/20 flex items-center gap-2 hover:border-primary/60 hover:text-primary transition-colors"
+                  >
                     {u} <span className="material-symbols-outlined text-[10px]">open_in_new</span>
-                  </span>
+                  </a>
                 ))}
               </div>
             </div>
@@ -481,6 +519,27 @@ function InformeContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get("perfil") || DEFAULT_KEY;
   const p: InformeData = INFORMES[key] ?? INFORMES[DEFAULT_KEY];
+
+  const [reportDate, setReportDate] = useState("");
+
+  useEffect(() => {
+    setReportDate(
+      new Date().toLocaleDateString("es-AR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+    );
+  }, []);
+
+  const missionId = useMemo(() => {
+    const seed = `${key}:${p.title}:${p.titleHighlight}`;
+    let hash = 0;
+    for (let i = 0; i < seed.length; i += 1) {
+      hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+    }
+    return `#VX-${1000 + (hash % 9000)}-AI`;
+  }, [key, p.title, p.titleHighlight]);
 
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const [showShare, setShowShare] = useState(false);
@@ -551,12 +610,12 @@ function InformeContent() {
             <div className="h-10 w-px bg-outline-variant/15"></div>
             <div>
               <p className="text-outline text-xs uppercase tracking-widest font-bold">FECHA</p>
-              <p className="text-on-surface font-headline font-bold text-lg">{new Date().toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })}</p>
+              <p className="text-on-surface font-headline font-bold text-lg">{reportDate || "--"}</p>
             </div>
             <div className="h-10 w-px bg-outline-variant/15"></div>
             <div>
               <p className="text-outline text-xs uppercase tracking-widest font-bold">ID DE MISIÓN</p>
-              <p className="text-on-surface font-headline font-bold text-lg">#VX-{Math.floor(1000 + Math.random() * 9000)}-AI</p>
+              <p className="text-on-surface font-headline font-bold text-lg">{missionId}</p>
             </div>
           </div>
         </header>
@@ -635,7 +694,7 @@ function InformeContent() {
                 </div>
                 <div className="space-y-4">
                   {phase.items.map((item) => (
-                    <div key={item.title} className={`bg-surface-container-low p-5 rounded-2xl border-l-4 ${phase.color}`}>
+                    <div key={item.title} className={`bg-surface-container-low p-5 rounded-2xl border-l-4 ${phase.color.replace("bg-", "border-")}`}>
                       <p className="font-bold text-sm mb-1">{item.title}</p>
                       <p className="text-xs text-on-surface-variant">{item.desc}</p>
                     </div>
