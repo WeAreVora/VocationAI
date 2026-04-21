@@ -1,899 +1,455 @@
-"use client";
-
-import { useState } from "react";
-import {
-  Sparkles,
-  ArrowRight,
-  Timer,
-  Users,
-  ShieldCheck,
-  Brain,
-  Target,
-  ListChecks,
-  FileText,
-  Award,
-  CircleCheck,
-  Check,
-  Minus,
-  Plus,
-  Instagram,
-  Twitter,
-  Linkedin,
-} from "lucide-react";
-import Image from "next/image";
-
-// ── Navbar ──────────────────────────────────────────────────────────────────
-function Navbar() {
-  return (
-    <div
-      className="flex items-center justify-between rounded-2xl px-12 py-4 w-full"
-      style={{ background: "var(--bg-cream)" }}
-    >
-      <span
-        className="text-xl font-medium tracking-[0.5px]"
-        style={{ color: "var(--text-primary)" }}
-      >
-        VocaciónIA
-      </span>
-      <div className="flex items-center gap-8">
-        {["Cómo Funciona", "Beneficios", "Planes", "Preguntas"].map((item) => (
-          <a
-            key={item}
-            href={`#${item.toLowerCase().replace(/\s/g, "-")}`}
-            className="text-sm tracking-[0.5px] hover:opacity-70 transition-opacity"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            {item}
-          </a>
-        ))}
-        <a
-          href="/test"
-          className="flex items-center rounded-lg px-6 py-[10px] text-sm font-bold transition-opacity hover:opacity-80"
-          style={{ background: "var(--bg-dark)", color: "#F3EBE2" }}
-        >
-          Empezar Test
-        </a>
-      </div>
-    </div>
-  );
-}
-
-// ── Hero Section ─────────────────────────────────────────────────────────────
-function HeroSection() {
-  return (
-    <div className="flex gap-[6px] w-full rounded-2xl overflow-hidden" style={{ height: 540 }}>
-      {/* Left: content */}
-      <div
-        className="flex flex-col justify-center gap-8 rounded-2xl px-12 py-16 flex-1"
-        style={{ background: "var(--bg-cream)" }}
-      >
-        {/* Badge */}
-        <div
-          className="flex items-center gap-2 rounded-full px-4 py-[6px] self-start"
-          style={{ background: "var(--bg-teal)" }}
-        >
-          <Sparkles size={16} color="var(--text-primary)" />
-          <span
-            className="text-[11px] font-medium tracking-[2px]"
-            style={{ color: "var(--text-primary)" }}
-          >
-            TEST VOCACIONAL CON IA
-          </span>
-        </div>
-
-        {/* Title */}
-        <h1
-          className="text-[64px] font-normal leading-[1.02] tracking-[-0.5px]"
-          style={{ color: "var(--text-primary)" }}
-        >
-          Descubrí qué
-          <br />
-          carrera es
-          <br />
-          ideal para vos
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          className="text-base leading-[1.6]"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          Hacé el test vocacional con inteligencia artificial
-          <br />y descubrí tu camino profesional en solo 5 minutos.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex items-center gap-4">
-          <a
-            href="/test"
-            className="flex items-center gap-2 rounded-lg px-8 py-4 text-base font-bold transition-opacity hover:opacity-80"
-            style={{ background: "var(--bg-dark)", color: "#F3EBE2" }}
-          >
-            Empezar test gratis
-            <ArrowRight size={18} color="#F3EBE2" />
-          </a>
-          <a
-            href="#planes"
-            className="text-[15px] transition-opacity hover:opacity-70"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            Ver planes →
-          </a>
-        </div>
-
-        {/* Trust indicators */}
-        <div className="flex items-center gap-6">
-          {[
-            { icon: <Timer size={14} />, text: "Test de 5 minutos" },
-            { icon: <Users size={14} />, text: "+12.000 usuarios" },
-            { icon: <ShieldCheck size={14} />, text: "Gratuito" },
-          ].map(({ icon, text }) => (
-            <div key={text} className="flex items-center gap-[6px]">
-              <span style={{ color: "var(--text-muted)" }}>{icon}</span>
-              <span
-                className="text-[13px]"
-                style={{ color: "var(--text-muted)" }}
-              >
-                {text}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Right: image */}
-      <div className="relative rounded-2xl overflow-hidden flex-1">
-        <Image
-          src="https://images.unsplash.com/photo-1627634770818-eee600e6c92e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-          alt="Estudiante con laptop"
-          fill
-          className="object-cover"
-        />
-      </div>
-    </div>
-  );
-}
-
-// ── How It Works ─────────────────────────────────────────────────────────────
-function HowItWorksSection() {
-  const steps = [
-    {
-      num: "01",
-      title: "Hacé el test vocacional",
-      desc: "Respondé preguntas sobre tus intereses, habilidades y personalidad.",
-      bg: "var(--bg-teal)",
-    },
-    {
-      num: "02",
-      title: "Recibí tu plan personalizado",
-      desc: "Durante 7 días completarás actividades diseñadas por IA para descubrir tu vocación.",
-      bg: "var(--bg-blue)",
-    },
-    {
-      num: "03",
-      title: "Obtené tu informe profesional",
-      desc: "Recibirás análisis de perfil, carreras recomendadas y certificado vocacional.",
-      bg: "var(--bg-olive)",
-    },
-  ];
-
-  return (
-    <div
-      id="cómo-funciona"
-      className="flex flex-col gap-12 rounded-2xl px-12 py-16 w-full"
-      style={{ background: "var(--bg-cream)" }}
-    >
-      <span
-        className="text-[11px] font-medium tracking-[2px] uppercase"
-        style={{ color: "var(--text-muted)" }}
-      >
-        CÓMO FUNCIONA
-      </span>
-      <h2
-        className="text-[44px] font-normal leading-[1.1]"
-        style={{ color: "var(--text-primary)" }}
-      >
-        Tres pasos hacia
-        <br />
-        tu vocación
-      </h2>
-      <div className="flex gap-[6px] w-full">
-        {steps.map((step) => (
-          <div
-            key={step.num}
-            className="flex flex-col gap-4 rounded-2xl p-8 flex-1"
-            style={{ background: step.bg }}
-          >
-            <span
-              className="text-[40px] font-bold"
-              style={{ color: "var(--text-primary)" }}
-            >
-              {step.num}
-            </span>
-            <p
-              className="text-[17px] font-medium leading-[1.3]"
-              style={{ color: "var(--text-primary)" }}
-            >
-              {step.title}
-            </p>
-            <p
-              className="text-[15px] leading-[1.6]"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {step.desc}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Benefits ──────────────────────────────────────────────────────────────────
-function BenefitsSection() {
-  const benefits = [
-    {
-      icon: <Brain size={32} color="var(--accent)" />,
-      title: "Psicología vocacional",
-      desc: "Test basado en principios de psicología vocacional y orientación profesional.",
-    },
-    {
-      icon: <Sparkles size={32} color="var(--accent)" />,
-      title: "IA entrenada",
-      desc: "Inteligencia artificial entrenada específicamente para orientación profesional.",
-    },
-    {
-      icon: <Target size={32} color="var(--accent)" />,
-      title: "Resultados personalizados",
-      desc: "Análisis único basado en tus respuestas con recomendaciones a medida.",
-    },
-    {
-      icon: <ListChecks size={32} color="var(--accent)" />,
-      title: "Actividades prácticas",
-      desc: "7 días de actividades diseñadas para explorar tu vocación de forma práctica.",
-    },
-    {
-      icon: <FileText size={32} color="var(--accent)" />,
-      title: "Informe descargable",
-      desc: "Descargá tu informe vocacional completo en formato PDF profesional.",
-    },
-    {
-      icon: <Award size={32} color="var(--accent)" />,
-      title: "Certificado vocacional",
-      desc: "Certificado de perfil vocacional que valida tu proceso de orientación.",
-    },
-  ];
-
-  return (
-    <div
-      id="beneficios"
-      className="flex flex-col w-full rounded-2xl"
-      style={{ background: "var(--bg-cream)" }}
-    >
-      {/* Header */}
-      <div className="flex flex-col gap-4 px-12 pt-16 pb-0">
-        <span
-          className="text-[11px] font-medium tracking-[2px] uppercase"
-          style={{ color: "var(--text-muted)" }}
-        >
-          BENEFICIOS
-        </span>
-        <h2
-          className="text-[44px] font-normal leading-[1.1]"
-          style={{ color: "var(--text-primary)" }}
-        >
-          ¿Por qué elegir nuestro
-          <br />
-          test vocacional?
-        </h2>
-      </div>
-
-      {/* Row 1 */}
-      <div className="flex gap-6 px-12 pt-6">
-        {benefits.slice(0, 3).map((b) => (
-          <div
-            key={b.title}
-            className="flex flex-col gap-4 rounded-2xl p-8 flex-1"
-            style={{ background: "var(--bg-card)" }}
-          >
-            {b.icon}
-            <p
-              className="text-[17px] font-medium"
-              style={{ color: "var(--text-primary)" }}
-            >
-              {b.title}
-            </p>
-            <p
-              className="text-[15px] leading-[1.6]"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {b.desc}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* Row 2 */}
-      <div className="flex gap-6 px-12 pb-16 mt-6">
-        {benefits.slice(3).map((b) => (
-          <div
-            key={b.title}
-            className="flex flex-col gap-4 rounded-2xl p-8 flex-1"
-            style={{ background: "var(--bg-card)" }}
-          >
-            {b.icon}
-            <p
-              className="text-[17px] font-medium"
-              style={{ color: "var(--text-primary)" }}
-            >
-              {b.title}
-            </p>
-            <p
-              className="text-[15px] leading-[1.6]"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {b.desc}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Results Example ───────────────────────────────────────────────────────────
-function ResultsSection() {
-  const features = [
-    "Perfil vocacional detallado",
-    "Gráficos de habilidades e intereses",
-    "Top 5 carreras recomendadas",
-    "Certificado de perfil vocacional",
-  ];
-
-  return (
-    <div
-      className="flex gap-[6px] w-full rounded-2xl overflow-hidden"
-      style={{ height: 520 }}
-    >
-      {/* Left: text */}
-      <div
-        className="flex flex-col justify-center gap-8 rounded-2xl px-12 py-16 flex-1"
-        style={{ background: "var(--bg-cream)" }}
-      >
-        <span
-          className="text-[11px] font-medium tracking-[2px]"
-          style={{ color: "var(--text-muted)" }}
-        >
-          EJEMPLO DE RESULTADOS
-        </span>
-        <h2
-          className="text-[44px] font-normal leading-[1.1]"
-          style={{ color: "var(--text-primary)" }}
-        >
-          Mirá cómo es
-          <br />
-          tu informe
-          <br />
-          vocacional
-        </h2>
-        <p
-          className="text-base leading-[1.6]"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          Recibí un análisis completo de tu perfil vocacional con gráficos de
-          habilidades, carreras recomendadas y un plan de acción personalizado.
-        </p>
-        <div className="flex flex-col gap-3">
-          {features.map((f) => (
-            <div key={f} className="flex items-center gap-[10px]">
-              <CircleCheck size={18} color="var(--accent)" />
-              <span
-                className="text-[15px]"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {f}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Right: mock report */}
-      <div
-        className="flex flex-col gap-6 rounded-2xl p-8 flex-1"
-        style={{ background: "var(--bg-teal)" }}
-      >
-        {/* Mock header */}
-        <div className="flex items-center justify-between w-full">
-          <span
-            className="text-base font-medium"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Informe Vocacional
-          </span>
-          <span
-            className="text-[13px]"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            2026
-          </span>
-        </div>
-
-        {/* Mock profile */}
-        <div
-          className="flex flex-col gap-3 rounded-xl p-6 w-full"
-          style={{ background: "var(--bg-cream)" }}
-        >
-          <span
-            className="text-[13px] font-medium tracking-[1px]"
-            style={{ color: "var(--text-muted)" }}
-          >
-            PERFIL VOCACIONAL
-          </span>
-          <span
-            className="text-lg font-medium"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Analítico · Creativo · Social
-          </span>
-          <div className="flex flex-col gap-2 mt-1">
-            {[
-              { label: "Creatividad", pct: "82%" },
-              { label: "Análisis", pct: "75%" },
-              { label: "Liderazgo", pct: "60%" },
-            ].map(({ label, pct }) => (
-              <div key={label}>
-                <div className="flex justify-between mb-1">
-                  <span className="text-[12px]" style={{ color: "var(--text-muted)" }}>
-                    {label}
-                  </span>
-                  <span className="text-[12px]" style={{ color: "var(--text-muted)" }}>
-                    {pct}
-                  </span>
-                </div>
-                <div
-                  className="w-full rounded-full h-[6px]"
-                  style={{ background: "var(--border)" }}
-                >
-                  <div
-                    className="h-[6px] rounded-full"
-                    style={{ width: pct, background: "var(--accent)" }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Careers */}
-        <div
-          className="flex flex-col gap-3 rounded-xl p-6 w-full"
-          style={{ background: "var(--bg-cream)" }}
-        >
-          <span
-            className="text-[13px] font-medium tracking-[1px]"
-            style={{ color: "var(--text-muted)" }}
-          >
-            CARRERAS RECOMENDADAS
-          </span>
-          {[
-            "Diseño UX/UI",
-            "Psicología",
-            "Comunicación Social",
-            "Marketing Digital",
-            "Arquitectura",
-          ].map((c, i) => (
-            <div key={c} className="flex items-center gap-3">
-              <span
-                className="text-[13px] font-medium w-5"
-                style={{ color: "var(--accent)" }}
-              >
-                {i + 1}.
-              </span>
-              <span className="text-[14px]" style={{ color: "var(--text-primary)" }}>
-                {c}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Pricing ───────────────────────────────────────────────────────────────────
-function PricingSection() {
-  const planIA = [
-    "Test vocacional completo",
-    "Plan de 7 días con actividades IA",
-    "Informe vocacional descargable",
-    "Certificado de perfil vocacional",
-    "Carreras recomendadas personalizadas",
-  ];
-
-  const planPremium = [
-    "Todo lo del Plan IA",
-    "Chatbot asistente IA 24/7",
-    "Seguimiento personalizado",
-    "Reunión 1:1 con psicólogo vocacional",
-    "Informe vocacional ampliado",
-  ];
-
-  return (
-    <div
-      id="planes"
-      className="flex flex-col w-full rounded-2xl"
-      style={{ background: "var(--bg-cream)" }}
-    >
-      {/* Header */}
-      <div className="flex flex-col items-center gap-4 px-12 pt-16 pb-8">
-        <span
-          className="text-[11px] font-medium tracking-[2px]"
-          style={{ color: "var(--text-muted)" }}
-        >
-          PLANES
-        </span>
-        <h2
-          className="text-[44px] font-normal leading-[1.1] text-center"
-          style={{ color: "var(--text-primary)" }}
-        >
-          Elegí el plan que mejor
-          <br />
-          se adapte a vos
-        </h2>
-        <p className="text-base leading-[1.6]" style={{ color: "var(--text-muted)" }}>
-          Pago único. Sin suscripciones. Sin sorpresas.
-        </p>
-      </div>
-
-      {/* Cards */}
-      <div className="flex gap-6 px-12 pb-16">
-        {/* Plan IA */}
-        <div
-          className="flex flex-col gap-8 rounded-2xl p-12 flex-1"
-          style={{
-            background: "var(--bg-cream)",
-            border: "1px solid var(--border)",
-          }}
-        >
-          <span
-            className="text-[11px] font-medium tracking-[2px]"
-            style={{ color: "var(--text-muted)" }}
-          >
-            PLAN IA
-          </span>
-          <div className="flex items-end gap-2">
-            <span
-              className="text-[48px] font-normal leading-none"
-              style={{ color: "var(--text-primary)" }}
-            >
-              USD 5
-            </span>
-            <span className="text-[15px] pb-1" style={{ color: "var(--text-muted)" }}>
-              pago único
-            </span>
-          </div>
-          <p className="text-[15px] leading-[1.6]" style={{ color: "var(--text-secondary)" }}>
-            Todo lo que necesitás para descubrir tu vocación con inteligencia artificial.
-          </p>
-          <div className="flex flex-col gap-[14px]">
-            {planIA.map((f) => (
-              <div key={f} className="flex items-center gap-[10px]">
-                <Check size={16} color="var(--accent)" />
-                <span className="text-[14px]" style={{ color: "var(--text-secondary)" }}>
-                  {f}
-                </span>
-              </div>
-            ))}
-          </div>
-          <a
-            href="/test"
-            className="flex items-center justify-center rounded-lg py-4 px-8 text-base font-bold mt-auto transition-opacity hover:opacity-80"
-            style={{ background: "var(--bg-dark)", color: "#F3EBE2" }}
-          >
-            Elegir Plan IA
-          </a>
-        </div>
-
-        {/* Plan Premium */}
-        <div
-          className="flex flex-col gap-8 rounded-2xl p-12 flex-1"
-          style={{ background: "var(--bg-dark)" }}
-        >
-          <div className="flex items-center gap-2">
-            <span
-              className="text-[11px] font-medium tracking-[2px]"
-              style={{ color: "var(--border)" }}
-            >
-              PLAN PREMIUM
-            </span>
-            <span
-              className="rounded-xl px-[10px] py-1 text-[10px] font-bold tracking-[1px] text-white"
-              style={{ background: "var(--accent)" }}
-            >
-              POPULAR
-            </span>
-          </div>
-          <div className="flex items-end gap-2">
-            <span className="text-[48px] font-normal leading-none" style={{ color: "#F3EBE2" }}>
-              USD 15–25
-            </span>
-            <span className="text-[15px] pb-1" style={{ color: "var(--border)" }}>
-              pago único
-            </span>
-          </div>
-          <p className="text-[15px] leading-[1.6]" style={{ color: "var(--border)" }}>
-            La experiencia completa: IA + acompañamiento profesional con psicólogo vocacional.
-          </p>
-          <div className="flex flex-col gap-[14px]">
-            {planPremium.map((f) => (
-              <div key={f} className="flex items-center gap-[10px]">
-                <Check size={16} color="var(--accent)" />
-                <span className="text-[14px]" style={{ color: "var(--border)" }}>
-                  {f}
-                </span>
-              </div>
-            ))}
-          </div>
-          <a
-            href="/test"
-            className="flex items-center justify-center rounded-lg py-4 px-8 text-base font-bold mt-auto transition-opacity hover:opacity-80 text-white"
-            style={{ background: "var(--accent)" }}
-          >
-            Elegir Plan Premium
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── FAQ ───────────────────────────────────────────────────────────────────────
-const faqItems = [
-  {
-    q: "¿El test es gratis?",
-    a: "Sí, el test inicial es completamente gratuito. Solo pagás si querés acceder al informe vocacional completo y las actividades de los 7 días.",
-  },
-  {
-    q: "¿Cuánto dura el proceso?",
-    a: "El test toma 5 minutos. Luego, el programa de actividades dura 7 días. Al finalizar, recibís tu informe vocacional completo.",
-  },
-  {
-    q: "¿Recibo un informe?",
-    a: "Sí, recibís un informe vocacional profesional en PDF con análisis de perfil, gráficos de habilidades, carreras recomendadas y certificado.",
-  },
-  {
-    q: "¿Puedo hablar con un profesional?",
-    a: "Sí, en el Plan Premium incluimos una reunión 1:1 con un psicólogo vocacional profesional para acompañarte en tu decisión.",
-  },
-];
-
-function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  return (
-    <div
-      id="preguntas"
-      className="flex gap-[6px] w-full rounded-2xl overflow-hidden"
-    >
-      {/* Left: header */}
-      <div
-        className="flex flex-col justify-center gap-6 rounded-2xl px-12 py-16"
-        style={{ background: "var(--bg-blue)", width: 480, flexShrink: 0 }}
-      >
-        <span
-          className="text-[11px] font-medium tracking-[2px]"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          PREGUNTAS FRECUENTES
-        </span>
-        <h2
-          className="text-[44px] font-normal leading-[1.1]"
-          style={{ color: "var(--text-primary)" }}
-        >
-          Todo lo que
-          <br />
-          necesitás saber
-        </h2>
-        <p
-          className="text-[15px] leading-[1.6]"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          ¿Tenés alguna otra pregunta?
-          <br />
-          Escribinos a hola@vocacionia.com
-        </p>
-      </div>
-
-      {/* Right: items */}
-      <div
-        className="flex flex-col rounded-2xl px-12 py-12 flex-1"
-        style={{ background: "var(--bg-cream)" }}
-      >
-        {faqItems.map((item, i) => (
-          <div
-            key={item.q}
-            className="flex flex-col gap-3 py-6 cursor-pointer"
-            style={{
-              borderBottom:
-                i < faqItems.length - 1 ? "1px solid var(--border)" : "none",
-            }}
-            onClick={() => setOpenIndex(openIndex === i ? null : i)}
-          >
-            <div className="flex items-center justify-between w-full">
-              <span
-                className="text-base font-medium"
-                style={{ color: "var(--text-primary)" }}
-              >
-                {item.q}
-              </span>
-              {openIndex === i ? (
-                <Minus size={18} color="var(--text-muted)" />
-              ) : (
-                <Plus size={18} color="var(--text-muted)" />
-              )}
-            </div>
-            {openIndex === i && (
-              <p
-                className="text-[14px] leading-[1.6]"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {item.a}
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Final CTA ─────────────────────────────────────────────────────────────────
-function FinalCTA() {
-  return (
-    <div
-      className="flex flex-col items-center gap-8 rounded-2xl px-12 py-20 w-full"
-      style={{ background: "var(--bg-cream)" }}
-    >
-      <span
-        className="text-[11px] font-medium tracking-[2px]"
-        style={{ color: "var(--text-secondary)" }}
-      >
-        EMPEZÁ HOY
-      </span>
-      <h2
-        className="text-[48px] font-normal leading-[1.05] text-center"
-        style={{ color: "var(--text-primary)" }}
-      >
-        Tu futuro profesional
-        <br />
-        empieza con una pregunta
-      </h2>
-      <p
-        className="text-base leading-[1.6] text-center"
-        style={{ color: "var(--text-secondary)" }}
-      >
-        Hacé el test vocacional gratuito y descubrí las carreras
-        <br />
-        que mejor se alinean con tu personalidad.
-      </p>
-      <div className="flex items-center gap-4">
-        <a
-          href="/test"
-          className="flex items-center gap-2 rounded-lg px-10 py-[18px] text-base font-bold transition-opacity hover:opacity-80"
-          style={{ background: "var(--bg-dark)", color: "#F3EBE2" }}
-        >
-          Empezar test gratis
-          <ArrowRight size={18} color="#F3EBE2" />
-        </a>
-        <a
-          href="#planes"
-          className="text-[15px] transition-opacity hover:opacity-70"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          Ver planes y precios →
-        </a>
-      </div>
-      <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>
-        Gratis · 5 minutos · Sin compromiso
-      </span>
-    </div>
-  );
-}
-
-// ── Footer ────────────────────────────────────────────────────────────────────
-function Footer() {
-  return (
-    <div
-      className="flex flex-col gap-12 rounded-2xl p-12 w-full"
-      style={{ background: "var(--bg-dark)" }}
-    >
-      {/* Top */}
-      <div className="flex items-start justify-between w-full">
-        <div className="flex flex-col gap-3" style={{ width: 300 }}>
-          <span
-            className="text-xl font-medium tracking-[0.5px]"
-            style={{ color: "#F3EBE2" }}
-          >
-            VocaciónIA
-          </span>
-          <p className="text-[14px] leading-[1.6]" style={{ color: "var(--text-muted)" }}>
-            Test vocacional con inteligencia artificial.
-            <br />
-            Descubrí tu camino profesional.
-          </p>
-        </div>
-
-        <div className="flex gap-16">
-          {[
-            {
-              title: "Producto",
-              links: ["Test Vocacional", "Plan IA", "Plan Premium", "Informe Ejemplo"],
-            },
-            {
-              title: "Empresa",
-              links: ["Sobre Nosotros", "Blog", "Contacto"],
-            },
-            { title: "Legal", links: ["Términos", "Privacidad"] },
-          ].map((col) => (
-            <div key={col.title} className="flex flex-col gap-4">
-              <span
-                className="text-[12px] font-medium tracking-[1px]"
-                style={{ color: "var(--border)" }}
-              >
-                {col.title.toUpperCase()}
-              </span>
-              {col.links.map((link) => (
-                <a
-                  key={link}
-                  href="#"
-                  className="text-[14px] transition-opacity hover:opacity-70"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  {link}
-                </a>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom */}
-      <div
-        className="flex items-center justify-between w-full pt-6"
-        style={{ borderTop: "1px solid var(--text-secondary)" }}
-      >
-        <span className="text-[13px]" style={{ color: "var(--text-muted)" }}>
-          © 2026 VocaciónIA. Todos los derechos reservados.
-        </span>
-        <div className="flex items-center gap-4">
-          {[Instagram, Twitter, Linkedin].map((Icon, i) => (
-            <a key={i} href="#" className="transition-opacity hover:opacity-70">
-              <Icon size={18} color="var(--text-muted)" />
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Page ──────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   return (
-    <main
-      className="flex flex-col gap-[6px] min-h-full p-[6px]"
-      style={{ background: "var(--bg-sand)" }}
-    >
-      <Navbar />
-      <HeroSection />
-      <HowItWorksSection />
-      <BenefitsSection />
-      <ResultsSection />
-      <PricingSection />
-      <FAQSection />
-      <FinalCTA />
-      <Footer />
-    </main>
+    <>
+      <nav className="bg-[#0e0e13]/80 backdrop-blur-xl top-0 sticky z-50 shadow-[0_0_40px_rgba(178,161,255,0.08)]">
+        <div className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
+          <div className="text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent font-headline">
+            VocacionAI
+          </div>
+          <div className="hidden md:flex gap-8 items-center">
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">Cómo funciona</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">Vista previa</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">FAQ</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">Contacto</a>
+          </div>
+          <div className="flex items-center gap-4">
+            <a href="/test" className="bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] text-on-primary-fixed font-bold py-2 px-6 rounded-xl hover:scale-105 transition-transform active:scale-95">
+              Empezar test gratis
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <main className="relative overflow-hidden">
+        <div className="glow-orb bg-primary w-[500px] h-[500px] -top-48 -left-48"></div>
+        <div className="glow-orb bg-secondary w-[400px] h-[400px] top-1/2 -right-48"></div>
+
+        {/* Hero */}
+        <section className="max-w-7xl mx-auto px-8 py-20 lg:py-32 grid lg:grid-cols-2 gap-16 items-center">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-highest border border-outline-variant/20 text-primary text-sm font-semibold tracking-wide">
+              <span className="material-symbols-outlined text-sm">auto_awesome</span>
+              ✦ TEST VOCACIONAL CON INTELIGENCIA ARTIFICIAL
+            </div>
+            <h1 className="text-6xl lg:text-7xl font-black font-headline leading-tight tracking-tight">
+              Descubrí qué{" "}
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                carrera es ideal
+              </span>{" "}
+              para vos
+            </h1>
+            <p className="text-xl text-on-surface-variant max-w-xl leading-relaxed">
+              Un análisis profundo basado en 40 preguntas y 4 marcos psicológicos validados. Obtené un mapa detallado de tu futuro profesional en minutos.
+            </p>
+            <div className="flex flex-wrap gap-4 pt-4">
+              <a href="/test" className="px-8 py-4 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-bold rounded-xl text-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(178,161,255,0.3)]">
+                Empezar test gratis
+              </a>
+            </div>
+            <div className="flex items-center gap-12 pt-8 border-t border-outline-variant/10">
+              <div>
+                <div className="text-3xl font-black text-on-surface">15k+</div>
+                <div className="text-on-surface-variant text-sm">Estudiantes</div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-secondary">98%</div>
+                <div className="text-on-surface-variant text-sm">Precisión AI</div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-tertiary">200+</div>
+                <div className="text-on-surface-variant text-sm">Carreras</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary">
+                <span className="material-symbols-outlined">psychology</span>
+              </div>
+              <h3 className="text-lg font-bold">RIASEC</h3>
+              <p className="text-sm text-on-surface-variant">Teoría de Holland sobre ambientes laborales.</p>
+            </div>
+            <div className="glass-card p-6 rounded-3xl space-y-4 mt-8 hover:-translate-y-2 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary">
+                <span className="material-symbols-outlined">lightbulb</span>
+              </div>
+              <h3 className="text-lg font-bold">Gardner</h3>
+              <p className="text-sm text-on-surface-variant">Mapeo de las 8 inteligencias múltiples.</p>
+            </div>
+            <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-tertiary/20 flex items-center justify-center text-tertiary">
+                <span className="material-symbols-outlined">schema</span>
+              </div>
+              <h3 className="text-lg font-bold">Kolb</h3>
+              <p className="text-sm text-on-surface-variant">Identificación de estilos de aprendizaje.</p>
+            </div>
+            <div className="glass-card p-6 rounded-3xl space-y-4 mt-8 hover:-translate-y-2 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-primary-fixed/20 flex items-center justify-center text-primary-fixed">
+                <span className="material-symbols-outlined">balance</span>
+              </div>
+              <h3 className="text-lg font-bold">Schwartz</h3>
+              <p className="text-sm text-on-surface-variant">Valores humanos básicos y motivación.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Steps */}
+        <section className="max-w-7xl mx-auto px-8 py-24">
+          <div className="text-center mb-16 space-y-4">
+            <h2 className="text-4xl lg:text-5xl font-black font-headline tracking-tight">Tres pasos para descubrir tu camino</h2>
+            <p className="text-on-surface-variant max-w-2xl mx-auto">Nuestro proceso está diseñado para ser simple pero profundamente revelador.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
+              <div className="text-8xl font-black opacity-10 absolute -top-4 -left-4 group-hover:scale-110 transition-transform duration-500">1</div>
+              <div className="relative z-10 space-y-6">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined text-3xl">assignment</span>
+                </div>
+                <h4 className="text-2xl font-bold">Test Gratuito</h4>
+                <p className="text-on-surface-variant">Respondé 40 preguntas rápidas diseñadas por expertos en pedagogía y psicología.</p>
+              </div>
+            </div>
+            <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
+              <div className="text-8xl font-black opacity-10 absolute -top-4 -left-4 group-hover:scale-110 transition-transform duration-500">2</div>
+              <div className="relative z-10 space-y-6">
+                <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary">
+                  <span className="material-symbols-outlined text-3xl">hub</span>
+                </div>
+                <h4 className="text-2xl font-bold">Análisis AI</h4>
+                <p className="text-on-surface-variant">Nuestros algoritmos cruzan tus datos con miles de perfiles exitosos en el mercado laboral.</p>
+              </div>
+            </div>
+            <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
+              <div className="text-8xl font-black opacity-10 absolute -top-4 -left-4 group-hover:scale-110 transition-transform duration-500">3</div>
+              <div className="relative z-10 space-y-6">
+                <div className="w-16 h-16 bg-tertiary/10 rounded-2xl flex items-center justify-center text-tertiary">
+                  <span className="material-symbols-outlined text-3xl">article</span>
+                </div>
+                <h4 className="text-2xl font-bold">Informe Elite</h4>
+                <p className="text-on-surface-variant">Recibís un PDF de 15 páginas con carreras, universidades y consejos personalizados.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Preview */}
+        <section className="bg-surface-container-low py-24">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="grid lg:grid-cols-2 gap-20 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl lg:text-5xl font-black font-headline tracking-tight">Tu mapa profesional personalizado</h2>
+                <p className="text-on-surface-variant text-lg leading-relaxed">
+                  No te damos solo una lista de carreras. Te entregamos un análisis psicológico detallado de por qué encajás en cada área y qué universidades son las mejores para vos.
+                </p>
+                <ul className="space-y-6">
+                  {[
+                    "Ranking de 5 carreras con mayor afinidad.",
+                    "Gráficos de radar sobre tus inteligencias dominantes.",
+                    "Links directos a planes de estudio de universidades reales.",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-4">
+                      <div className="mt-1 w-6 h-6 bg-tertiary/20 text-tertiary rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="material-symbols-outlined text-xs">check</span>
+                      </div>
+                      <span className="text-on-surface">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-gradient-to-tr from-primary to-tertiary rounded-[3rem] opacity-20 blur-2xl"></div>
+                <div className="glass-card rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+                  <div className="flex justify-between items-center mb-8">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+                        <img
+                          className="w-full h-full object-cover"
+                          alt="Estudiante universitario con lentes"
+                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW_CIAwbh945QfyUHZuz7x9upigUURf9GoflMPWtryiCpN26Djis2XpvOsPjCrufdcZ-CPXsWwOc3YTY7sizEpchYf7OhmsEp-tnJrcWrSlrfOcH2BloAgG8fE0TGteeF_sp-dg9rYjM0EvOoqNbspNyYpsS58aVoq6dq--8g8d71y_QU164cHU1zchhFnohaYUaiDBy5opLNZlX1nl4n1T_09Nc665Xg9lWTwDYUXpqRXiRmYZHy_5Pkkn3XX-mCd5huW44tc1m4"
+                        />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold">Mateo García</div>
+                        <div className="text-[10px] text-on-surface-variant">Reporte Generado: May 2024</div>
+                      </div>
+                    </div>
+                    <div className="px-3 py-1 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded-full">PERFIL COMPLETO</div>
+                  </div>
+
+                  <div className="mb-8">
+                    <h5 className="text-3xl font-black font-headline">The Multifaceted Explorer</h5>
+                    <p className="text-on-surface-variant text-sm">Tu perfil destaca por una alta capacidad analítica mezclada con creatividad aplicada.</p>
+                  </div>
+
+                  <div className="space-y-4 mb-8">
+                    {[
+                      { label: "Liderazgo Estratégico", pct: "92%", color: "text-tertiary", bg: "bg-tertiary" },
+                      { label: "Resolución Técnica", pct: "85%", color: "text-primary", bg: "bg-primary" },
+                    ].map(({ label, pct, color, bg }) => (
+                      <div key={label}>
+                        <div className="flex justify-between text-[11px] mb-1 font-bold">
+                          <span>{label}</span>
+                          <span className={color}>{pct}</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                          <div className={`h-full ${bg}`} style={{ width: pct }}></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest">Carreras Recomendadas</div>
+                    <div className="flex flex-wrap gap-2">
+                      {["Ing. en Software", "Diseño UX/UI", "Marketing Data"].map((c) => (
+                        <span key={c} className="px-4 py-2 bg-surface-container-highest text-xs rounded-xl border border-outline-variant/20">{c}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-8 pt-6 border-t border-outline-variant/10 flex items-center gap-4 grayscale opacity-50">
+                    <div className="h-6 w-16 bg-on-surface/20 rounded"></div>
+                    <div className="h-6 w-20 bg-on-surface/20 rounded"></div>
+                    <div className="h-6 w-14 bg-on-surface/20 rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* About */}
+        <section className="max-w-7xl mx-auto px-8 py-24">
+          <div className="grid lg:grid-cols-5 gap-16">
+            <div className="lg:col-span-2 space-y-8">
+              <h2 className="text-4xl font-black font-headline">Por qué VocaIA es diferente</h2>
+              <p className="text-lg text-on-surface-variant leading-relaxed">
+                Nacimos de la frustración de ver a miles de jóvenes elegir carreras por inercia o presión social. Combinamos la precisión de la Inteligencia Artificial con los marcos psicológicos más respetados del mundo para darte una respuesta real y accionable.
+              </p>
+              <p className="text-lg text-on-surface-variant leading-relaxed">
+                No somos un simple cuestionario; somos tu primer paso hacia una vida profesional satisfactoria y exitosa.
+              </p>
+              <div className="pt-4">
+                <button className="flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all">
+                  Conocé nuestra metodología <span className="material-symbols-outlined">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-3 grid md:grid-cols-2 gap-4">
+              {[
+                { icon: "psychology_alt", color: "text-primary", title: "Psicología Real", desc: "Basado en test de Holland y las 8 inteligencias de Gardner." },
+                { icon: "auto_graph", color: "text-secondary", title: "Reporte AI", desc: "Análisis profundo generado por modelos de lenguaje avanzados." },
+                { icon: "bolt", color: "text-tertiary", title: "Resultados Instantáneos", desc: "Nada de esperar días. Tu futuro está listo en 5 minutos." },
+                { icon: "savings", color: "text-primary", title: "Precio Accesible", desc: "Mucho más económico que una sesión de orientación privada." },
+                { icon: "school", color: "text-secondary", title: "Unis Reales", desc: "Conectamos tus resultados con ofertas académicas vigentes." },
+                { icon: "picture_as_pdf", color: "text-tertiary", title: "Formato PDF", desc: "Descargá tu reporte y compartilo con tus padres o amigos." },
+              ].map(({ icon, color, title, desc }) => (
+                <div key={title} className="p-8 rounded-3xl bg-surface-container-low border border-outline-variant/10 space-y-4">
+                  <span className={`material-symbols-outlined ${color} text-3xl`}>{icon}</span>
+                  <h4 className="font-bold text-xl">{title}</h4>
+                  <p className="text-sm text-on-surface-variant">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="py-24 bg-surface-container-lowest">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-4xl font-black font-headline">Lo que dicen los futuros profesionales</h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  text: "\"Estaba totalmente perdida entre Derecho y Psicología. El test me mostró que mi perfil era mucho más analítico y me recomendó Ciencia de Datos. ¡Me cambió la vida!\"",
+                  name: "Sofía Martínez",
+                  role: "Estudiante de Data Science",
+                  img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBbH4sBTY0h12YZVrc5n_F3ckMKipRMPaYNmgk1zMBsTAQySLBi4c0oR4Yst0ut8FQECZur_7q7P2lC4Uc8cf21LPR-Bw6sHO9cVjxpkByOmrRCUQrzVZzHEwvILe_1wZUPym1p4f-gZA_ex0E-ZCwXvvPTudvlevgtZeueGJks9hvJu3OhqkBPa0BaRGOP6_W8fMo0TT-p1HPgy1EaosOqT7n4NWRnCWTF0yXyeRC4e2KsL-ZZJl_AtbzcsAi-Vak1Svab7Rk1I6A",
+                },
+                {
+                  text: "\"El reporte es increíblemente detallado. Las opciones de universidades que me dio me ahorraron meses de investigación. Super recomendado.\"",
+                  name: "Lucas Pérez",
+                  role: "Estudiante de Arquitectura",
+                  img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDKxeodKPTQysugxiR8Ti60n0NAf2xAYELX3gh7JNRZ9Vs4C9O4HEOS5s4ICGqGFbQ7UmHIBLQz2H_YZ3blskqo-56se_xJZ-8O9fJNE0daYtOFJlcOvFZS9xTPakfoHBvNvTi1BZIwHgQEiUgYRPNiDkkFwbG_ZLAkVuc7X2koLX8VQkbatQTdsxqe6bQ-yNv2zIvYRCa9tr3kkE9z67XbyI_Zt9_Jqtd1mApjHO1Z3gHUQmK9rmtwT4snJHWXjPIqGQxvS0k1DK4",
+                },
+                {
+                  text: "\"No creía que una IA pudiera conocerme tanto. El análisis de mis inteligencias fue spot-on. Gracias VocaIA por la claridad.\"",
+                  name: "Martina Díaz",
+                  role: "Ingeniería Industrial",
+                  img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD4rjwM8iYX37XNPeyGmkeG_rO2FfVhrxJr87fVRSmS947JW0PtQjl-zcqeen6shX6xEab0ZKehapDUbzXakNvJxR7UAdJpZmF6FhFBA1fRO6KLO78W-QuqCl2wWMz-yfg18bs_MoosNG7CEqcNd-RK6td4TOSgP2qIUU5esn9E0v5nIo3bnKanN-y8sYwWguCtXPNJkFfxGEBIs7s9r2xPMrSbKmp0cV9j-d_u0V4Tbhzxw5KkmS071MVMly8KdeUZuq0CDP7smss",
+                },
+              ].map(({ text, name, role, img }) => (
+                <div key={name} className="glass-card p-8 rounded-3xl space-y-6">
+                  <div className="flex text-tertiary">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    ))}
+                  </div>
+                  <p className="text-on-surface-variant italic">{text}</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-surface-container-high overflow-hidden">
+                      <img className="w-full h-full object-cover" alt={name} src={img} />
+                    </div>
+                    <div>
+                      <div className="font-bold">{name}</div>
+                      <div className="text-xs text-on-surface-variant">{role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="max-w-3xl mx-auto px-8 py-24">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black font-headline">Preguntas Frecuentes</h2>
+          </div>
+          <div className="space-y-4">
+            {[
+              {
+                q: "¿El test es realmente gratis?",
+                a: "Sí, el test de 40 preguntas y los resultados básicos de afinidad son gratuitos. El reporte Elite con análisis profundo de IA tiene un costo único muy accesible.",
+              },
+              {
+                q: "¿Qué tan preciso es el análisis de IA?",
+                a: "Utilizamos modelos entrenados con bases de datos psicopedagógicas y perfiles profesionales reales. Nuestra precisión es del 98% según el feedback de nuestros usuarios.",
+              },
+              {
+                q: "¿Sirve para cualquier país?",
+                a: "Sí, aunque nuestro catálogo de universidades está enfocado inicialmente en Latinoamérica y España, los perfiles vocacionales son universales.",
+              },
+            ].map(({ q, a }) => (
+              <details key={q} className="group bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/10">
+                <summary className="flex justify-between items-center p-6 cursor-pointer list-none">
+                  <span className="font-bold">{q}</span>
+                  <span className="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+                </summary>
+                <div className="px-6 pb-6 text-on-surface-variant">{a}</div>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="max-w-7xl mx-auto px-8 py-24">
+          <div className="bg-gradient-to-br from-primary-dim to-secondary rounded-[3rem] p-12 lg:p-24 text-center relative overflow-hidden group">
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+            <div className="relative z-10 space-y-8">
+              <div className="text-6xl lg:text-7xl">🚀</div>
+              <h2 className="text-4xl lg:text-6xl font-black font-headline text-on-primary-fixed leading-tight">
+                ¿Listo para lanzar tu <br />misión profesional?
+              </h2>
+              <p className="text-on-primary-fixed/80 text-xl max-w-2xl mx-auto font-medium">
+                No dejes tu futuro al azar. Dejá que la ciencia y la tecnología te guíen.
+              </p>
+              <a href="/test" className="inline-block bg-on-surface text-surface-dim px-12 py-5 rounded-2xl text-xl font-black hover:scale-110 transition-transform active:scale-95 shadow-2xl">
+                Empezar mi test ahora
+              </a>
+            </div>
+            <div className="absolute -top-12 -right-12 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl"></div>
+          </div>
+        </section>
+
+        {/* Contact */}
+        <section className="max-w-7xl mx-auto px-8 py-24 grid lg:grid-cols-2 gap-16">
+          <div className="space-y-8">
+            <h2 className="text-4xl font-black font-headline">Hablemos</h2>
+            <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocaIA en tu colegio o simplemente querés saludarnos?</p>
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined">mail</span>
+                </div>
+                <div>
+                  <div className="text-sm text-on-surface-variant">Escríbinos a</div>
+                  <div className="font-bold">hola@vocacionai.com</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
+                  <span className="material-symbols-outlined">share</span>
+                </div>
+                <div>
+                  <div className="text-sm text-on-surface-variant">Seguinos en</div>
+                  <div className="font-bold">@vocacionai</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-card p-10 rounded-[2.5rem]">
+            <form className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold ml-1">Nombre</label>
+                  <input className="w-full bg-surface-container-high border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-primary/40 transition-all" placeholder="Tu nombre" type="text" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold ml-1">Email</label>
+                  <input className="w-full bg-surface-container-high border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-primary/40 transition-all" placeholder="tu@email.com" type="email" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold ml-1">Mensaje</label>
+                <textarea className="w-full bg-surface-container-high border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-primary/40 transition-all" placeholder="¿En qué podemos ayudarte?" rows={4}></textarea>
+              </div>
+              <button type="submit" className="w-full py-4 bg-primary text-on-primary-fixed font-black rounded-xl hover:bg-primary-dim transition-colors">
+                Enviar mensaje
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer className="bg-[#0e0e13] w-full mt-20 pt-12 pb-8 border-t border-[#48474d]/15">
+        <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="space-y-4">
+            <div className="text-lg font-bold text-[#b2a1ff] font-headline">VocacionAI</div>
+            <p className="text-[#acaab1] text-sm leading-relaxed">
+              Potenciando la próxima generación de profesionales a través de la inteligencia artificial y la psicología aplicada.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="font-bold text-on-surface">Plataforma</div>
+              <ul className="space-y-2">
+                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/test">Test Vocacional</a></li>
+                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/informe">Ejemplo Informe</a></li>
+                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="#">Precios</a></li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <div className="font-bold text-on-surface">Legal</div>
+              <ul className="space-y-2">
+                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="#">Privacy Policy</a></li>
+                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="#">Terms of Service</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div className="font-bold text-on-surface">Newsletter</div>
+            <p className="text-sm text-[#acaab1]">Recibí consejos sobre carreras y futuro laboral.</p>
+            <div className="flex gap-2">
+              <input className="flex-1 bg-surface-container-high border-none rounded-lg text-sm px-4 py-2" placeholder="Email" type="text" />
+              <button className="bg-primary text-on-primary-fixed p-2 rounded-lg">
+                <span className="material-symbols-outlined">send</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-8 text-center text-[#acaab1] text-xs border-t border-outline-variant/10 pt-8">
+          © 2024 VocacionAI. Launch your mission.
+        </div>
+      </footer>
+    </>
   );
 }

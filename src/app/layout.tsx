@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VocaciónIA — Test Vocacional con Inteligencia Artificial",
+  title: "VocacionAI | Descubrí tu Futuro con IA",
   description:
-    "Hacé el test vocacional con inteligencia artificial y descubrí tu camino profesional en solo 5 minutos.",
+    "Un análisis profundo basado en 40 preguntas y 4 marcos psicológicos validados. Obtené tu mapa profesional en minutos.",
 };
 
 export default function RootLayout({
@@ -13,14 +13,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="h-full">
+    <html lang="es" className="dark">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="h-full font-funnel antialiased bg-[var(--bg-sand)]">
+      <body className="bg-background text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary-fixed">
         {children}
       </body>
     </html>
