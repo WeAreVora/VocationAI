@@ -70,7 +70,7 @@ export default function HomePage() {
               <h3 className="text-lg font-bold">RIASEC</h3>
               <p className="text-sm text-on-surface-variant">Teoría de Holland sobre ambientes laborales.</p>
             </div>
-            <div className="glass-card p-6 rounded-3xl space-y-4 mt-8 hover:-translate-y-2 transition-transform duration-300">
+            <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
               <div className="w-12 h-12 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary">
                 <span className="material-symbols-outlined">lightbulb</span>
               </div>
@@ -84,7 +84,7 @@ export default function HomePage() {
               <h3 className="text-lg font-bold">Kolb</h3>
               <p className="text-sm text-on-surface-variant">Identificación de estilos de aprendizaje.</p>
             </div>
-            <div className="glass-card p-6 rounded-3xl space-y-4 mt-8 hover:-translate-y-2 transition-transform duration-300">
+            <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
               <div className="w-12 h-12 rounded-2xl bg-primary-fixed/20 flex items-center justify-center text-primary-fixed">
                 <span className="material-symbols-outlined">balance</span>
               </div>
@@ -102,7 +102,7 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
-              <div className="text-8xl font-black opacity-10 absolute -top-4 -left-4 group-hover:scale-110 transition-transform duration-500">1</div>
+              <div className="text-8xl font-black opacity-10 absolute -top-4 -right-2 group-hover:scale-110 transition-transform duration-500">1</div>
               <div className="relative z-10 space-y-6">
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                   <span className="material-symbols-outlined text-3xl">assignment</span>
@@ -112,7 +112,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
-              <div className="text-8xl font-black opacity-10 absolute -top-4 -left-4 group-hover:scale-110 transition-transform duration-500">2</div>
+              <div className="text-8xl font-black opacity-10 absolute -top-4 -right-2 group-hover:scale-110 transition-transform duration-500">2</div>
               <div className="relative z-10 space-y-6">
                 <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary">
                   <span className="material-symbols-outlined text-3xl">hub</span>
@@ -122,7 +122,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
-              <div className="text-8xl font-black opacity-10 absolute -top-4 -left-4 group-hover:scale-110 transition-transform duration-500">3</div>
+              <div className="text-8xl font-black opacity-10 absolute -top-4 -right-2 group-hover:scale-110 transition-transform duration-500">3</div>
               <div className="relative z-10 space-y-6">
                 <div className="w-16 h-16 bg-tertiary/10 rounded-2xl flex items-center justify-center text-tertiary">
                   <span className="material-symbols-outlined text-3xl">article</span>
@@ -225,7 +225,7 @@ export default function HomePage() {
         <section className="max-w-7xl mx-auto px-8 py-24">
           <div className="grid lg:grid-cols-5 gap-16">
             <div className="lg:col-span-2 space-y-8">
-              <h2 className="text-4xl font-black font-headline">Por qué VocaIA es diferente</h2>
+              <h2 className="text-4xl font-black font-headline">Por qué VocacionAI es diferente</h2>
               <p className="text-lg text-on-surface-variant leading-relaxed">
                 Nacimos de la frustración de ver a miles de jóvenes elegir carreras por inercia o presión social. Combinamos la precisión de la Inteligencia Artificial con los marcos psicológicos más respetados del mundo para darte una respuesta real y accionable.
               </p>
@@ -279,7 +279,7 @@ export default function HomePage() {
                   img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDKxeodKPTQysugxiR8Ti60n0NAf2xAYELX3gh7JNRZ9Vs4C9O4HEOS5s4ICGqGFbQ7UmHIBLQz2H_YZ3blskqo-56se_xJZ-8O9fJNE0daYtOFJlcOvFZS9xTPakfoHBvNvTi1BZIwHgQEiUgYRPNiDkkFwbG_ZLAkVuc7X2koLX8VQkbatQTdsxqe6bQ-yNv2zIvYRCa9tr3kkE9z67XbyI_Zt9_Jqtd1mApjHO1Z3gHUQmK9rmtwT4snJHWXjPIqGQxvS0k1DK4",
                 },
                 {
-                  text: "\"No creía que una IA pudiera conocerme tanto. El análisis de mis inteligencias fue spot-on. Gracias VocaIA por la claridad.\"",
+                  text: "\"No creía que una IA pudiera conocerme tanto. El análisis de mis inteligencias fue spot-on. Gracias VocacionAI por la claridad.\"",
                   name: "Martina Díaz",
                   role: "Ingeniería Industrial",
                   img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD4rjwM8iYX37XNPeyGmkeG_rO2FfVhrxJr87fVRSmS947JW0PtQjl-zcqeen6shX6xEab0ZKehapDUbzXakNvJxR7UAdJpZmF6FhFBA1fRO6KLO78W-QuqCl2wWMz-yfg18bs_MoosNG7CEqcNd-RK6td4TOSgP2qIUU5esn9E0v5nIo3bnKanN-y8sYwWguCtXPNJkFfxGEBIs7s9r2xPMrSbKmp0cV9j-d_u0V4Tbhzxw5KkmS071MVMly8KdeUZuq0CDP7smss",
@@ -363,7 +363,7 @@ export default function HomePage() {
         <section className="max-w-7xl mx-auto px-8 py-24 grid lg:grid-cols-2 gap-16">
           <div className="space-y-8">
             <h2 className="text-4xl font-black font-headline">Hablemos</h2>
-            <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocaIA en tu colegio o simplemente querés saludarnos?</p>
+            <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocacionAI en tu colegio o simplemente querés saludarnos?</p>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">

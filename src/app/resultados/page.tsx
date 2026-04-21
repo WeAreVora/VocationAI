@@ -392,7 +392,7 @@ function ResultadosContent() {
                   <span className="text-on-surface-variant text-lg">/ USD 5</span>
                 </div>
               </div>
-              <a href="/informe" className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-black py-5 rounded-xl flex items-center justify-center gap-3 hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_rgba(178,161,255,0.3)]">
+              <a href={`/informe?perfil=${key}`} className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-black py-5 rounded-xl flex items-center justify-center gap-3 hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_rgba(178,161,255,0.3)]">
                 <span className="material-symbols-outlined">description</span>
                 📄 Descargar mi Informe Completo
               </a>
