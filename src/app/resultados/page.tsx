@@ -260,6 +260,7 @@ const PROFILES: Record<string, Profile> = {
 function ResultadosContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get("perfil") || "creativo-digital";
+  const country = searchParams.get("pais") || "arg";
   const p: Profile = PROFILES[key] ?? PROFILES["creativo-digital"];
   const [isPaying, setIsPaying] = useState(false);
 
@@ -269,7 +270,7 @@ function ResultadosContent() {
       const res = await fetch("/api/payments/create-preference", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ perfil: key }),
+        body: JSON.stringify({ perfil: key, pais: country }),
       });
 
       if (!res.ok) {

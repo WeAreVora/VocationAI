@@ -26,6 +26,69 @@ type InformeData = {
   careers: Career[]; roadmap: [RoadmapPhase, RoadmapPhase]; closing: string;
 };
 
+type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru";
+
+const COUNTRY_LABELS: Record<CountryCode, string> = {
+  arg: "Argentina",
+  mx: "México",
+  uru: "Uruguay",
+  col: "Colombia",
+  chile: "Chile",
+  peru: "Perú",
+};
+
+const UNIVERSITY_COUNTRY: Record<string, CountryCode> = {
+  "ITBA (Argentina)": "arg",
+  "Tec de Monterrey (México)": "mx",
+  "PUC (Chile)": "chile",
+  "UBA (Argentina)": "arg",
+  "UNAM (México)": "mx",
+  "U. de Chile": "chile",
+  "UTN (Argentina)": "arg",
+  "IPN (México)": "mx",
+  "UAI (Chile)": "chile",
+  "UNSAM (Argentina)": "arg",
+  "ITAM (México)": "mx",
+  "U. de los Andes (Colombia)": "col",
+  "CENPAT–CONICET (Argentina)": "arg",
+  "U. de Concepción (Chile)": "chile",
+  "UP (Argentina)": "arg",
+  "IBERO (México)": "mx",
+  "UBA – FADU (Argentina)": "arg",
+  "Duoc UC (Chile)": "chile",
+  "Da Vinci (Argentina)": "arg",
+  "Centro de Diseño (México)": "mx",
+  "ARCOS (Chile)": "chile",
+  "UCA (Argentina)": "arg",
+  "UNLP (Argentina)": "arg",
+  "UCEMA (Argentina)": "arg",
+  "ITESM (México)": "mx",
+  "Berklee (Online)": "mx",
+  "EMT (Argentina)": "arg",
+  "Centro de Capacitación Musical (México)": "mx",
+  "UNAM – ENAP (México)": "mx",
+  "U. de Chile – FAU": "chile",
+  "IUNA (Argentina)": "arg",
+  "Centro Universitario de Teatro (México)": "mx",
+  "ARCIS (Chile)": "chile",
+  "UDESA (Argentina)": "arg",
+  "TEC Campus Ciudad de México": "mx",
+  "P. Universidad Católica (Chile)": "chile",
+  "UNIPE (Argentina)": "arg",
+  "UPN (México)": "mx",
+  "FLACSO (Argentina)": "arg",
+  "FADU – UBA (Argentina)": "arg",
+  "UNAM – FA (México)": "mx",
+  "DUOC UC (Chile)": "chile",
+  "U. Adolfo Ibáñez (Chile)": "chile",
+  "ESE (Chile)": "chile",
+  "IPADE (México)": "mx",
+};
+
+function isCountryCode(value: string | null): value is CountryCode {
+  return value === "arg" || value === "mx" || value === "uru" || value === "col" || value === "chile" || value === "peru";
+}
+
 const UNIVERSITY_URLS: Record<string, string> = {
   "ITBA (Argentina)": "https://www.itba.edu.ar/",
   "Tec de Monterrey (México)": "https://tec.mx/",
@@ -422,10 +485,12 @@ function ShareModal({ title, onClose }: { title: string; onClose: () => void }) 
 }
 
 // ─── Career Card ──────────────────────────────────────────────────────────────
-function CareerCard({ career, isFirst, expanded, onToggle }: {
-  career: Career; isFirst: boolean; expanded: boolean; onToggle?: () => void;
+function CareerCard({ career, isFirst, expanded, country, onToggle }: {
+  career: Career; isFirst: boolean; expanded: boolean; country: CountryCode; onToggle?: () => void;
 }) {
   const show = isFirst || expanded;
+  const filteredUniversities = career.universities.filter((u) => UNIVERSITY_COUNTRY[u] === country);
+  const countryLabel = COUNTRY_LABELS[country];
 
   if (show) {
     return (
@@ -467,9 +532,9 @@ function CareerCard({ career, isFirst, expanded, onToggle }: {
               </div>
             </div>
             <div className="mt-auto pt-6 border-t border-outline-variant/10">
-              <p className="text-xs font-bold text-on-surface-variant mb-3">DÓNDE ESTUDIAR (TOP LATAM)</p>
+              <p className="text-xs font-bold text-on-surface-variant mb-3">DÓNDE ESTUDIAR EN {countryLabel.toUpperCase()}</p>
               <div className="flex flex-wrap gap-3">
-                {career.universities.map((u) => (
+                {filteredUniversities.map((u) => (
                   <a
                     key={u}
                     href={getUniversityHref(u)}
@@ -480,6 +545,9 @@ function CareerCard({ career, isFirst, expanded, onToggle }: {
                     {u} <span className="material-symbols-outlined text-[10px]">open_in_new</span>
                   </a>
                 ))}
+                {filteredUniversities.length === 0 && (
+                  <span className="text-xs text-on-surface-variant">Todavía no tenemos universidades cargadas para {countryLabel} en esta carrera.</span>
+                )}
               </div>
             </div>
             {!isFirst && (
@@ -518,6 +586,8 @@ function CareerCard({ career, isFirst, expanded, onToggle }: {
 function InformeContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get("perfil") || DEFAULT_KEY;
+  const rawCountry = searchParams.get("pais");
+  const country: CountryCode = isCountryCode(rawCountry) ? rawCountry : "arg";
   const p: InformeData = INFORMES[key] ?? INFORMES[DEFAULT_KEY];
   const paymentStatus = searchParams.get("status") || searchParams.get("collection_status");
   const paymentId = searchParams.get("payment_id") || searchParams.get("collection_id");
@@ -579,7 +649,7 @@ function InformeContent() {
             Para acceder al informe completo primero necesitás completar el pago en Mercado Pago.
           </p>
           <a
-            href={`/resultados?perfil=${encodeURIComponent(key)}`}
+            href={`/resultados?perfil=${encodeURIComponent(key)}&pais=${encodeURIComponent(country)}`}
             className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform active:scale-95"
           >
             <span className="material-symbols-outlined">arrow_back</span>
@@ -699,7 +769,7 @@ function InformeContent() {
           <div className="space-y-6">
             {p.careers.map((career, i) => (
               <CareerCard key={career.name} career={career} isFirst={i === 0}
-                expanded={expanded.has(i)} onToggle={() => toggleExpanded(i)} />
+                expanded={expanded.has(i)} country={country} onToggle={() => toggleExpanded(i)} />
             ))}
           </div>
         </section>

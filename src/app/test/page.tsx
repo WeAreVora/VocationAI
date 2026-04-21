@@ -3,6 +3,17 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru";
+
+const COUNTRY_OPTIONS: { code: CountryCode; label: string }[] = [
+  { code: "arg", label: "Argentina" },
+  { code: "mx", label: "México" },
+  { code: "uru", label: "Uruguay" },
+  { code: "col", label: "Colombia" },
+  { code: "chile", label: "Chile" },
+  { code: "peru", label: "Perú" },
+];
+
 const BLOCKS = [
   { name: "Bloque 1: Holland RIASEC", category: "Personalidad e Intereses" },
   { name: "Bloque 2: Gardner", category: "Inteligencias Múltiples" },
@@ -449,6 +460,7 @@ export default function TestPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<"intro" | "quiz" | "outro">("intro");
   const [profileKey, setProfileKey] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState<CountryCode | null>(null);
 
   // Intro state
   const [visibleMsgs, setVisibleMsgs] = useState(0);
@@ -582,14 +594,43 @@ export default function TestPage() {
                   </div>
                   <p className="text-on-surface-variant">Solo respondé con sinceridad. ¿Estás listo para despegar?</p>
                 </div>
+
+                <div className={`glass-panel p-5 rounded-2xl rounded-tl-none border-l-4 border-tertiary/40 transition-all duration-500 ease-out ${
+                  visibleMsgs >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}>
+                  <p className="text-on-surface leading-relaxed mb-4">
+                    Antes de arrancar, ¿de qué país sos? Voy a personalizar las universidades de tu informe final.
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {COUNTRY_OPTIONS.map((country) => {
+                      const isSelected = selectedCountry === country.code;
+                      return (
+                        <button
+                          key={country.code}
+                          type="button"
+                          onClick={() => setSelectedCountry(country.code)}
+                          className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all ${
+                            isSelected
+                              ? "bg-primary/15 border-primary text-primary"
+                              : "bg-surface-container-high border-outline-variant/20 text-on-surface-variant hover:border-primary/50"
+                          }`}
+                        >
+                          {country.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               <div className={`pt-8 transition-all duration-500 ease-out ${
                 showBtn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}>
                 <button
+                  type="button"
                   onClick={() => setPhase("quiz")}
-                  className="group relative px-10 py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95"
+                  disabled={!selectedCountry}
+                  className="group relative px-10 py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   Sí, empezar el test
                   <span className="ml-2 material-symbols-outlined align-middle transition-transform group-hover:translate-x-1">rocket_launch</span>
@@ -769,7 +810,10 @@ export default function TestPage() {
                 {outroStep >= 3 && (
                   <div className="pt-4 animate-fade-in-up">
                     <button
-                      onClick={() => router.push("/resultados?perfil=" + profileKey)}
+                      onClick={() => {
+                        const country = selectedCountry ?? "arg";
+                        router.push(`/resultados?perfil=${profileKey}&pais=${country}`);
+                      }}
                       className="group px-10 py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 flex items-center gap-3"
                     >
                       <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>person_check</span>

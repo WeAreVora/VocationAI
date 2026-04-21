@@ -2,7 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 type CreatePreferenceBody = {
   perfil?: string;
+  pais?: string;
 };
+
+const ALLOWED_COUNTRIES = new Set(["arg", "mx", "uru", "col", "chile", "peru"]);
+
+function resolveBaseUrl(req: NextRequest): string {
+  const envUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (envUrl) {
+    return envUrl;
+  }
+
+  const forwardedProto = req.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
+  const forwardedHost = req.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+  if (forwardedProto && forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+
+  return req.nextUrl.origin;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,11 +35,13 @@ export async function POST(req: NextRequest) {
 
     const body = (await req.json()) as CreatePreferenceBody;
     const perfil = body.perfil?.trim() || "creativo-digital";
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
+    const rawCountry = body.pais?.trim().toLowerCase() || "arg";
+    const pais = ALLOWED_COUNTRIES.has(rawCountry) ? rawCountry : "arg";
+    const baseUrl = resolveBaseUrl(req);
 
-    const successUrl = `${baseUrl}/informe?perfil=${encodeURIComponent(perfil)}`;
-    const pendingUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pago=pendiente`;
-    const failureUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pago=rechazado`;
+    const successUrl = `${baseUrl}/informe?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}`;
+    const pendingUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&pago=pendiente`;
+    const failureUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&pago=rechazado`;
 
     const payload: Record<string, unknown> = {
       items: [
@@ -33,6 +53,10 @@ export async function POST(req: NextRequest) {
         },
       ],
       external_reference: `informe-${perfil}-${Date.now()}`,
+      metadata: {
+        perfil,
+        pais,
+      },
       back_urls: {
         success: successUrl,
         pending: pendingUrl,
@@ -40,8 +64,8 @@ export async function POST(req: NextRequest) {
       },
     };
 
-    // Mercado Pago suele requerir una URL HTTPS válida para auto_return.
-    if (successUrl.startsWith("https://")) {
+    // Mercado Pago requiere HTTPS para auto_return.
+    if (successUrl.toLowerCase().startsWith("https://")) {
       payload.auto_return = "approved";
     }
 
