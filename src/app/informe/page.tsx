@@ -519,6 +519,9 @@ function InformeContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get("perfil") || DEFAULT_KEY;
   const p: InformeData = INFORMES[key] ?? INFORMES[DEFAULT_KEY];
+  const paymentStatus = searchParams.get("status") || searchParams.get("collection_status");
+  const paymentId = searchParams.get("payment_id") || searchParams.get("collection_id");
+  const isPaid = paymentStatus === "approved" && Boolean(paymentId);
 
   const [reportDate, setReportDate] = useState("");
 
@@ -563,6 +566,29 @@ function InformeContent() {
     }
     setShowShare(true);
   };
+
+  if (!isPaid) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-6">
+        <section className="max-w-xl w-full glass-card rounded-3xl p-10 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-tertiary/10 mb-6">
+            <span className="material-symbols-outlined text-tertiary">lock</span>
+          </div>
+          <h1 className="font-headline text-3xl font-black mb-4">Informe completo bloqueado</h1>
+          <p className="text-on-surface-variant mb-8">
+            Para acceder al informe completo primero necesitás completar el pago en Mercado Pago.
+          </p>
+          <a
+            href={`/resultados?perfil=${encodeURIComponent(key)}`}
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform active:scale-95"
+          >
+            <span className="material-symbols-outlined">arrow_back</span>
+            Ir a pagar ahora
+          </a>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <>

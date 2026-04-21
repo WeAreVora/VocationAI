@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 const TRAIT_COLORS = [
   { color: "text-primary", barFrom: "from-primary", barTo: "to-primary-dim" },
@@ -260,6 +261,34 @@ function ResultadosContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get("perfil") || "creativo-digital";
   const p: Profile = PROFILES[key] ?? PROFILES["creativo-digital"];
+  const [isPaying, setIsPaying] = useState(false);
+
+  const handleCheckout = async () => {
+    try {
+      setIsPaying(true);
+      const res = await fetch("/api/payments/create-preference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ perfil: key }),
+      });
+
+      if (!res.ok) {
+        throw new Error("No se pudo iniciar el pago");
+      }
+
+      const data = await res.json();
+      const checkoutUrl = data.checkoutUrl || data.checkoutSandboxUrl;
+
+      if (!checkoutUrl) {
+        throw new Error("No se recibió URL de checkout");
+      }
+
+      window.location.href = checkoutUrl;
+    } catch {
+      alert("No pudimos redirigirte a Mercado Pago. Intentá nuevamente.");
+      setIsPaying(false);
+    }
+  };
 
   return (
     <>
@@ -389,13 +418,18 @@ function ResultadosContent() {
                 <p className="text-on-surface-variant text-sm font-bold uppercase tracking-widest mb-1">Inversión única</p>
                 <div className="flex flex-col items-center">
                   <span className="text-4xl font-black text-on-surface">ARS $15.000</span>
-                  <span className="text-on-surface-variant text-lg">/ USD 5</span>
+                  
                 </div>
               </div>
-              <a href={`/informe?perfil=${key}`} className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-black py-5 rounded-xl flex items-center justify-center gap-3 hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_rgba(178,161,255,0.3)]">
+              <button
+                type="button"
+                onClick={handleCheckout}
+                disabled={isPaying}
+                className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-black py-5 rounded-xl flex items-center justify-center gap-3 hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_rgba(178,161,255,0.3)] disabled:opacity-70 disabled:cursor-not-allowed"
+              >
                 <span className="material-symbols-outlined">description</span>
-                📄 Descargar mi Informe Completo
-              </a>
+                {isPaying ? "Redirigiendo a Mercado Pago..." : "Descargar mi Informe Completo"}
+              </button>
               <p className="text-[10px] text-on-surface-variant mt-4 text-center">Acceso instantáneo por email y descarga directa.</p>
             </div>
           </div>
