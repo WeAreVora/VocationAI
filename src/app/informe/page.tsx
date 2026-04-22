@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Emoji3D from "@/app/components/Emoji3D";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Career = {
@@ -18,12 +19,17 @@ type RoadmapPhase = {
   items: { title: string; desc: string }[];
   extras: { icon: string; label: string }[];
 };
+type Mentor = { name: string; role: string; platform: string; handle: string; why: string; color: string };
+type R26Goal = { icon: string; title: string; desc: string };
+type R26Phase = { quarter: string; color: string; title: string; goals: R26Goal[] };
 type InformeData = {
   emoji: string; title: string; titleHighlight: string;
   fromColor: string; toColor: string;
   tagline: string; quote: string;
   dimensions: Dimension[]; aiAnalysis: string[]; workStyle: string[];
   careers: Career[]; roadmap: [RoadmapPhase, RoadmapPhase]; closing: string;
+  mentors: Mentor[];
+  roadmap2026: R26Phase[];
 };
 
 type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru";
@@ -149,6 +155,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-tertiary", title: "Antes de Matricularte", items: [{ title: "Primer proyecto en GitHub", desc: "Un portfolio con 2–3 proyectos reales vale más que cualquier certificado introductorio." }, { title: "Participá en un hackathon", desc: "Conocés la comunidad y testás tus habilidades bajo presión real en 48 horas." }], extras: [{ icon: "hub", label: "GitHub — Portafolio" }, { icon: "groups", label: "Hackathon universitario" }] },
     ],
     closing: "Los sistemas más importantes del mundo los están construyendo personas con tu perfil. Tu desafío no es llegar — es elegir en qué problema vale la pena trabajar. El primer commit siempre es el más importante.",
+    mentors: [
+      { name: "Andrej Karpathy", role: "AI Researcher · Ex-OpenAI & Tesla", platform: "YouTube", handle: "@AndrejKarpathy", why: "El mejor profesor de IA del mundo. Explica desde los fundamentos hasta GPT con claridad brutal.", color: "bg-primary" },
+      { name: "Pieter Levels", role: "Indie Maker · Nomad List, Remote OK", platform: "X (Twitter)", handle: "@levelsio", why: "Te demuestra que un solo developer puede construir negocios de millones desde cero.", color: "bg-secondary" },
+      { name: "Fireship", role: "Dev Education · 2M+ subscribers", platform: "YouTube", handle: "@Fireship", why: "El canal más eficiente para aprender tecnologías modernas en minutos. Indispensable.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Fundamentos Sólidos", goals: [{ icon: "code", title: "TypeScript + Next.js 15 en profundidad", desc: "Completá un proyecto full-stack deployado en Vercel con App Router y Server Components reales." }, { icon: "hub", title: "Portfolio en GitHub con 3 proyectos", desc: "Proyectos deployados en producción. Vercel, Railway o Fly.io son gratuitos para empezar." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Integración IA", goals: [{ icon: "smart_toy", title: "Primeros agentes con LLMs", desc: "Construí tu primer agente con la API de Anthropic o OpenAI. Completá el curso de Hugging Face." }, { icon: "rocket_launch", title: "Primer lanzamiento con usuarios reales", desc: "Publicá un micro-producto y conseguí 10 usuarios reales. La validación vale más que el código perfecto." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Comunidad y Empleo", goals: [{ icon: "groups", title: "Hackathon o programa tech", desc: "Participá en un hackathon de IA o aplicá a MLH, YC Startup School o AWS Activate." }, { icon: "work", title: "Primera pasantía o trabajo part-time", desc: "Con un portfolio sólido, el primer empleo part-time está al alcance. Postulate aunque sientas que no cumplís el 100%." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Decisión Universitaria", goals: [{ icon: "school", title: "Elegí con datos, no con miedo", desc: "Ciencias de la Computación, Ingeniería en Sistemas o bootcamp intensivo. La carrera importa menos que el portafolio." }, { icon: "trending_up", title: "Definí tu especialización", desc: "Backend, Frontend, ML/AI o DevOps. Elegir dirección clara multiplica tu velocidad de crecimiento." }] },
+    ],
   },
 
   "cientifico-analitico": {
@@ -177,6 +194,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-primary", title: "Antes de Matricularte", items: [{ title: "Contactá investigadores activos", desc: "Escribí a un doctorado de tu área. El 80% responde y muchos ofrecen voluntariados en laboratorio." }, { title: "Primera co-autoría", desc: "Buscá oportunidades para aparecer en un paper universitario. Cambia tu CV para siempre." }], extras: [{ icon: "contact_mail", label: "LinkedIn: Researchers" }, { icon: "article", label: "Google Scholar" }] },
     ],
     closing: "La ciencia necesita personas que no acepten el 'siempre fue así'. Tu capacidad analítica es un recurso escaso y valioso. Empezá con una pregunta que nadie haya respondido todavía.",
+    mentors: [
+      { name: "Andrew Huberman", role: "Neurocientífico · Stanford University", platform: "YouTube / Podcast", handle: "@hubermanlab", why: "Combina ciencia rigurosa con divulgación accesible. Modelo de cómo un científico comunica su trabajo al mundo.", color: "bg-secondary" },
+      { name: "Lex Fridman", role: "AI Researcher · Podcaster", platform: "YouTube", handle: "@lexfridman", why: "Entrevistas profundas con los mejores científicos del mundo. Amplía tu perspectiva sobre lo que es posible.", color: "bg-primary" },
+      { name: "Nassim Taleb", role: "Estadístico · Autor de El Cisne Negro", platform: "Books / X", handle: "@nntaleb", why: "Su pensamiento sobre incertidumbre y probabilidad es fundamental para cualquier mente científica.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-secondary", title: "Ene–Mar: Método Científico Digital", goals: [{ icon: "bar_chart", title: "Python para estadística y datos", desc: "Aprendé pandas, matplotlib y scipy. Son las herramientas del científico moderno en cualquier disciplina." }, { icon: "science", title: "Tu primera hipótesis documentada", desc: "Elegí un problema que te interese y diseñá un experimento simple. Documentalo como si fuera un paper real." }] },
+      { quarter: "Q2", color: "bg-primary", title: "Abr–Jun: Contacto con la Investigación", goals: [{ icon: "contact_mail", title: "Contactá investigadores activos", desc: "Escribí a un investigador de tu área en LinkedIn o email. El 80% responde. Pedí una llamada de 20 minutos." }, { icon: "article", title: "Leer 1 paper por semana", desc: "Usá Semantic Scholar o Google Scholar. Empezá con reviews, no con research articles originales." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Primera Publicación", goals: [{ icon: "edit_note", title: "Publicá un análisis propio", desc: "Un blog en Substack o Medium con análisis de datos sobre algo que te apasione. Es tu primer CV científico." }, { icon: "groups", title: "Comunidad científica local", desc: "Sumate a un club de ciencia, grupo de estudio o asistí a una conferencia universitaria abierta." }] },
+      { quarter: "Q4", color: "bg-secondary", title: "Oct–Dic: Ruta Universitaria", goals: [{ icon: "school", title: "Elegí con foco en investigación", desc: "Biología, Física, Matemática o Psicología. Priorizá universidades con laboratorios activos y acceso a CONICET." }, { icon: "emoji_events", title: "Olimpíadas científicas", desc: "Participá en olimpíadas nacionales de tu disciplina. Son el mejor diferencial para programas de excelencia." }] },
+    ],
   },
 
   "explorador-naturalista": {
@@ -205,6 +233,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-secondary", title: "Antes de Matricularte", items: [{ title: "Participá en campamentos científicos", desc: "Muchas universidades ofrecen programas de verano en campo para pre-universitarios." }, { title: "Aprendé GIS básico", desc: "QGIS es gratuito y una de las habilidades más demandadas en ciencias ambientales." }], extras: [{ icon: "map", label: "QGIS Tutorials" }, { icon: "groups", label: "Campamento Científico UBA" }] },
     ],
     closing: "El planeta necesita urgentemente personas con tu perfil: que lo entiendan, lo respeten y puedan diseñar soluciones reales. Tu vocación tiene el propósito más grande de todos. Salí, explorá, registrá.",
+    mentors: [
+      { name: "Bertie Gregory", role: "Wildlife Filmmaker · National Geographic", platform: "YouTube / Instagram", handle: "@bertiegregory", why: "Documenta la naturaleza con perspectiva joven y moderna. Muestra cómo hacer carrera real en ciencias naturales.", color: "bg-tertiary" },
+      { name: "Hank Green", role: "Divulgador Científico · SciShow", platform: "YouTube", handle: "@SciShow", why: "Explica biología y ciencias naturales con entusiasmo y rigor. El mejor punto de entrada para cualquier área.", color: "bg-secondary" },
+      { name: "Jane Goodall Institute", role: "Conservación y Primatología Global", platform: "YouTube / Web", handle: "janegoodall.org", why: "Referencia mundial en conservación. Combina ciencia de campo con activismo ambiental real y de impacto.", color: "bg-primary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-tertiary", title: "Ene–Mar: Ciencia de Campo", goals: [{ icon: "eco", title: "Observación sistemática con iNaturalist", desc: "Registrá especies locales cada semana. La observación sistemática es la base de cualquier carrera naturalista." }, { icon: "bar_chart", title: "Introducción a R o Python para ecología", desc: "La ecología moderna usa datos. Aprendé análisis básico con datasets de biodiversidad disponibles en GBIF." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Conexión Institucional", goals: [{ icon: "volunteer_activism", title: "Voluntariado en reserva o ONG ambiental", desc: "Contactá reservas naturales o museos de ciencias. La experiencia de campo vale más que cualquier certificado." }, { icon: "camera", title: "Fotografía naturalista", desc: "Documentar es parte del trabajo científico. Aprendé técnicas básicas de fotografía de naturaleza y ecosistemas." }] },
+      { quarter: "Q3", color: "bg-primary", title: "Jul–Sep: Proyectos con Impacto", goals: [{ icon: "science", title: "Primer monitoreo de fauna o flora", desc: "Diseñá un monitoreo simple en tu zona. La ciencia ciudadana tiene impacto real y se usa en políticas públicas." }, { icon: "public", title: "Conectar con redes globales", desc: "Society for Conservation Biology, IUCN Youth. La ciencia ambiental es internacional desde el primer día." }] },
+      { quarter: "Q4", color: "bg-tertiary", title: "Oct–Dic: Carrera con Propósito", goals: [{ icon: "school", title: "Biología, Ecología o Ingeniería Ambiental", desc: "Elegí una universidad con acceso a campo, laboratorios y vínculos con reservas o institutos de investigación." }, { icon: "trending_up", title: "Especializarte en biodiversidad o clima", desc: "Las dos áreas con más financiamiento y demanda internacional para el período 2025–2035." }] },
+    ],
   },
 
   "creativo-digital": {
@@ -233,6 +272,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-secondary", title: "Antes de Matricularte", items: [{ title: "Portfolio de 3 proyectos", desc: "Rediseñá una app que uses y expliqué tu proceso. Es mejor que cualquier CV." }, { title: "Concurso de diseño", desc: "Participá en un brief de diseño online. Los premios y menciones pesan mucho en admisiones." }], extras: [{ icon: "web", label: "Framer — Portfolio" }, { icon: "emoji_events", label: "Brief / Concursos" }] },
     ],
     closing: "El diseño digital mueve economías enteras. Las marcas más valiosas del mundo pagan por personas que piensan como vos. Construí tu portfolio desde hoy: cada pixel cuenta.",
+    mentors: [
+      { name: "Femke van Schoonhoven", role: "UX Designer · Product Design Coach", platform: "YouTube / Newsletter", handle: "@femkesvs", why: "La mejor creadora de contenido sobre diseño de producto. Muestra el trabajo real detrás de las pantallas bonitas.", color: "bg-primary" },
+      { name: "Pablo Stanley", role: "Designer · Humaaans / Blush Design", platform: "YouTube / X", handle: "@pablostanley", why: "Diseñador latinoamericano referente. Combina ilustración, sistemas de diseño y humor en cada pieza de contenido.", color: "bg-secondary" },
+      { name: "Design Tribe", role: "UX/UI Education en Español", platform: "YouTube", handle: "@DesignTribeES", why: "El canal de diseño más completo en español. Práctico, actualizado y orientado a proyectos reales.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Dominar Figma", goals: [{ icon: "design_services", title: "Auto Layout, Variables y Design Tokens", desc: "Las features que separan a un designer amateur de uno profesional. Practicalas en proyectos reales desde el día uno." }, { icon: "style", title: "Tu primer Design System", desc: "Armá una librería de componentes para un proyecto propio. Es el diferencial número uno en entrevistas de trabajo." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Portfolio con Casos Reales", goals: [{ icon: "web", title: "3 case studies con proceso completo", desc: "Problema, proceso y solución. Behance o una web en Framer. El proceso importa tanto como el resultado final." }, { icon: "person_search", title: "Primer test de usabilidad con usuarios", desc: "Rediseñá una app que uses y hacé tests con 5 personas reales. El feedback real es el mejor aprendizaje." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Visibilidad y Colaboración", goals: [{ icon: "share", title: "Publicar tu proceso en LinkedIn y Dribbble", desc: "Mostrar el proceso genera más oportunidades que el resultado final. La consistencia construye audiencia." }, { icon: "handshake", title: "Colaborar con un developer", desc: "Co-crear con alguien que implementa hace que diseñes considerando la realidad técnica. Busca proyectos Open Source." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Primeros Clientes o Pasantía", goals: [{ icon: "work", title: "Primera pasantía o proyecto freelance", desc: "Con 3 case studies sólidos, ya podés postularte a pasantías o tomar proyectos freelance pequeños." }, { icon: "school", title: "Diseño Gráfico, UX/UI o Multimedia", desc: "Elegí una carrera con orientación práctica y acceso a herramientas digitales desde el primer año." }] },
+    ],
   },
 
   "comunicador-estrategico": {
@@ -261,6 +311,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-tertiary", title: "Antes de Matricularte", items: [{ title: "Portfolio de contenido", desc: "Recopilá tus mejores piezas: artículos, campañas o presentaciones. La evidencia supera al CV." }, { title: "Prácticas en medios o agencias", desc: "Muchas aceptan pasantes secundarios. Una experiencia real antes de la facu es invaluable." }], extras: [{ icon: "work", label: "LinkedIn: Internships" }, { icon: "web", label: "Portfolio en Notion" }] },
     ],
     closing: "Vivimos en la era donde el contenido mueve economías. Las personas que saben comunicar estratégicamente nunca van a sobrar. Empezá a escribir hoy. Tu audiencia te está esperando.",
+    mentors: [
+      { name: "Seth Godin", role: "Marketing & Writing · Author", platform: "Blog / Books", handle: "seths.blog", why: "El blog de marketing más influyente del mundo. Cada post es una lección de comunicación estratégica comprimida.", color: "bg-primary" },
+      { name: "Ann Handley", role: "Content Marketing · MarketingProfs", platform: "Newsletter / Books", handle: "@annhandley", why: "La referente mundial de escritura de contenido. Su libro 'Everybody Writes' es lectura obligatoria.", color: "bg-secondary" },
+      { name: "Gary Vaynerchuk", role: "Entrepreneur · VaynerMedia Founder", platform: "YouTube / X", handle: "@garyvee", why: "Su enfoque sobre autenticidad, contenido y comunicación directa es transformador para cualquier comunicador.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Escribir en Público", goals: [{ icon: "edit", title: "Publicar 3 veces por semana", desc: "LinkedIn, Substack o un blog propio. Escribir en público es el entrenamiento más efectivo de comunicación estratégica." }, { icon: "record_voice_over", title: "Primer video de 60 segundos", desc: "TikTok, Reels o YouTube Shorts. La cámara se pierde con práctica. Empezá mal y mejorá rápido." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Audiencia Propia", goals: [{ icon: "newspaper", title: "Newsletter con 100 suscriptores reales", desc: "Contenido en tu área de interés. 100 suscriptores reales valen más que 10.000 seguidores pasivos." }, { icon: "podcasts", title: "Aparición en podcast o panel", desc: "Ofrecete como invitado en podcasts de tu área. Es la forma más rápida de construir credibilidad." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Comunicación Aplicada", goals: [{ icon: "campaign", title: "Gestionar redes de un proyecto real", desc: "Manejá las redes de un emprendimiento local o una ONG. Experiencia real con métricas reales." }, { icon: "analytics", title: "Aprender métricas de contenido", desc: "Sin datos no hay estrategia. Google Analytics, Meta Insights y herramientas de SEO básico." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Carrera Definida", goals: [{ icon: "school", title: "Comunicación, Periodismo o Marketing", desc: "Elegí una universidad con orientación práctica y vínculos con medios, agencias o empresas reales." }, { icon: "work", title: "Primera pasantía en medio o agencia", desc: "Con portfolio de contenido publicado, ya tenés lo necesario para postularte a tu primera pasantía." }] },
+    ],
   },
 
   "artista-expresivo": {
@@ -289,6 +350,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-secondary", title: "Antes de Matricularte", items: [{ title: "Portfolio artístico sólido", desc: "Para admisiones en arte, el portfolio es todo. Armá uno con tu mejor trabajo de los últimos 2 años." }, { title: "Audiciones y concursos", desc: "Participar en convocatorias te expone, te da feedback y abre puertas a becas." }], extras: [{ icon: "collections", label: "Portfolio Físico/Digital" }, { icon: "emoji_events", label: "Concursos y Becas" }] },
     ],
     closing: "El mundo necesita más belleza, más catarsis y más verdad. Solo los artistas pueden darlo. Tu sensibilidad no es un lujo — es una necesidad social. Creá con todo.",
+    mentors: [
+      { name: "Proko", role: "Dibujo Figurativo · Anatomy Teacher", platform: "YouTube", handle: "@Proko", why: "El mejor canal de YouTube para aprender dibujo desde los fundamentos. Clases de anatomía artística de nivel universitario.", color: "bg-primary" },
+      { name: "Rick Rubin", role: "Productor Musical · Author", platform: "Podcast / Books", handle: "Broken Record Podcast", why: "Su libro 'The Creative Act' es la biblia del proceso creativo. Aplicable a cualquier disciplina artística.", color: "bg-secondary" },
+      { name: "Nina Geometrieva", role: "Artista Digital · Adobe Creative Resident", platform: "YouTube / Instagram", handle: "@ninageometrieva", why: "Combina proceso artístico con herramientas digitales modernas. Muestra el camino entre arte análogo y digital.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Práctica Deliberada", goals: [{ icon: "brush", title: "30 minutos de práctica diaria sin excepción", desc: "La consistencia vence al talento. Sketchbooks, estudios de color, ejercicios técnicos. Publicá el proceso en redes." }, { icon: "collections", title: "Portfolio con 10 piezas sólidas", desc: "No cantidad, calidad. Diez trabajos que muestren tu voz y proceso son más poderosos que cien bocetos." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Digitalizar tu Práctica", goals: [{ icon: "draw", title: "Aprender Procreate o Adobe Fresco", desc: "La ilustración digital abre mercados que el arte análogo no puede tocar. Invertí en una tablet y practicá." }, { icon: "share", title: "Presencia consistente en Behance e Instagram", desc: "El arte sin audiencia no llega a quien lo necesita. Publicá regularmente y construí tu marca visual propia." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Primeros Ingresos", goals: [{ icon: "attach_money", title: "Primera comisión o venta", desc: "Etsy, Gumroad, Society6 o redes sociales. La primera venta, aunque sea pequeña, valida tu trabajo en el mercado." }, { icon: "emoji_events", title: "Concurso o exposición artística", desc: "Participar en convocatorias te da feedback real y visibilidad dentro de la comunidad artística." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Formación Formal", goals: [{ icon: "school", title: "Bellas Artes, Diseño o Animación", desc: "Elegí una carrera que combine técnica con libertad creativa. El portfolio pesa más que las notas en admisiones." }, { icon: "theater_comedy", title: "Definí tu disciplina principal", desc: "Ilustración, música, animación, escultura. Foco no significa cerrarse, significa profundizar para luego expandirse." }] },
+    ],
   },
 
   "lider-emprendedor": {
@@ -317,6 +389,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-primary", title: "Antes de Matricularte", items: [{ title: "Participá en un concurso de startups", desc: "NAVES, Endeavor, StartupWeekend. La adrenalina de un pitch real no tiene sustituto." }, { title: "Encontrá un mentor", desc: "Un founder con 5 años de experiencia te ahorra 2 años de errores evitables." }], extras: [{ icon: "emoji_events", label: "Endeavor / NAVES" }, { icon: "handshake", label: "LinkedIn Mentors" }] },
     ],
     closing: "El mundo necesita founders que quieran construir cosas que importen. Tu visión combinada con tu capacidad de llevar personas es extraordinariamente escasa. El mejor momento para empezar fue hace 5 años. El segundo mejor momento es hoy.",
+    mentors: [
+      { name: "Paul Graham", role: "Co-Founder Y Combinator", platform: "Essays / X", handle: "paulgraham.com", why: "Sus essays son la biblia del emprendimiento. Leer todo el archivo cambia para siempre cómo ves los negocios.", color: "bg-primary" },
+      { name: "Hernán Kazah", role: "Co-Founder Kaszek · Ex-MercadoLibre", platform: "LinkedIn / X", handle: "@hkazah", why: "El inversor más importante de Latinoamérica. Referente local del ecosistema emprendedor regional.", color: "bg-secondary" },
+      { name: "Alex Hormozi", role: "Entrepreneur · $100M Offers Author", platform: "YouTube / Books", handle: "@AlexHormozi", why: "El manual más práctico de cómo construir un negocio sólido. Concreto, sin relleno y orientado a resultados.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Lanzar Algo Real", goals: [{ icon: "store", title: "Primer producto o servicio en 30 días", desc: "No importa qué tan pequeño. Vender algo real — freelance, producto digital, consultoría — enseña más que cualquier curso." }, { icon: "menu_book", title: "Leer Zero to One y $100M Offers", desc: "Dos libros que cambian cómo ves los negocios. Tomá notas y aplicá al menos una idea a algo concreto." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Primeros 100 Clientes", goals: [{ icon: "groups", title: "Armar tu co-founder team", desc: "Los mejores emprendimientos se construyen en equipo. Buscá personas con skills distintas a las tuyas." }, { icon: "analytics", title: "100 clientes o usuarios reales", desc: "Sin ventas no hay startup. Conseguí 100 clientes reales antes de pensar en escalar o buscar inversión." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Aceleradoras y Red", goals: [{ icon: "rocket_launch", title: "Postularse a aceleradora", desc: "NAVES, Endeavor Latam, YC Startup School o 500 Global. El proceso de aplicación te enseña a comunicar tu visión." }, { icon: "handshake", title: "Red de mentores activos", desc: "Un mentor con 10 años de experiencia te ahorra 3 años de errores. Buscalos en LinkedIn y ofrecé valor primero." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Universidad como Plataforma", goals: [{ icon: "school", title: "Administración, Sistemas o tu área de negocio", desc: "La carrera importa menos que los compañeros que hacés y los recursos (laboratorios, incubadoras) que aprovechás." }, { icon: "trending_up", title: "Definir tu industria objetivo", desc: "Tech, salud, educación, fintech. Especializarte en una industria te hace más valioso como fundador desde el arranque." }] },
+    ],
   },
 
   "humanista-social": {
@@ -345,6 +428,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-primary", title: "Antes de Matricularte", items: [{ title: "Leer Freud, Rogers y Frankl", desc: "Conocer las corrientes psicológicas fundamentales antes de entrar te da una ventaja enorme en primer año." }, { title: "Autoconocimiento y terapia personal", desc: "Los mejores psicólogos son los que conocen su propio mapa emocional. Empezá tu propio proceso." }], extras: [{ icon: "book", label: "El Hombre en Busca de Sentido" }, { icon: "self_improvement", label: "Psicoanálisis / ACT Intro" }] },
     ],
     closing: "El mundo tiene un déficit profundo de personas que realmente escuchen y acompañen. Tu vocación no es un sacrificio — es una misión. Cuidarte a vos mismo es la condición para cuidar a otros.",
+    mentors: [
+      { name: "Brené Brown", role: "Investigadora · Universidad de Houston", platform: "TED / Podcast", handle: "@brenebrown", why: "Su trabajo sobre vulnerabilidad, empatía y liderazgo es esencial para cualquier perfil orientado a las personas.", color: "bg-primary" },
+      { name: "Adam Grant", role: "Psicólogo Organizacional · Wharton", platform: "Podcast WorkLife / Books", handle: "@AdamMGrant", why: "El psicólogo más influyente de la actualidad. Sus libros sobre dar y pensar son lectura obligatoria.", color: "bg-secondary" },
+      { name: "Simon Sinek", role: "Autor · Speaker Internacional", platform: "YouTube / Books", handle: "@simonsinek", why: "'Start With Why' es la base de cualquier liderazgo con propósito. Su contenido inspira y tiene sustancia real.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Experiencia Directa", goals: [{ icon: "volunteer_activism", title: "Voluntariado activo en ONG o comunidad", desc: "No para el CV — para entender de primera mano los problemas que querés resolver. La empatía se construye en campo." }, { icon: "menu_book", title: "Leer El Hombre en Busca de Sentido", desc: "Viktor Frankl. El libro que todo perfil humanista necesita leer. Cambia cómo ves el sufrimiento y el propósito." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Habilidades Concretas", goals: [{ icon: "hearing", title: "Curso de escucha activa y CNV", desc: "Comunicación No Violenta o el Método DISC. Herramientas concretas del trabajo humanista con impacto real." }, { icon: "psychology", title: "Psicología de Yale en Coursera (gratis)", desc: "El mejor punto de entrada para entender el comportamiento humano antes de elegir una carrera en el área." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Liderazgo Comunitario", goals: [{ icon: "groups", title: "Liderá un proyecto social propio", desc: "Una campaña, un evento, un grupo de apoyo. El liderazgo real se aprende liderando, no leyendo sobre liderazgo." }, { icon: "campaign", title: "Toastmasters o TEDx Youth", desc: "Aprender a hablar en público sobre lo que te importa. La voz es la herramienta principal del perfil humanista." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Carrera de Impacto", goals: [{ icon: "school", title: "Psicología, Trabajo Social o Educación", desc: "Elegí una universidad con inserción comunitaria y prácticas tempranas. El trabajo de campo es insustituible." }, { icon: "public", title: "Programas juveniles de UNICEF u OMS", desc: "La perspectiva global amplía el impacto local. Las organizaciones internacionales tienen programas para jóvenes." }] },
+    ],
   },
 
   "agente-cambio": {
@@ -373,6 +467,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-tertiary", title: "Antes de Matricularte", items: [{ title: "Modelo ONU o parlamento juvenil", desc: "Desarrollás argumentación, negociación y visión estratégica en un ambiente real." }, { title: "Documentá injusticias locales", desc: "Un ensayo, un documental corto, un artículo viral. Empezá a construir tu voz pública." }], extras: [{ icon: "language", label: "Modelo de Naciones Unidas" }, { icon: "article", label: "Medium / Periódico escolar" }] },
     ],
     closing: "La historia la cambian personas que no se resignan. Tu combinación de valores sólidos, mente analítica y voz poderosa es exactamente lo que los movimientos más importantes necesitan. La injusticia no espera — y vos tampoco tenés que hacerlo.",
+    mentors: [
+      { name: "Bryan Stevenson", role: "Abogado · Equal Justice Initiative", platform: "TED / Books", handle: "TED: We Need to Talk About Injustice", why: "Su TED Talk y 'Just Mercy' son el modelo de cómo el derecho puede transformar vidas y sistemas enteros.", color: "bg-primary" },
+      { name: "Yuval Noah Harari", role: "Historiador · Autor de Sapiens", platform: "YouTube / Books", handle: "@harari_yuval", why: "Entender el pasado y presente de la humanidad es la base de cualquier acción transformadora real.", color: "bg-secondary" },
+      { name: "Malala Yousafzai", role: "Activista · Premio Nobel de la Paz", platform: "Books / Social", handle: "@Malala", why: "El ejemplo más poderoso de que la edad no es límite para el impacto. Su historia es una lección de determinación.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Conocer el Sistema", goals: [{ icon: "gavel", title: "Introducción al Derecho y políticas públicas", desc: "Entendé cómo funciona el sistema legal y político de tu país. El cambio real requiere conocer las reglas del juego." }, { icon: "article", title: "Prensa internacional y análisis crítico", desc: "The Guardian, El País, NACLA. La comprensión global da perspectiva sobre los problemas que querés atacar." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Acción Concreta", goals: [{ icon: "campaign", title: "Primera campaña o proyecto de incidencia", desc: "Identificá un problema en tu escuela o comunidad y organizá una respuesta colectiva. Pequeño pero real." }, { icon: "edit", title: "Publicar tu visión", desc: "Un blog, columna en el diario estudiantil o hilo en redes. Tu voz es tu primera y más poderosa herramienta." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Red de Aliados", goals: [{ icon: "groups", title: "Voluntariado en organización real", desc: "Amnistía Internacional, CELS, FARN u organizaciones locales. Sumate y aprendé el trabajo real desde adentro." }, { icon: "school", title: "Debate y oratoria", desc: "Los mejores agentes de cambio son oradores excepcionales. Clubes de debate o programas de liderazgo juvenil." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Formación Estratégica", goals: [{ icon: "school", title: "Derecho, Ciencias Políticas o RRII", desc: "Tres caminos hacia el cambio sistémico. Elegí según tu foco: legal, institucional o internacional." }, { icon: "public", title: "ONE Young World o Model UN", desc: "Programas internacionales de liderazgo. Te conectan con jóvenes cambiadores de todo el mundo." }] },
+    ],
   },
 
   "estratega-negocios": {
@@ -401,6 +506,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-secondary", title: "Antes de Matricularte", items: [{ title: "Simulaciones de negocio", desc: "Competencias como Global Management Challenge o Capsim te dan experiencia real de decisión estratégica." }, { title: "Lectura del Economist y FT", desc: "Entender el contexto macro es la base del pensamiento estratégico global." }], extras: [{ icon: "emoji_events", label: "Global Mgmt Challenge" }, { icon: "newspaper", label: "The Economist / FT" }] },
     ],
     closing: "Las organizaciones más importantes del mundo pagan más por estrategas que por cualquier otro perfil. Tu capacidad de ver el bosque y los árboles simultáneamente es un activo extraordinario. Empezá a pensar en grande desde hoy.",
+    mentors: [
+      { name: "Ray Dalio", role: "Fundador Bridgewater Associates", platform: "YouTube / Books", handle: "@RayDalio", why: "Sus Principios son el manual de management y toma de decisiones más usado por ejecutivos globales.", color: "bg-primary" },
+      { name: "Alex Hormozi", role: "Entrepreneur · Author", platform: "YouTube / Books", handle: "@AlexHormozi", why: "El enfoque más práctico sobre cómo construir y escalar negocios rentables. Sin relleno, orientado a resultados.", color: "bg-secondary" },
+      { name: "Harvard Business Review", role: "Publicación de referencia global", platform: "Web / Newsletter", handle: "hbr.org", why: "El estándar del pensamiento estratégico empresarial. Sus artículos cortos son casos de estudio en miniatura.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Pensamiento Estratégico", goals: [{ icon: "analytics", title: "Excel avanzado y SQL básico", desc: "Toda estrategia vive en datos. Dominar estas herramientas te diferencia desde el primer trabajo o entrevista." }, { icon: "menu_book", title: "Principios de Dalio + Good Strategy Bad Strategy", desc: "Dos libros que estructuran cómo analizar situaciones complejas y diseñar respuestas efectivas con criterio." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Simulaciones Reales", goals: [{ icon: "emoji_events", title: "Competencia de estrategia de negocios", desc: "Global Management Challenge, CFA Research Challenge o Capsim. Experiencia real de toma de decisiones bajo presión." }, { icon: "work_history", title: "Analizar 10 empresas en profundidad", desc: "Elegí 10 empresas que admires y analizá su estrategia: modelo de negocio, ventaja competitiva y métricas clave." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Primera Experiencia", goals: [{ icon: "handshake", title: "Consultoría gratuita para una PyME", desc: "Ofrecé un análisis estratégico a un emprendimiento local. Es tu primer caso real y tu primera referencia laboral." }, { icon: "hub", title: "LinkedIn con 500+ conexiones relevantes", desc: "La estrategia de negocios es un campo donde las relaciones abren puertas. Construí tu red desde ahora." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Carrera de Alto Impacto", goals: [{ icon: "school", title: "Administración, Economía o Ing. Industrial", desc: "Elegí universidad con buen ranking en negocios y vínculos reales con empresas para pasantías tempranas." }, { icon: "trending_up", title: "Target: Big 4 o consultoría top", desc: "McKinsey, BCG, Bain, Deloitte. Investigá sus programas de reclutamiento para estudiantes desde primer año." }] },
+    ],
   },
 
   "constructor-pragmatico": {
@@ -429,6 +545,17 @@ const INFORMES: Record<string, InformeData> = {
       { step: "2", color: "bg-secondary", title: "Antes de Matricularte", items: [{ title: "Visitá obras e industrias", desc: "Nada reemplaza ver una obra en construcción o una planta industrial funcionando." }, { title: "Concursos de diseño técnico", desc: "Olimpíadas de ingeniería, concursos de arquitectura estudiantil o challenges de diseño." }], extras: [{ icon: "factory", label: "Visita Técnica Industrial" }, { icon: "emoji_events", label: "Olimpíadas Ingeniería" }] },
     ],
     closing: "Cada puente, cada edificio, cada producto bien diseñado existe porque alguien como vos decidió hacerlo bien. El mundo físico necesita constructores que piensen. Ese sos vos.",
+    mentors: [
+      { name: "Mark Rober", role: "Ex-NASA Engineer · YouTuber", platform: "YouTube", handle: "@MarkRober", why: "Ex-ingeniero de la NASA que demuestra que la ingeniería puede ser creativa, divertida y extraordinariamente impactante.", color: "bg-primary" },
+      { name: "Simone Giertz", role: "Inventor · The Queen of Shitty Robots", platform: "YouTube", handle: "@simonegiertz", why: "Sus proyectos enseñan más ingeniería práctica y resolución de problemas que muchos cursos universitarios.", color: "bg-secondary" },
+      { name: "Adam Savage", role: "Maker · Ex-MythBusters", platform: "YouTube (Tested)", handle: "@tested", why: "Comparte el proceso real de fabricación y construcción. Su filosofía del making es inspiradora y muy práctica.", color: "bg-tertiary" },
+    ],
+    roadmap2026: [
+      { quarter: "Q1", color: "bg-primary", title: "Ene–Mar: Construir de Verdad", goals: [{ icon: "build", title: "Primer proyecto físico completo", desc: "Un mueble, un circuito, un objeto en 3D. Lo que sea. La práctica directa con materiales reales es tu mejor maestro." }, { icon: "design_services", title: "AutoCAD o SketchUp gratuito", desc: "Son las herramientas base de cualquier ingeniero o arquitecto. Tutoriales completos y gratuitos en YouTube." }] },
+      { quarter: "Q2", color: "bg-secondary", title: "Abr–Jun: Portfolio Técnico", goals: [{ icon: "videocam", title: "Documentar tu proceso de construcción", desc: "Fotos y videos de cómo construís. Es tu portfolio. Los que contratan ingenieros quieren ver cómo pensás." }, { icon: "hub", title: "Hackerspace o FabLab local", desc: "Buscá un espacio maker en tu ciudad. Tienen herramientas profesionales y comunidad real de constructores." }] },
+      { quarter: "Q3", color: "bg-tertiary", title: "Jul–Sep: Competencias Técnicas", goals: [{ icon: "emoji_events", title: "Olimpíada de Ingeniería o Robótica", desc: "First Robotics, olimpíadas de física o construcción. El mejor diferencial para admisiones universitarias técnicas." }, { icon: "factory", title: "Visita técnica a obra o planta industrial", desc: "Contactá empresas constructoras o industriales. Ver el trabajo real en operación cambia por completo la perspectiva." }] },
+      { quarter: "Q4", color: "bg-primary", title: "Oct–Dic: Carrera con Impacto Físico", goals: [{ icon: "school", title: "Ingeniería Civil, Industrial o Arquitectura", desc: "Elegí universidad con prácticas de campo tempranas y vínculos con la industria de construcción o manufactura." }, { icon: "trending_up", title: "Especializarte en construcción sostenible", desc: "Las infraestructuras del futuro son verdes. La especialización en sustentabilidad es el diferencial del constructor del siglo XXI." }] },
+    ],
   },
 };
 
@@ -692,7 +819,7 @@ function InformeContent() {
           <div className="mb-10 inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full text-primary font-bold text-xs tracking-widest uppercase">
             INFORME VOCACIONAL IA
           </div>
-          <div className="mb-8 text-8xl md:text-9xl">{p.emoji}</div>
+          <div className="mb-8 flex justify-center"><Emoji3D emoji={p.emoji} size={140} /></div>
           <h1 className="font-headline text-5xl md:text-7xl font-black text-on-surface tracking-tighter leading-none mb-6">
             {p.title} <br />
             <span className={`bg-gradient-to-r ${p.fromColor} ${p.toColor} bg-clip-text text-transparent`}>{p.titleHighlight}</span>
@@ -809,10 +936,249 @@ function InformeContent() {
           </div>
         </section>
 
+        {/* Mentors */}
+        <section className="space-y-8">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-black uppercase tracking-tighter mb-4 border border-secondary/20">
+              <span className="material-symbols-outlined text-sm">verified</span>
+              Referentes recomendados
+            </div>
+            <h2 className="font-headline text-3xl font-extrabold text-on-surface mb-2">Mentores que seguir ahora</h2>
+            <p className="text-on-surface-variant max-w-2xl">Personas reales cuyo contenido y trayectoria está directamente alineada con tu perfil. Seguirlos acelera tu crecimiento.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {p.mentors.map((mentor) => (
+              <div key={mentor.name} className="glass-card p-6 rounded-3xl flex flex-col gap-4 hover:ring-2 hover:ring-primary/20 transition-all">
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-2xl ${mentor.color} flex items-center justify-center text-on-primary-fixed font-black text-lg flex-shrink-0`}>
+                    {mentor.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-bold text-on-surface text-sm leading-tight">{mentor.name}</p>
+                    <p className="text-on-surface-variant text-xs leading-tight">{mentor.role}</p>
+                  </div>
+                </div>
+                <p className="text-sm text-on-surface-variant leading-relaxed flex-1">{mentor.why}</p>
+                <div className="flex items-center justify-between pt-2 border-t border-outline-variant/10">
+                  <span className="text-xs font-bold text-on-surface-variant">{mentor.platform}</span>
+                  <span className="text-xs bg-surface-container px-3 py-1 rounded-full text-on-surface-variant font-mono">{mentor.handle}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Roadmap 2026 */}
+        <section className="space-y-10">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-black uppercase tracking-tighter mb-4 border border-primary/20">
+              <span className="material-symbols-outlined text-sm">calendar_month</span>
+              Plan de acción
+            </div>
+            <h2 className="font-headline text-4xl font-black text-on-surface mb-3">Tu Roadmap 2026</h2>
+            <p className="text-on-surface-variant max-w-xl mx-auto">Objetivos concretos trimestre a trimestre, diseñados específicamente para tu perfil vocacional.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {p.roadmap2026.map((phase) => (
+              <div key={phase.quarter} className="glass-card rounded-3xl overflow-hidden">
+                <div className={`${phase.color} px-6 py-4 flex items-center gap-3`}>
+                  <span className="text-on-primary-fixed font-black text-2xl">{phase.quarter}</span>
+                  <h3 className="text-on-primary-fixed font-headline font-bold text-sm leading-tight">{phase.title}</h3>
+                </div>
+                <div className="p-6 space-y-4">
+                  {phase.goals.map((goal) => (
+                    <div key={goal.title} className="flex gap-4">
+                      <div className={`w-9 h-9 rounded-xl ${phase.color}/10 flex items-center justify-center flex-shrink-0`}>
+                        <span className={`material-symbols-outlined text-sm ${phase.color.replace("bg-", "text-")}`}>{goal.icon}</span>
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-on-surface mb-0.5">{goal.title}</p>
+                        <p className="text-xs text-on-surface-variant leading-relaxed">{goal.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CV Guide */}
+        <section className="space-y-10">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-tertiary/10 text-tertiary rounded-full text-xs font-black uppercase tracking-tighter mb-6 border border-tertiary/20">
+              <span className="material-symbols-outlined text-sm">badge</span>
+              Bonus exclusivo
+            </div>
+            <h2 className="font-headline text-4xl font-black text-on-surface mb-4">Cómo armar tu Currículum para conseguir trabajo</h2>
+            <p className="text-on-surface-variant max-w-2xl mx-auto">Una guía paso a paso con ejemplo visual para que tu CV destaque desde el primer segundo.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            {/* Steps */}
+            <div className="space-y-6">
+              {[
+                {
+                  step: "1",
+                  icon: "person",
+                  color: "bg-primary",
+                  title: "Datos de contacto claros y profesionales",
+                  desc: "Ponés tu nombre completo en grande, tu título o rol objetivo ('Desarrollador Full-Stack Junior'), email profesional, teléfono con código de país y el link a tu LinkedIn o portfolio. Sin foto si no es requerida, sin fecha de nacimiento ni DNI en países donde no corresponde.",
+                  tip: "Tu email debe ser nombre.apellido@gmail.com — nunca 'darkwarrior99'.",
+                },
+                {
+                  step: "2",
+                  icon: "format_quote",
+                  color: "bg-secondary",
+                  title: "Resumen profesional (3 líneas máximo)",
+                  desc: "Dos o tres líneas que respondan: quién sos, qué sabés hacer y qué buscás. Es lo primero que lee el reclutador. Tiene que ser específico a la posición que aplicás, no genérico.",
+                  tip: "Evitá frases vacías como 'soy responsable y trabajo en equipo'. Mejor: 'Estudiante de 3° año de Sistemas con experiencia en proyectos React y Node.js, buscando primer empleo en producto.'",
+                },
+                {
+                  step: "3",
+                  icon: "school",
+                  color: "bg-tertiary",
+                  title: "Educación relevante",
+                  desc: "Institución, carrera y año de egreso (o estimado). Si tenés promedio alto, incluilo. Si sos estudiante, ponés el año que cursás. Cursos, bootcamps y certificaciones van acá también, especialmente si son de plataformas reconocidas (Coursera, edX, Platzi).",
+                  tip: "Ordená de más reciente a más antiguo siempre.",
+                },
+                {
+                  step: "4",
+                  icon: "build",
+                  color: "bg-primary",
+                  title: "Habilidades técnicas y herramientas",
+                  desc: "Lista organizada de tecnologías, idiomas de programación, software o competencias específicas. Usá niveles reales: Básico, Intermedio, Avanzado. No pongas Excel si lo usás a nivel básico y la posición es técnica.",
+                  tip: "Adaptá esta sección para cada postulación: priorizá las skills que pide la oferta.",
+                },
+                {
+                  step: "5",
+                  icon: "work_history",
+                  color: "bg-secondary",
+                  title: "Experiencia o proyectos",
+                  desc: "Si tenés experiencia laboral: empresa, rol, fechas y 2–3 logros concretos en viñetas (no descripción de funciones). Si no tenés experiencia: proyectos personales o universitarios con link a GitHub, descripción del problema que resolviste y tecnologías usadas.",
+                  tip: "Cuantificá todo lo que puedas: 'Reduje el tiempo de carga en un 40%' > 'Mejoré el rendimiento'.",
+                },
+                {
+                  step: "6",
+                  icon: "checklist",
+                  color: "bg-tertiary",
+                  title: "Formato y presentación final",
+                  desc: "Máximo 1 página si tenés menos de 5 años de experiencia. Fuente limpia (Inter, Calibri, Arial). Márgenes de al menos 1.5 cm. Guardá siempre como PDF con el nombre: 'NombreApellido_CV.pdf'. Usá herramientas como Canva, Novoresume o un template de Google Docs limpio.",
+                  tip: "Evitá columnas múltiples si vas a pasar por filtros ATS (sistemas automáticos de reclutamiento).",
+                },
+              ].map(({ step, icon, color, title, desc, tip }) => (
+                <div key={step} className="flex gap-5">
+                  <div className="flex-shrink-0">
+                    <div className={`w-10 h-10 rounded-full ${color} flex items-center justify-center font-black text-on-primary-fixed`}>{step}</div>
+                  </div>
+                  <div className="glass-card p-6 rounded-2xl flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`material-symbols-outlined text-sm ${color.replace("bg-", "text-")}`}>{icon}</span>
+                      <h3 className="font-headline font-bold text-on-surface">{title}</h3>
+                    </div>
+                    <p className="text-sm text-on-surface-variant leading-relaxed mb-3">{desc}</p>
+                    <div className="flex items-start gap-2 bg-primary/5 rounded-xl p-3 border border-primary/10">
+                      <span className="material-symbols-outlined text-primary text-sm mt-0.5">lightbulb</span>
+                      <p className="text-xs text-on-surface-variant italic">{tip}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Visual CV example */}
+            <div className="sticky top-24">
+              <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-4 text-center">Ejemplo de CV bien estructurado</p>
+              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden text-gray-800 font-sans text-[11px] leading-snug">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-[#7857f8] to-[#b2a1ff] px-6 py-5 text-white">
+                  <p className="text-lg font-black tracking-tight">Valentina García</p>
+                  <p className="text-white/80 text-[11px] font-medium">Diseñadora UX/UI · Buscando primer empleo en producto</p>
+                  <div className="flex flex-wrap gap-3 mt-3 text-[10px] text-white/70">
+                    <span>valentina.garcia@gmail.com</span>
+                    <span>+54 11 5555-1234</span>
+                    <span>linkedin.com/in/valgarcia</span>
+                    <span>valgarcia.design</span>
+                  </div>
+                </div>
+
+                <div className="px-6 py-4 space-y-4">
+                  {/* Summary */}
+                  <div>
+                    <p className="text-[9px] uppercase tracking-widest font-black text-[#7857f8] mb-1 border-b border-gray-100 pb-1">Resumen</p>
+                    <p className="text-gray-600 text-[10px] leading-relaxed">Estudiante de 3° año de Diseño Gráfico con especialización en UX/UI. Experiencia en proyectos universitarios con Figma y prototipado. Buscando primer empleo en empresa de producto donde aportar valor desde el diseño centrado en el usuario.</p>
+                  </div>
+
+                  {/* Skills */}
+                  <div>
+                    <p className="text-[9px] uppercase tracking-widest font-black text-[#7857f8] mb-2 border-b border-gray-100 pb-1">Habilidades</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {["Figma (Avanzado)", "Adobe XD", "Prototipado", "Illustrator", "Design Systems", "HTML/CSS Básico", "Inglés B2"].map(s => (
+                        <span key={s} className="bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full text-[9px] font-semibold border border-purple-100">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Education */}
+                  <div>
+                    <p className="text-[9px] uppercase tracking-widest font-black text-[#7857f8] mb-2 border-b border-gray-100 pb-1">Educación</p>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-bold text-[10px]">Lic. en Diseño Gráfico</p>
+                        <p className="text-gray-500 text-[9px]">Universidad de Palermo · 2022 – 2025 (en curso)</p>
+                      </div>
+                      <span className="text-[9px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">Prom. 8.4</span>
+                    </div>
+                    <div className="mt-2 flex justify-between items-start">
+                      <div>
+                        <p className="font-bold text-[10px]">UX Design Professional Certificate</p>
+                        <p className="text-gray-500 text-[9px]">Google · Coursera · 2024</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Projects */}
+                  <div>
+                    <p className="text-[9px] uppercase tracking-widest font-black text-[#7857f8] mb-2 border-b border-gray-100 pb-1">Proyectos</p>
+                    <div className="space-y-2">
+                      <div>
+                        <div className="flex justify-between">
+                          <p className="font-bold text-[10px]">App de turnos médicos · Proyecto Universitario</p>
+                          <a className="text-[9px] text-[#7857f8] font-semibold">Ver →</a>
+                        </div>
+                        <ul className="text-gray-500 text-[9px] space-y-0.5 mt-0.5 list-disc list-inside">
+                          <li>Rediseñé flujo de turnos reduciendo pasos de 7 a 3</li>
+                          <li>Test de usabilidad con 12 usuarios reales</li>
+                          <li>Entregable: Figma + prototipo navegable</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <div className="flex justify-between">
+                          <p className="font-bold text-[10px]">Sistema de diseño para e-commerce</p>
+                          <a className="text-[9px] text-[#7857f8] font-semibold">Ver →</a>
+                        </div>
+                        <ul className="text-gray-500 text-[9px] space-y-0.5 mt-0.5 list-disc list-inside">
+                          <li>Construí librería de 40+ componentes reutilizables en Figma</li>
+                          <li>Documentación completa de tokens de diseño</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer label */}
+                <div className="px-6 py-2 bg-gray-50 border-t border-gray-100 text-center">
+                  <p className="text-[9px] text-gray-400">NombreApellido_CV.pdf · 1 página · Fuente: Inter 10pt</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Closing */}
         <footer className="pt-20 border-t border-outline-variant/15 text-center">
           <div className="max-w-2xl mx-auto space-y-8">
-            <div className="text-6xl">{p.emoji}</div>
+            <div className="flex justify-center"><Emoji3D emoji={p.emoji} size={80} /></div>
             <h2 className="font-headline text-4xl font-black text-on-surface">Tu misión apenas comienza.</h2>
             <p className="text-on-surface-variant leading-relaxed text-lg">{p.closing}</p>
             <div className="flex justify-center gap-4 no-print">

@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import Emoji3D from "@/app/components/Emoji3D";
 
 const TRAIT_COLORS = [
   { color: "text-primary", barFrom: "from-primary", barTo: "to-primary-dim" },
@@ -263,6 +264,27 @@ function ResultadosContent() {
   const country = searchParams.get("pais") || "arg";
   const p: Profile = PROFILES[key] ?? PROFILES["creativo-digital"];
   const [isPaying, setIsPaying] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: `Mi perfil vocacional: ${p.title} ${p.titleHighlight}`,
+      text: p.subtitle,
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch { /* ignorar si cancela */ }
+    } else {
+      handleCopyLink();
+    }
+  };
 
   const handleCheckout = async () => {
     try {
@@ -316,7 +338,7 @@ function ResultadosContent() {
 
         {/* Result Header */}
         <section className="text-center mb-16">
-          <div className="inline-block text-8xl mb-6">{p.emoji}</div>
+          <div className="inline-block mb-6"><Emoji3D emoji={p.emoji} size={120} /></div>
           <h1 className="font-headline text-5xl md:text-7xl font-black mb-4 tracking-tighter leading-none">
             {p.title}{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -418,8 +440,11 @@ function ResultadosContent() {
               <div className="text-center mb-8">
                 <p className="text-on-surface-variant text-sm font-bold uppercase tracking-widest mb-1">Inversión única</p>
                 <div className="flex flex-col items-center">
-                  <span className="text-4xl font-black text-on-surface">ARS $15.000</span>
-                  
+                  {country === "arg" ? (
+                    <span className="text-4xl font-black text-on-surface">ARS $15.000</span>
+                  ) : (
+                    <span className="text-4xl font-black text-on-surface">USD $5</span>
+                  )}
                 </div>
               </div>
               <button
@@ -440,12 +465,12 @@ function ResultadosContent() {
         <section className="mt-20 text-center">
           <h4 className="font-headline text-lg font-bold text-on-surface-variant mb-6 uppercase tracking-widest">Comparte tu resultado</h4>
           <div className="flex justify-center gap-4">
-            <button className="p-4 bg-surface-container-low rounded-full hover:bg-primary/20 transition-colors border border-outline-variant/10">
+            <button onClick={handleShare} className="p-4 bg-surface-container-low rounded-full hover:bg-primary/20 transition-colors border border-outline-variant/10">
               <span className="material-symbols-outlined text-primary">share</span>
             </button>
-            <button className="flex items-center gap-2 px-6 py-4 bg-surface-container-low rounded-full hover:bg-on-surface/5 transition-colors border border-outline-variant/10 text-sm font-bold text-on-surface-variant">
+            <button onClick={handleCopyLink} className="flex items-center gap-2 px-6 py-4 bg-surface-container-low rounded-full hover:bg-on-surface/5 transition-colors border border-outline-variant/10 text-sm font-bold text-on-surface-variant">
               <span className="material-symbols-outlined text-sm">content_copy</span>
-              Copiar Enlace
+              {copied ? "¡Enlace copiado!" : "Copiar Enlace"}
             </button>
           </div>
         </section>

@@ -1,3 +1,5 @@
+import Emoji3D from "@/app/components/Emoji3D";
+
 export default function HomePage() {
   return (
     <>
@@ -7,10 +9,10 @@ export default function HomePage() {
             VocacionAI
           </div>
           <div className="hidden md:flex gap-8 items-center">
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">Cómo funciona</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">Vista previa</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">FAQ</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#">Contacto</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#como-funciona">Cómo funciona</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#vista-previa">Vista previa</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#faq">FAQ</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#contacto">Contacto</a>
           </div>
           <div className="flex items-center gap-4">
             <a href="/test" className="bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] text-on-primary-fixed font-bold py-2 px-6 rounded-xl hover:scale-105 transition-transform active:scale-95">
@@ -95,7 +97,7 @@ export default function HomePage() {
         </section>
 
         {/* Steps */}
-        <section className="max-w-7xl mx-auto px-8 py-24">
+        <section id="como-funciona" className="max-w-7xl mx-auto px-8 py-24">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl lg:text-5xl font-black font-headline tracking-tight">Tres pasos para descubrir tu camino</h2>
             <p className="text-on-surface-variant max-w-2xl mx-auto">Nuestro proceso está diseñado para ser simple pero profundamente revelador.</p>
@@ -135,7 +137,7 @@ export default function HomePage() {
         </section>
 
         {/* Preview */}
-        <section className="bg-surface-container-low py-24">
+        <section id="vista-previa" className="bg-surface-container-low py-24">
           <div className="max-w-7xl mx-auto px-8">
             <div className="grid lg:grid-cols-2 gap-20 items-center">
               <div className="space-y-8">
@@ -308,7 +310,7 @@ export default function HomePage() {
         </section>
 
         {/* FAQ */}
-        <section className="max-w-3xl mx-auto px-8 py-24">
+        <section id="faq" className="max-w-3xl mx-auto px-8 py-24">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black font-headline">Preguntas Frecuentes</h2>
           </div>
@@ -343,7 +345,7 @@ export default function HomePage() {
           <div className="bg-gradient-to-br from-primary-dim to-secondary rounded-[3rem] p-12 lg:p-24 text-center relative overflow-hidden group">
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
             <div className="relative z-10 space-y-8">
-              <div className="text-6xl lg:text-7xl">🚀</div>
+              <div className="flex justify-center"><Emoji3D emoji="🚀" size={96} /></div>
               <h2 className="text-4xl lg:text-6xl font-black font-headline text-on-primary-fixed leading-tight">
                 ¿Listo para lanzar tu <br />misión profesional?
               </h2>
@@ -360,7 +362,7 @@ export default function HomePage() {
         </section>
 
         {/* Contact */}
-        <section className="max-w-7xl mx-auto px-8 py-24 grid lg:grid-cols-2 gap-16">
+        <section id="contacto" className="max-w-7xl mx-auto px-8 py-24 grid lg:grid-cols-2 gap-16">
           <div className="space-y-8">
             <h2 className="text-4xl font-black font-headline">Hablemos</h2>
             <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocacionAI en tu colegio o simplemente querés saludarnos?</p>
