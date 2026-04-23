@@ -89,6 +89,24 @@ const UNIVERSITY_COUNTRY: Record<string, CountryCode> = {
   "U. Adolfo Ibáñez (Chile)": "chile",
   "ESE (Chile)": "chile",
   "IPADE (México)": "mx",
+  "UBA – CONICET (Argentina)": "arg",
+  "UTDT (Argentina)": "arg",
+  "U. de Santiago (Chile)": "chile",
+  "UDELAR (Uruguay)": "uru",
+  "ORT Uruguay": "uru",
+  "U. de Montevideo (Uruguay)": "uru",
+  "UCU (Uruguay)": "uru",
+  "UNAL (Colombia)": "col",
+  "U. Javeriana (Colombia)": "col",
+  "EAFIT (Colombia)": "col",
+  "U. del Rosario (Colombia)": "col",
+  "U. Pedagógica Nacional (Colombia)": "col",
+  "PUCP (Perú)": "peru",
+  "UNMSM (Perú)": "peru",
+  "UNI (Perú)": "peru",
+  "UPC (Perú)": "peru",
+  "ESAN (Perú)": "peru",
+  "UPCH (Perú)": "peru",
 };
 
 function isCountryCode(value: string | null): value is CountryCode {
@@ -121,6 +139,7 @@ const UNIVERSITY_URLS: Record<string, string> = {
   "UNLP (Argentina)": "https://unlp.edu.ar/",
   "UCEMA (Argentina)": "https://ucema.edu.ar/",
   "ITESM (México)": "https://tec.mx/",
+
 };
 
 function getUniversityHref(university: string): string {
@@ -763,6 +782,11 @@ function InformeContent() {
     }
     setShowShare(true);
   };
+  const handleEmail = () => {
+    const subject = `Mi perfil vocacional: ${p.title} ${p.titleHighlight}`;
+    const body = `¡Hola!\n\nQuería compartirte mi perfil vocacional que descubrí con VocacionAI: "${p.title} ${p.titleHighlight}".\n\nMe pareció súper interesante y pensé que a vos también te podría gustar.\n\nPodés verlo aquí: ${window.location.href}\n\n¡Saludos!`;
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
 
   if (!isPaid) {
     return (
@@ -801,6 +825,10 @@ function InformeContent() {
           <span className="text-on-surface-variant text-sm font-label hidden md:block">Informe de Resultados • {p.title} {p.titleHighlight}</span>
         </div>
         <div className="flex items-center gap-3">
+          <button onClick={handleEmail} className="bg-surface-container-high text-on-surface px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium">
+            <span className="material-symbols-outlined">mail</span>
+            Enviar por email
+          </button>
           <button onClick={handleShare} className="bg-surface-container-high text-on-surface px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium">
             <span className="material-symbols-outlined">share</span>
             Compartir

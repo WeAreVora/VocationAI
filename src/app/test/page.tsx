@@ -551,8 +551,6 @@ export default function TestPage() {
           </a>
           <div className="hidden md:flex gap-8 items-center">
             <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="/">Inicio</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="#">Careers</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="#">Mentors</a>
           </div>
         </nav>
       </header>
