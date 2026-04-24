@@ -732,25 +732,68 @@ function CareerCard({ career, isFirst, expanded, country, onToggle }: {
 // ─── Main Content ─────────────────────────────────────────────────────────────
 function InformeContent() {
   const searchParams = useSearchParams();
-  const key = searchParams.get("perfil") || DEFAULT_KEY;
+  const rawProfile = searchParams.get("perfil");
+  const key = rawProfile || DEFAULT_KEY;
   const rawCountry = searchParams.get("pais");
-  const country: CountryCode = isCountryCode(rawCountry) ? rawCountry : "arg";
+  const parsedCountry = isCountryCode(rawCountry) ? rawCountry : null;
+  const country: CountryCode = parsedCountry || "arg";
   const p: InformeData = INFORMES[key] ?? INFORMES[DEFAULT_KEY];
-  const paymentStatus = searchParams.get("status") || searchParams.get("collection_status");
   const paymentId = searchParams.get("payment_id") || searchParams.get("collection_id");
-  const isPaid = paymentStatus === "approved" && Boolean(paymentId);
+  const paymentRef = searchParams.get("ref") || searchParams.get("external_reference");
+  const hasPaymentContext = Boolean(paymentId && paymentRef);
 
-  const [reportDate, setReportDate] = useState("");
-
-  useEffect(() => {
-    setReportDate(
+  const reportDate = useMemo(
+    () =>
       new Date().toLocaleDateString("es-AR", {
         day: "numeric",
         month: "long",
         year: "numeric",
       }),
-    );
-  }, []);
+    [],
+  );
+  const [paymentState, setPaymentState] = useState<"checking" | "paid" | "blocked">(
+    hasPaymentContext ? "checking" : "blocked",
+  );
+
+  useEffect(() => {
+    if (!hasPaymentContext) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const verifyPayment = async () => {
+      try {
+        const res = await fetch("/api/payments/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentId,
+            ref: paymentRef,
+            perfil: rawProfile || undefined,
+            pais: parsedCountry || undefined,
+          }),
+          signal: controller.signal,
+        });
+
+        if (!res.ok) {
+          setPaymentState("blocked");
+          return;
+        }
+
+        const data = (await res.json()) as { paid?: boolean };
+        setPaymentState(data.paid ? "paid" : "blocked");
+      } catch {
+        if (!controller.signal.aborted) {
+          setPaymentState("blocked");
+        }
+      }
+    };
+
+    void verifyPayment();
+
+    return () => controller.abort();
+  }, [hasPaymentContext, paymentId, paymentRef, key, country]);
 
   const missionId = useMemo(() => {
     const seed = `${key}:${p.title}:${p.titleHighlight}`;
@@ -789,7 +832,46 @@ function InformeContent() {
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
-  if (!isPaid) {
+  if (!hasPaymentContext) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-6">
+        <section className="max-w-xl w-full glass-card rounded-3xl p-10 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-tertiary/10 mb-6">
+            <span className="material-symbols-outlined text-tertiary">lock</span>
+          </div>
+          <h1 className="font-headline text-3xl font-black mb-4">Informe completo bloqueado</h1>
+          <p className="text-on-surface-variant mb-8">
+            Para acceder al informe completo primero necesitás completar el pago en Mercado Pago.
+          </p>
+          <a
+            href={`/resultados?perfil=${encodeURIComponent(key)}&pais=${encodeURIComponent(country)}`}
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform active:scale-95"
+          >
+            <span className="material-symbols-outlined">arrow_back</span>
+            Ir a pagar ahora
+          </a>
+        </section>
+      </main>
+    );
+  }
+
+  if (paymentState === "checking") {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-6">
+        <section className="max-w-xl w-full glass-card rounded-3xl p-10 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-6 animate-pulse">
+            <span className="material-symbols-outlined text-primary">sync</span>
+          </div>
+          <h1 className="font-headline text-3xl font-black mb-4">Verificando pago</h1>
+          <p className="text-on-surface-variant">
+            Estamos confirmando tu operación con Mercado Pago. Esto tarda solo unos segundos.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
+  if (paymentState !== "paid") {
     return (
       <main className="min-h-screen flex items-center justify-center px-6">
         <section className="max-w-xl w-full glass-card rounded-3xl p-10 text-center">

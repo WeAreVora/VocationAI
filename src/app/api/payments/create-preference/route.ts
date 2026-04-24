@@ -39,7 +39,9 @@ export async function POST(req: NextRequest) {
     const pais = ALLOWED_COUNTRIES.has(rawCountry) ? rawCountry : "arg";
     const baseUrl = resolveBaseUrl(req);
 
-    const successUrl = `${baseUrl}/informe?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}`;
+    const externalReference = `informe-${crypto.randomUUID()}`;
+
+    const successUrl = `${baseUrl}/informe?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&ref=${encodeURIComponent(externalReference)}`;
     const pendingUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&pago=pendiente`;
     const failureUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&pago=rechazado`;
 
@@ -52,7 +54,7 @@ export async function POST(req: NextRequest) {
           unit_price: 15000,
         },
       ],
-      external_reference: `informe-${perfil}-${Date.now()}`,
+      external_reference: externalReference,
       metadata: {
         perfil,
         pais,

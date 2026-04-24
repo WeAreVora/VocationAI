@@ -37,3 +37,6 @@ next-env.d.ts
 
 .AGENTS.md
 .CLAUDE.md
+
+# local backoffice data
+.data/
