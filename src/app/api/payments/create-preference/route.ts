@@ -7,19 +7,37 @@ type CreatePreferenceBody = {
 
 const ALLOWED_COUNTRIES = new Set(["arg", "mx", "uru", "col", "chile", "peru"]);
 
-function resolveBaseUrl(req: NextRequest): string {
-  const envUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (envUrl) {
-    return envUrl;
+function resolveBaseUrl(): string {
+  const configuredBaseUrl = process.env.APP_BASE_URL?.trim() || process.env.NEXT_PUBLIC_APP_URL?.trim();
+
+  if (!configuredBaseUrl) {
+    if (process.env.NODE_ENV !== "production") {
+      return "http://localhost:3000";
+    }
+
+    throw new Error("Falta APP_BASE_URL para construir back_urls de pago en produccion");
   }
 
-  const forwardedProto = req.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
-  const forwardedHost = req.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
-  if (forwardedProto && forwardedHost) {
-    return `${forwardedProto}://${forwardedHost}`;
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(configuredBaseUrl);
+  } catch {
+    throw new Error("APP_BASE_URL no es una URL valida");
   }
 
-  return req.nextUrl.origin;
+  if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") {
+    throw new Error("APP_BASE_URL debe usar protocolo http o https");
+  }
+
+  if (process.env.NODE_ENV === "production" && parsedUrl.protocol !== "https:") {
+    throw new Error("APP_BASE_URL debe usar HTTPS en produccion");
+  }
+
+  parsedUrl.pathname = "";
+  parsedUrl.search = "";
+  parsedUrl.hash = "";
+
+  return parsedUrl.toString().replace(/\/$/, "");
 }
 
 export async function POST(req: NextRequest) {
@@ -37,7 +55,7 @@ export async function POST(req: NextRequest) {
     const perfil = body.perfil?.trim() || "creativo-digital";
     const rawCountry = body.pais?.trim().toLowerCase() || "arg";
     const pais = ALLOWED_COUNTRIES.has(rawCountry) ? rawCountry : "arg";
-    const baseUrl = resolveBaseUrl(req);
+    const baseUrl = resolveBaseUrl();
 
     const externalReference = `informe-${crypto.randomUUID()}`;
 

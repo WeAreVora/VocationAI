@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Emoji3D from "@/app/components/Emoji3D";
@@ -318,17 +319,10 @@ function ResultadosContent() {
       <header className="bg-[#0e0e13]/80 backdrop-blur-xl top-0 sticky z-50 shadow-[0_0_40px_rgba(178,161,255,0.08)]">
         <div className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto font-headline tracking-tight">
           <div className="text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent">VocacionAI</div>
-          <nav className="hidden md:flex items-center gap-8">
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="/">Inicio</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="#">Careers</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="#">Mentors</a>
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="#">Pricing</a>
-          </nav>
           <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-[#acaab1] cursor-pointer">account_circle</span>
-            <button className="bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] text-on-primary-fixed font-bold px-6 py-2 rounded-xl hover:scale-105 transition-transform active:scale-95 duration-200">
-              Get Started
-            </button>
+            <Link href="/" className="bg-gradient-to-br from-[#b2a500] to-[#7857f8] text-on-primary-fixed font-bold px-6 py-2 rounded-xl hover:scale-105 transition-transform active:scale-95 duration-200 inline-block">
+              Inicio
+            </Link>
           </div>
         </div>
       </header>
