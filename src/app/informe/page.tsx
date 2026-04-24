@@ -142,6 +142,7 @@ const UNIVERSITY_URLS: Record<string, string> = {
 
 };
 
+
 function getUniversityHref(university: string): string {
   return UNIVERSITY_URLS[university] ?? `https://www.google.com/search?q=${encodeURIComponent(university)}`;
 }
@@ -165,7 +166,7 @@ const INFORMES: Record<string, InformeData> = {
     ],
     workStyle: ["Entornos async con métricas claras de output.", "Stack moderno: TypeScript, Python, cloud nativo.", "Alta autonomía para elegir el cómo de cada solución.", "Sprints cortos con demos reales, no reuniones de status."],
     careers: [
-      { name: "Ingeniería de Software", match: "98%", projection: "10/10", summary: "Construís los sistemas digitales que mueven el mundo.", image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=600&q=80", badge: "Alta Demanda", duration: "5 años", salary: "$3k – $5k USD/mes", queEstudia: "Algoritmos, estructuras de datos, arquitectura de software y computación en la nube.", queHace: "Diseña, construye y escala aplicaciones utilizadas por millones de personas.", universities: ["ITBA (Argentina)", "Tec de Monterrey (México)", "PUC (Chile)"] },
+      { name: "Ingeniería Informática ", match: "98%", projection: "10/10", summary: "Construís los sistemas digitales que mueven el mundo.", image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=600&q=80", badge: "Alta Demanda", duration: "5 años", salary: "$3k – $5k USD/mes", queEstudia: "Algoritmos, estructuras de datos, arquitectura de software y computación en la nube.", queHace: "Diseña, construye y escala aplicaciones utilizadas por millones de personas.", universities: ["ITBA (Argentina)","UBA (Argentina)", "Tec de Monterrey (México)"] },
       { name: "Ciencia de Datos e IA", match: "94%", projection: "10/10", summary: "Extraés inteligencia de datos masivos para guiar decisiones críticas.", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80", badge: "Tendencia", duration: "4–5 años", salary: "$2.5k – $4.5k USD/mes", queEstudia: "Estadística, machine learning, Python/R y visualización de datos.", queHace: "Construye modelos predictivos y comunica insights que transforman estrategias de negocio.", universities: ["UBA (Argentina)", "UNAM (México)", "U. de Chile"] },
       { name: "Ciberseguridad", match: "89%", projection: "9/10", summary: "Protegés infraestructura digital ante amenazas globales.", image: "https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=600&q=80", badge: "Escasez Global", duration: "4–5 años", salary: "$3.5k – $6k USD/mes", queEstudia: "Redes, criptografía, ethical hacking y forense digital.", queHace: "Audita sistemas, responde incidentes de seguridad y diseña arquitecturas de defensa.", universities: ["UTN (Argentina)", "IPN (México)", "UAI (Chile)"] },
     ],
