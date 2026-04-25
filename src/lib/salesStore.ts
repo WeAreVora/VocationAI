@@ -9,8 +9,17 @@ export type ApprovedSale = {
   approvedAt: string;
 };
 
+export type PendingPayment = {
+  preferenceId: string;
+  ref: string;
+  perfil: string;
+  pais: string;
+  createdAt: string;
+};
+
 type SalesDb = {
   approvedSales: ApprovedSale[];
+  pendingPayments: PendingPayment[];
 };
 
 const DATA_DIR = path.join(process.cwd(), ".data");
@@ -21,7 +30,7 @@ function normalizeCountry(value: string): string {
 }
 
 function defaultDb(): SalesDb {
-  return { approvedSales: [] };
+  return { approvedSales: [], pendingPayments: [] };
 }
 
 async function ensureDbFile(): Promise<void> {
@@ -39,11 +48,12 @@ async function readDb(): Promise<SalesDb> {
   const raw = await readFile(SALES_DB_PATH, "utf8");
 
   try {
-    const parsed = JSON.parse(raw) as SalesDb;
-    if (!Array.isArray(parsed.approvedSales)) {
-      return defaultDb();
-    }
-    return parsed;
+    const parsed = JSON.parse(raw) as Partial<SalesDb>;
+
+    return {
+      approvedSales: Array.isArray(parsed.approvedSales) ? parsed.approvedSales : [],
+      pendingPayments: Array.isArray(parsed.pendingPayments) ? parsed.pendingPayments : [],
+    };
   } catch {
     return defaultDb();
   }
@@ -70,6 +80,44 @@ export async function recordApprovedSale(sale: Omit<ApprovedSale, "approvedAt">)
 
   await writeDb(db);
   return true;
+}
+
+export async function getApprovedSaleByPaymentId(paymentId: string): Promise<ApprovedSale | null> {
+  const db = await readDb();
+  return db.approvedSales.find((item) => item.paymentId === paymentId) ?? null;
+}
+
+export async function recordPendingPayment(payment: Omit<PendingPayment, "createdAt">): Promise<void> {
+  const db = await readDb();
+  db.pendingPayments = db.pendingPayments.filter(
+    (item) => item.ref !== payment.ref && item.preferenceId !== payment.preferenceId,
+  );
+
+  db.pendingPayments.push({
+    ...payment,
+    perfil: payment.perfil.trim(),
+    pais: normalizeCountry(payment.pais),
+    createdAt: new Date().toISOString(),
+  });
+
+  await writeDb(db);
+}
+
+export async function getPendingPaymentByRef(ref: string): Promise<PendingPayment | null> {
+  const db = await readDb();
+  return db.pendingPayments.find((item) => item.ref === ref) ?? null;
+}
+
+export async function removePendingPaymentByRef(ref: string): Promise<void> {
+  const db = await readDb();
+  const nextPendingPayments = db.pendingPayments.filter((item) => item.ref !== ref);
+
+  if (nextPendingPayments.length === db.pendingPayments.length) {
+    return;
+  }
+
+  db.pendingPayments = nextPendingPayments;
+  await writeDb(db);
 }
 
 function toProfileLabel(key: string): string {

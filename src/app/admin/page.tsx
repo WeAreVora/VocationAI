@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ADMIN_SESSION_COOKIE, verifyAdminSessionToken } from "@/lib/adminAuth";
 import { getAdminSalesStats } from "@/lib/salesStore";
@@ -52,6 +53,17 @@ export default async function AdminPage() {
             </button>
           </form>
         </header>
+
+        <Link
+          href="/admin/mensajes"
+          className="glass-card rounded-3xl px-8 py-6 flex items-center justify-between gap-5 border border-outline-variant/30 hover:border-primary/30 transition-colors"
+        >
+          <div>
+            <p className="text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-1">Mensajes de contacto</p>
+            <h2 className="font-headline text-xl font-black">Revisar mensajes recibidos</h2>
+          </div>
+          <span className="text-primary font-bold">Ver mensajes</span>
+        </Link>
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <article className="glass-card rounded-2xl p-6">

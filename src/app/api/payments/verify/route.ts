@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { recordApprovedSale } from "@/lib/salesStore";
+import {
+  getApprovedSaleByPaymentId,
+  getPendingPaymentByRef,
+  recordApprovedSale,
+  removePendingPaymentByRef,
+} from "@/lib/salesStore";
 
 type VerifyBody = {
   paymentId?: string;
   ref?: string;
-  perfil?: string;
-  pais?: string;
 };
 
 type MercadoPagoPayment = {
@@ -32,11 +35,13 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as VerifyBody;
     const paymentId = body.paymentId?.trim();
     const ref = body.ref?.trim();
-    const perfil = body.perfil?.trim();
-    const pais = body.pais?.trim()?.toLowerCase();
-
     if (!paymentId || !ref || !isValidRef(ref)) {
       return NextResponse.json({ paid: false }, { status: 400 });
+    }
+
+    const alreadyApproved = await getApprovedSaleByPaymentId(paymentId);
+    if (alreadyApproved?.ref === ref) {
+      return NextResponse.json({ paid: true });
     }
 
     const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
@@ -52,21 +57,32 @@ export async function POST(req: NextRequest) {
     }
 
     const payment = (await mpRes.json()) as MercadoPagoPayment;
+    const pendingPayment = await getPendingPaymentByRef(ref);
 
     const isApproved = payment.status === "approved";
     const sameReference = payment.external_reference === ref;
-    const sameProfile = perfil ? payment.metadata?.perfil === perfil : true;
-    const sameCountry = pais ? payment.metadata?.pais === pais : true;
+    const samePendingReference = pendingPayment ? pendingPayment.ref === ref : false;
+    const sameProfile = pendingPayment ? payment.metadata?.perfil === pendingPayment.perfil : false;
+    const sameCountry = pendingPayment ? payment.metadata?.pais === pendingPayment.pais : false;
 
-    const paid = isApproved && sameReference && sameProfile && sameCountry;
+    const paid = Boolean(
+      isApproved &&
+        sameReference &&
+        pendingPayment &&
+        samePendingReference &&
+        sameProfile &&
+        sameCountry,
+    );
 
-    if (paid && perfil && pais) {
+    if (paid && pendingPayment) {
       await recordApprovedSale({
         paymentId,
         ref,
-        perfil,
-        pais,
+        perfil: pendingPayment.perfil,
+        pais: pendingPayment.pais,
       });
+
+      await removePendingPaymentByRef(ref);
     }
 
     return NextResponse.json({ paid });

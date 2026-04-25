@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { recordPendingPayment } from "@/lib/salesStore";
 
 type CreatePreferenceBody = {
   perfil?: string;
@@ -7,37 +8,43 @@ type CreatePreferenceBody = {
 
 const ALLOWED_COUNTRIES = new Set(["arg", "mx", "uru", "col", "chile", "peru"]);
 
-function resolveBaseUrl(): string {
-  const configuredBaseUrl = process.env.APP_BASE_URL?.trim() || process.env.NEXT_PUBLIC_APP_URL?.trim();
+function normalizeBaseUrl(candidate: string): string | null {
+  try {
+    const parsedUrl = new URL(candidate);
 
-  if (!configuredBaseUrl) {
-    if (process.env.NODE_ENV !== "production") {
-      return "http://localhost:3000";
+    if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") {
+      return null;
     }
 
-    throw new Error("Falta APP_BASE_URL para construir back_urls de pago en produccion");
-  }
+    parsedUrl.pathname = "";
+    parsedUrl.search = "";
+    parsedUrl.hash = "";
 
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL(configuredBaseUrl);
+    return parsedUrl.toString().replace(/\/$/, "");
   } catch {
-    throw new Error("APP_BASE_URL no es una URL valida");
+    return null;
+  }
+}
+
+function resolveBaseUrl(req: NextRequest): string {
+  const candidates = [
+    process.env.APP_BASE_URL?.trim(),
+    process.env.NEXT_PUBLIC_APP_URL?.trim(),
+    req.nextUrl.origin,
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) {
+      continue;
+    }
+
+    const normalized = normalizeBaseUrl(candidate);
+    if (normalized) {
+      return normalized;
+    }
   }
 
-  if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") {
-    throw new Error("APP_BASE_URL debe usar protocolo http o https");
-  }
-
-  if (process.env.NODE_ENV === "production" && parsedUrl.protocol !== "https:") {
-    throw new Error("APP_BASE_URL debe usar HTTPS en produccion");
-  }
-
-  parsedUrl.pathname = "";
-  parsedUrl.search = "";
-  parsedUrl.hash = "";
-
-  return parsedUrl.toString().replace(/\/$/, "");
+  throw new Error("No se pudo resolver la URL base de la aplicacion");
 }
 
 export async function POST(req: NextRequest) {
@@ -55,7 +62,7 @@ export async function POST(req: NextRequest) {
     const perfil = body.perfil?.trim() || "creativo-digital";
     const rawCountry = body.pais?.trim().toLowerCase() || "arg";
     const pais = ALLOWED_COUNTRIES.has(rawCountry) ? rawCountry : "arg";
-    const baseUrl = resolveBaseUrl();
+    const baseUrl = resolveBaseUrl(req);
 
     const externalReference = `informe-${crypto.randomUUID()}`;
 
@@ -108,11 +115,28 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await mpRes.json();
+    const checkoutUrl = typeof data.init_point === "string" ? data.init_point.trim() : "";
+    const checkoutSandboxUrl = typeof data.sandbox_init_point === "string" ? data.sandbox_init_point.trim() : "";
+    const preferenceId = typeof data.id === "string" ? data.id.trim() : "";
+
+    if (!preferenceId || (!checkoutUrl && !checkoutSandboxUrl)) {
+      return NextResponse.json(
+        { error: "Mercado Pago no devolvio una preferencia valida" },
+        { status: 502 },
+      );
+    }
+
+    await recordPendingPayment({
+      preferenceId,
+      ref: externalReference,
+      perfil,
+      pais,
+    });
 
     return NextResponse.json({
-      checkoutUrl: data.init_point,
-      checkoutSandboxUrl: data.sandbox_init_point,
-      preferenceId: data.id,
+      checkoutUrl,
+      checkoutSandboxUrl,
+      preferenceId,
     });
   } catch {
     return NextResponse.json(

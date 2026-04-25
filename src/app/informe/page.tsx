@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Emoji3D from "@/app/components/Emoji3D";
 
@@ -770,8 +771,6 @@ function InformeContent() {
           body: JSON.stringify({
             paymentId,
             ref: paymentRef,
-            perfil: rawProfile || undefined,
-            pais: parsedCountry || undefined,
           }),
           signal: controller.signal,
         });
@@ -810,7 +809,11 @@ function InformeContent() {
   const toggleExpanded = (i: number) => {
     setExpanded((prev) => {
       const next = new Set(prev);
-      next.has(i) ? next.delete(i) : next.add(i);
+      if (next.has(i)) {
+        next.delete(i);
+      } else {
+        next.add(i);
+      }
       return next;
     });
   };
@@ -900,10 +903,10 @@ function InformeContent() {
 
       <nav className="fixed top-0 left-0 w-full z-50 bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant/10 px-6 py-4 flex justify-between items-center no-print">
         <div className="flex items-center gap-4">
-          <a href="/" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium">
+          <Link href="/" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium">
             <span className="material-symbols-outlined">arrow_back</span>
             Volver
-          </a>
+          </Link>
           <div className="h-6 w-px bg-outline-variant/20 hidden md:block"></div>
           <span className="text-on-surface-variant text-sm font-label hidden md:block">Informe de Resultados • {p.title} {p.titleHighlight}</span>
         </div>

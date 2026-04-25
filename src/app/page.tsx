@@ -1,4 +1,5 @@
 import Emoji3D from "@/app/components/Emoji3D";
+import ContactForm from "@/app/components/ContactForm";
 
 export default function HomePage() {
   return (
@@ -368,13 +369,6 @@ export default function HomePage() {
             <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocacionAI en tu colegio o simplemente querés saludarnos?</p>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined">mail</span>
-                </div>
-                <div>
-                  <div className="text-sm text-on-surface-variant">Escríbinos a</div>
-                  <div className="font-bold">hola@vocacionai.com</div>
-                </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
@@ -389,25 +383,7 @@ export default function HomePage() {
           </div>
 
           <div className="glass-card p-10 rounded-[2.5rem]">
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold ml-1">Nombre</label>
-                  <input className="w-full bg-surface-container-high border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-primary/40 transition-all" placeholder="Tu nombre" type="text" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold ml-1">Email</label>
-                  <input className="w-full bg-surface-container-high border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-primary/40 transition-all" placeholder="tu@email.com" type="email" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold ml-1">Mensaje</label>
-                <textarea className="w-full bg-surface-container-high border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-primary/40 transition-all" placeholder="¿En qué podemos ayudarte?" rows={4}></textarea>
-              </div>
-              <button type="submit" className="w-full py-4 bg-primary text-on-primary-fixed font-black rounded-xl hover:bg-primary-dim transition-colors">
-                Enviar mensaje
-              </button>
-            </form>
+            <ContactForm />
           </div>
         </section>
       </main>
