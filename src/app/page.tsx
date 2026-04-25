@@ -431,7 +431,6 @@ export default function HomePage() {
               <div className="font-bold text-on-surface">Plataforma</div>
               <ul className="space-y-2">
                 <li><Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/test">Test Vocacional</Link></li>
-                <li><Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/#contacto">Precios</Link></li>
               </ul>
             </div>
             <div className="space-y-4">
@@ -440,16 +439,6 @@ export default function HomePage() {
                 <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/privacy-policy">Privacy Policy</a></li>
                 <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/terms-of-service">Terms of Service</a></li>
               </ul>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div className="font-bold text-on-surface">Newsletter</div>
-            <p className="text-sm text-[#acaab1]">Recibí consejos sobre carreras y futuro laboral.</p>
-            <div className="flex gap-2">
-              <input className="flex-1 bg-surface-container-high border-none rounded-lg text-sm px-4 py-2" placeholder="Email" type="text" />
-              <button className="bg-primary text-on-primary-fixed p-2 rounded-lg">
-                <span className="material-symbols-outlined">send</span>
-              </button>
             </div>
           </div>
         </div>
