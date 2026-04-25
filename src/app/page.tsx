@@ -5,8 +5,8 @@ export default function HomePage() {
   return (
     <>
       <nav className="bg-[#0e0e13]/80 backdrop-blur-xl top-0 sticky z-50 shadow-[0_0_40px_rgba(178,161,255,0.08)]">
-        <div className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
-          <div className="text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent font-headline">
+        <div className="flex justify-between items-center w-full px-4 sm:px-8 py-3 sm:py-4 max-w-7xl mx-auto gap-2 sm:gap-4">
+          <div className="text-xl sm:text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent font-headline whitespace-nowrap">
             VocacionAI
           </div>
           <div className="hidden md:flex gap-8 items-center">
@@ -15,10 +15,19 @@ export default function HomePage() {
             <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#faq">FAQ</a>
             <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#contacto">Contacto</a>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="/test" className="bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] text-on-primary-fixed font-bold py-2 px-6 rounded-xl hover:scale-105 transition-transform active:scale-95">
-              Empezar test gratis
+          <div className="flex items-center gap-2 sm:gap-4">
+            <a href="/test" className="bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] text-on-primary-fixed font-bold py-3 px-8 sm:px-6 rounded-xl text-xs sm:text-base hover:scale-105 transition-transform active:scale-95 whitespace-nowrap">
+              <span className="sm:hidden">Empezar</span>
+              <span className="hidden sm:inline">Empezar test gratis</span>
             </a>
+          </div>
+        </div>
+        <div className="md:hidden border-t border-outline-variant/10">
+          <div className="px-4 py-2 flex items-center gap-4 overflow-x-auto whitespace-nowrap">
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium text-sm shrink-0" href="#como-funciona">Cómo funciona</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium text-sm shrink-0" href="#vista-previa">Vista previa</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium text-sm shrink-0" href="#faq">FAQ</a>
+            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium text-sm shrink-0" href="#contacto">Contacto</a>
           </div>
         </div>
       </nav>

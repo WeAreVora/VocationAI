@@ -901,32 +901,32 @@ function InformeContent() {
     <>
       {showShare && <ShareModal title={`${p.title} ${p.titleHighlight}`} onClose={() => setShowShare(false)} />}
 
-      <nav className="fixed top-0 left-0 w-full z-50 bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant/10 px-6 py-4 flex justify-between items-center no-print">
-        <div className="flex items-center gap-4">
+      <nav className="fixed top-0 left-0 w-full z-50 bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant/10 px-4 py-3 md:px-6 md:py-4 flex flex-col gap-3 md:flex-row md:justify-between md:items-center no-print">
+        <div className="flex items-start md:items-center gap-3 md:gap-4 min-w-0">
           <Link href="/" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium">
             <span className="material-symbols-outlined">arrow_back</span>
-            Volver
+            <span className="text-sm md:text-base">Volver</span>
           </Link>
           <div className="h-6 w-px bg-outline-variant/20 hidden md:block"></div>
-          <span className="text-on-surface-variant text-sm font-label hidden md:block">Informe de Resultados • {p.title} {p.titleHighlight}</span>
+          <span className="text-on-surface-variant text-sm font-label hidden lg:block truncate">Informe de Resultados • {p.title} {p.titleHighlight}</span>
         </div>
-        <div className="flex items-center gap-3">
-          <button onClick={handleEmail} className="bg-surface-container-high text-on-surface px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium">
+        <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:gap-3 w-full md:w-auto">
+          <button onClick={handleEmail} className="bg-surface-container-high text-on-surface px-3 py-2 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium text-xs md:text-sm">
             <span className="material-symbols-outlined">mail</span>
-            Enviar por email
+            <span className="whitespace-nowrap">Enviar por email</span>
           </button>
-          <button onClick={handleShare} className="bg-surface-container-high text-on-surface px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium">
+          <button onClick={handleShare} className="bg-surface-container-high text-on-surface px-3 py-2 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium text-xs md:text-sm">
             <span className="material-symbols-outlined">share</span>
-            Compartir
+            <span className="whitespace-nowrap">Compartir</span>
           </button>
-          <button onClick={handlePDF} className="bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-6 py-2 rounded-xl flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_20px_rgba(178,161,255,0.2)] active:scale-95 font-bold">
+          <button onClick={handlePDF} className="col-span-2 md:col-span-1 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-4 py-2 rounded-xl flex items-center justify-center gap-2 hover:scale-105 transition-all shadow-[0_0_20px_rgba(178,161,255,0.2)] active:scale-95 font-bold text-xs md:text-sm">
             <span className="material-symbols-outlined">picture_as_pdf</span>
-            Guardar como PDF
+            <span className="whitespace-nowrap">Guardar como PDF</span>
           </button>
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto pt-32 pb-20 px-6 space-y-24">
+      <main className="max-w-5xl mx-auto pt-36 md:pt-32 pb-20 px-4 sm:px-6 space-y-24">
         {/* Cover */}
         <header className="relative glass-card p-12 md:p-20 rounded-[2.5rem] overflow-hidden text-center flex flex-col items-center">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-transparent to-tertiary/5 pointer-events-none"></div>

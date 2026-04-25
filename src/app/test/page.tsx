@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru";
@@ -431,6 +432,26 @@ const QUESTIONS: Q[] = [
   },
 ];
 
+function BotAvatar() {
+  return (
+    <div className="flex items-center space-x-4 mb-4">
+      <div className="relative">
+        <div className="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center border border-primary/20 shadow-[0_0_20px_rgba(178,161,255,0.15)]">
+          <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
+        </div>
+        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-tertiary rounded-full border-4 border-surface shadow-[0_0_10px_rgba(102,255,199,0.5)]" />
+      </div>
+      <div>
+        <h2 className="font-headline font-bold text-xl leading-tight">VocaIA</h2>
+        <p className="text-on-surface-variant text-sm flex items-center">
+          <span className="w-2 h-2 bg-tertiary rounded-full mr-2 inline-block" />
+          AI Counselor Online
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function getProfileKey(answers: (number | null)[]): string {
   const bc: number[][] = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
   answers.forEach((a, i) => { if (a !== null) bc[QUESTIONS[i].block][a]++; });
@@ -473,7 +494,10 @@ export default function TestPage() {
   // Outro state
   const [outroStep, setOutroStep] = useState(0);
   const [feedback, setFeedback] = useState("");
+  const [rating, setRating] = useState(0);
   const [feedbackSent, setFeedbackSent] = useState(false);
+  const [feedbackError, setFeedbackError] = useState("");
+  const [sendingFeedback, setSendingFeedback] = useState(false);
 
   useEffect(() => {
     if (phase !== "intro") return;
@@ -517,63 +541,70 @@ export default function TestPage() {
     if (currentQ > 0) setCurrentQ((n) => n - 1);
   };
 
-  const handleSendFeedback = () => {
-    if (!feedback.trim()) return;
-    setFeedbackSent(true);
-    setTimeout(() => setOutroStep(2), 900);
-    setTimeout(() => setOutroStep(3), 2400);
-  };
+  const handleSendFeedback = async () => {
+    if (!feedback.trim() || rating < 1) return;
 
-  const BotAvatar = () => (
-    <div className="flex items-center space-x-4 mb-4">
-      <div className="relative">
-        <div className="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center border border-primary/20 shadow-[0_0_20px_rgba(178,161,255,0.15)]">
-          <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
-        </div>
-        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-tertiary rounded-full border-4 border-surface shadow-[0_0_10px_rgba(102,255,199,0.5)]" />
-      </div>
-      <div>
-        <h2 className="font-headline font-bold text-xl leading-tight">VocaIA</h2>
-        <p className="text-on-surface-variant text-sm flex items-center">
-          <span className="w-2 h-2 bg-tertiary rounded-full mr-2 inline-block" />
-          AI Counselor Online
-        </p>
-      </div>
-    </div>
-  );
+    setSendingFeedback(true);
+    setFeedbackError("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rating, message: feedback }),
+      });
+
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        setFeedbackError(data?.error ?? "No se pudo guardar tu comentario.");
+        setSendingFeedback(false);
+        return;
+      }
+
+      setFeedbackSent(true);
+      setSendingFeedback(false);
+      setTimeout(() => setOutroStep(2), 900);
+      setTimeout(() => setOutroStep(3), 2400);
+    } catch {
+      setFeedbackError("No se pudo guardar tu comentario. Intentalo nuevamente.");
+      setSendingFeedback(false);
+    }
+  };
 
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-50 bg-[#0e0e13]/80 backdrop-blur-xl shadow-[0_0_40px_rgba(178,161,255,0.08)]">
-        <nav className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto font-headline tracking-tight">
-          <a href="/" className="text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent">
+        <nav className="flex justify-between items-center w-full px-4 sm:px-8 py-3 sm:py-4 max-w-7xl mx-auto font-headline tracking-tight">
+          <Link href="/" className="text-xl sm:text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent">
             VocacionAI
-          </a>
+          </Link>
           <div className="hidden md:flex gap-8 items-center">
-            <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="/">Inicio</a>
+            <Link className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="/">Inicio</Link>
           </div>
         </nav>
       </header>
 
-      <main className="min-h-screen pt-24 pb-20 px-4 relative overflow-hidden">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-tertiary/5 blur-[120px] rounded-full pointer-events-none" />
+      <main className="min-h-screen pt-20 sm:pt-24 pb-28 sm:pb-20 px-3 sm:px-4 relative overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[280px] h-[280px] sm:w-[500px] sm:h-[500px] bg-primary/5 blur-[100px] sm:blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[240px] h-[240px] sm:w-[400px] sm:h-[400px] bg-tertiary/5 blur-[100px] sm:blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-4xl mx-auto">
 
           {/* ── INTRO ── */}
           {phase === "intro" && (
-            <section className="flex flex-col space-y-6">
+            <section className="flex flex-col space-y-4 sm:space-y-6">
               <BotAvatar />
 
               <div className="space-y-4 max-w-2xl">
-                <div className={`glass-panel p-5 rounded-2xl rounded-tl-none border-l-4 border-primary/40 transition-all duration-500 ease-out ${
+                <div className={`glass-panel p-4 sm:p-5 rounded-2xl rounded-tl-none border-l-4 border-primary/40 transition-all duration-500 ease-out ${
                   visibleMsgs >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}>
                   <p className="text-on-surface leading-relaxed">¡Hola! Soy VocaIA, tu guía en esta misión de descubrimiento profesional. 🚀</p>
                 </div>
 
-                <div className={`glass-panel p-5 rounded-2xl rounded-tl-none border-l-4 border-primary/40 transition-all duration-500 ease-out ${
+                <div className={`glass-panel p-4 sm:p-5 rounded-2xl rounded-tl-none border-l-4 border-primary/40 transition-all duration-500 ease-out ${
                   visibleMsgs >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}>
                   <p className="text-on-surface leading-relaxed">
@@ -583,7 +614,7 @@ export default function TestPage() {
                   </p>
                 </div>
 
-                <div className={`glass-panel p-5 rounded-2xl rounded-tl-none border-l-4 border-primary/40 transition-all duration-500 ease-out ${
+                <div className={`glass-panel p-4 sm:p-5 rounded-2xl rounded-tl-none border-l-4 border-primary/40 transition-all duration-500 ease-out ${
                   visibleMsgs >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}>
                   <div className="flex items-center space-x-3 mb-2">
@@ -593,13 +624,13 @@ export default function TestPage() {
                   <p className="text-on-surface-variant">Solo respondé con sinceridad. ¿Estás listo para despegar?</p>
                 </div>
 
-                <div className={`glass-panel p-5 rounded-2xl rounded-tl-none border-l-4 border-tertiary/40 transition-all duration-500 ease-out ${
+                <div className={`glass-panel p-4 sm:p-5 rounded-2xl rounded-tl-none border-l-4 border-tertiary/40 transition-all duration-500 ease-out ${
                   visibleMsgs >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}>
                   <p className="text-on-surface leading-relaxed mb-4">
                     Antes de arrancar, ¿de qué país sos? Voy a personalizar las universidades de tu informe final.
                   </p>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
                     {COUNTRY_OPTIONS.map((country) => {
                       const isSelected = selectedCountry === country.code;
                       return (
@@ -607,7 +638,7 @@ export default function TestPage() {
                           key={country.code}
                           type="button"
                           onClick={() => setSelectedCountry(country.code)}
-                          className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all ${
+                          className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border text-sm font-bold transition-all ${
                             isSelected
                               ? "bg-primary/15 border-primary text-primary"
                               : "bg-surface-container-high border-outline-variant/20 text-on-surface-variant hover:border-primary/50"
@@ -621,14 +652,14 @@ export default function TestPage() {
                 </div>
               </div>
 
-              <div className={`pt-8 transition-all duration-500 ease-out ${
+              <div className={`pt-6 sm:pt-8 transition-all duration-500 ease-out ${
                 showBtn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}>
                 <button
                   type="button"
                   onClick={() => setPhase("quiz")}
                   disabled={!selectedCountry}
-                  className="group relative px-10 py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="group relative w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-base sm:text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   Sí, empezar el test
                   <span className="ml-2 material-symbols-outlined align-middle transition-transform group-hover:translate-x-1">rocket_launch</span>
@@ -641,14 +672,14 @@ export default function TestPage() {
           {phase === "quiz" && (
             <section>
               {/* Progress header */}
-              <div className="mb-12 space-y-4">
+              <div className="mb-8 sm:mb-12 space-y-4">
                 <div className="flex justify-between items-end">
                   <div>
                     <span className="text-on-surface-variant text-sm font-bold uppercase tracking-widest">Misión Actual</span>
-                    <h3 className="font-headline text-2xl font-black text-primary">{BLOCKS[q.block].name}</h3>
+                    <h3 className="font-headline text-xl sm:text-2xl font-black text-primary">{BLOCKS[q.block].name}</h3>
                   </div>
                   <div className="text-right">
-                    <span className="text-3xl font-black font-headline tabular-nums">
+                    <span className="text-2xl sm:text-3xl font-black font-headline tabular-nums">
                       {String(qNum).padStart(2, "0")}
                       <span className="text-on-surface-variant text-lg">/40</span>
                     </span>
@@ -663,14 +694,14 @@ export default function TestPage() {
               </div>
 
               {/* Question card */}
-              <div className="glass-panel p-8 md:p-10 rounded-[2rem] shadow-2xl relative overflow-hidden">
+              <div className="glass-panel p-5 sm:p-8 md:p-10 rounded-3xl sm:rounded-[2rem] shadow-2xl relative overflow-hidden">
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[80px]" />
-                <div className="relative z-10 space-y-8">
+                <div className="relative z-10 space-y-6 sm:space-y-8">
                   <div className="space-y-4">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-tighter">
                       {BLOCKS[q.block].category}
                     </span>
-                    <h4 className="text-2xl md:text-4xl font-headline font-extrabold leading-tight tracking-tight">
+                    <h4 className="text-xl sm:text-2xl md:text-4xl font-headline font-extrabold leading-tight tracking-tight">
                       {q.q}
                     </h4>
                   </div>
@@ -683,7 +714,7 @@ export default function TestPage() {
                         <button
                           key={idx}
                           onClick={() => handleSelect(idx)}
-                          className={`flex flex-col items-start p-6 rounded-2xl border-2 transition-all duration-300 text-left ${
+                          className={`flex flex-col items-start p-4 sm:p-6 rounded-2xl border-2 transition-all duration-300 text-left ${
                             isSelected
                               ? "bg-primary/5 border-primary shadow-[0_0_30px_rgba(178,161,255,0.1)]"
                               : "bg-surface-container-high hover:bg-surface-container-highest border-transparent hover:border-primary/50"
@@ -699,7 +730,7 @@ export default function TestPage() {
                               {opt.icon}
                             </span>
                           </div>
-                          <span className="font-bold text-lg mb-1 text-on-surface">{opt.label}</span>
+                          <span className="font-bold text-base sm:text-lg mb-1 text-on-surface">{opt.label}</span>
                           <p className="text-sm text-on-surface-variant">{opt.desc}</p>
                         </button>
                       );
@@ -707,11 +738,11 @@ export default function TestPage() {
                   </div>
 
                   {/* Navigation */}
-                  <div className="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+                  <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 pt-6 border-t border-outline-variant/10">
                     <button
                       onClick={handlePrev}
                       disabled={currentQ === 0}
-                      className="flex items-center space-x-2 text-on-surface-variant hover:text-on-surface transition-colors font-bold disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="w-full sm:w-auto justify-center sm:justify-start flex items-center space-x-2 text-on-surface-variant hover:text-on-surface transition-colors font-bold disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                       <span className="material-symbols-outlined">arrow_back</span>
                       <span>Anterior</span>
@@ -719,7 +750,7 @@ export default function TestPage() {
                     <button
                       onClick={handleNext}
                       disabled={selected === null}
-                      className="px-8 py-3 bg-primary rounded-xl font-headline font-bold text-on-primary shadow-lg hover:translate-y-[-2px] active:translate-y-0 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                      className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-primary rounded-xl font-headline font-bold text-on-primary shadow-lg hover:translate-y-[-2px] active:translate-y-0 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                     >
                       {currentQ === 39 ? "Finalizar test →" : "Siguiente pregunta"}
                     </button>
@@ -751,29 +782,67 @@ export default function TestPage() {
 
                 {/* User input */}
                 {outroStep >= 1 && !feedbackSent && (
-                  <div className="flex gap-3 items-end animate-fade-in-up">
-                    <div className="flex-1 bg-surface-container-high rounded-2xl border border-outline-variant/20">
-                      <textarea
-                        value={feedback}
-                        onChange={(e) => setFeedback(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault();
-                            handleSendFeedback();
-                          }
-                        }}
-                        placeholder="Contame tu experiencia..."
-                        rows={2}
-                        className="w-full bg-transparent px-4 py-3 text-on-surface placeholder:text-on-surface-variant text-sm resize-none focus:outline-none"
-                      />
+                  <div className="space-y-3 animate-fade-in-up">
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div>
+                        <p className="text-sm font-bold text-on-surface">Puntua tu experiencia</p>
+                        <p className="text-xs text-on-surface-variant">Del 1 al 5 estrellas</p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: 5 }).map((_, index) => {
+                          const value = index + 1;
+                          const isActive = value <= rating;
+
+                          return (
+                            <button
+                              key={value}
+                              type="button"
+                              onClick={() => setRating(value)}
+                              className="text-primary transition-transform hover:scale-110 active:scale-95"
+                              aria-label={`${value} estrellas`}
+                            >
+                              <span
+                                className="material-symbols-outlined text-[32px]"
+                                style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
+                              >
+                                star
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                    <button
-                      onClick={handleSendFeedback}
-                      disabled={!feedback.trim()}
-                      className="p-4 bg-primary rounded-xl text-on-primary disabled:opacity-40 disabled:cursor-not-allowed hover:scale-105 transition-transform active:scale-95"
-                    >
-                      <span className="material-symbols-outlined">send</span>
-                    </button>
+
+                    <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
+                      <div className="flex-1 bg-surface-container-high rounded-2xl border border-outline-variant/20">
+                        <textarea
+                          value={feedback}
+                          onChange={(e) => setFeedback(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                              e.preventDefault();
+                              handleSendFeedback();
+                            }
+                          }}
+                          placeholder="Contame tu experiencia..."
+                          rows={2}
+                          className="w-full bg-transparent px-4 py-3 text-on-surface placeholder:text-on-surface-variant text-sm resize-none focus:outline-none"
+                        />
+                      </div>
+                      <button
+                        onClick={handleSendFeedback}
+                        disabled={!feedback.trim() || rating < 1 || sendingFeedback}
+                        className="w-full sm:w-auto p-4 bg-primary rounded-xl text-on-primary disabled:opacity-40 disabled:cursor-not-allowed hover:scale-105 transition-transform active:scale-95"
+                      >
+                        <span className="material-symbols-outlined">{sendingFeedback ? "hourglass_top" : "send"}</span>
+                      </button>
+                    </div>
+
+                    {feedbackError && (
+                      <div className="rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error">
+                        {feedbackError}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -812,7 +881,7 @@ export default function TestPage() {
                         const country = selectedCountry ?? "arg";
                         router.push(`/resultados?perfil=${profileKey}&pais=${country}`);
                       }}
-                      className="group px-10 py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 flex items-center gap-3"
+                      className="group w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-base sm:text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 flex items-center justify-center gap-3"
                     >
                       <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>person_check</span>
                       Ver mi Perfil Vocacional
@@ -827,8 +896,8 @@ export default function TestPage() {
         </div>
       </main>
 
-      <footer className="w-full mt-12 pt-12 pb-8 bg-[#0e0e13] border-t border-[#48474d]/15 text-sm">
-        <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <footer className="w-full mt-10 sm:mt-12 pt-10 sm:pt-12 pb-24 md:pb-8 bg-[#0e0e13] border-t border-[#48474d]/15 text-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
             <span className="text-lg font-bold text-[#b2a1ff]">VocacionAI</span>
             <p className="text-[#acaab1]">Tu futuro no es una probabilidad, es una misión.</p>
@@ -843,12 +912,12 @@ export default function TestPage() {
             <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Contact Support</a>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-8 mt-12 text-center text-[#acaab1]/50 text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 mt-10 sm:mt-12 text-center text-[#acaab1]/50 text-xs">
           © 2024 VocacionAI. Launch your mission.
         </div>
       </footer>
 
-      <nav className="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-outline-variant/10 px-6 py-3 flex justify-between items-center z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-outline-variant/10 px-4 py-2.5 flex justify-between items-center z-50">
         <button className="flex flex-col items-center space-y-1 text-primary font-bold">
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>assessment</span>
           <span className="text-[10px]">Test</span>

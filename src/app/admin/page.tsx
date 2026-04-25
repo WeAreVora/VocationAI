@@ -54,16 +54,29 @@ export default async function AdminPage() {
           </form>
         </header>
 
-        <Link
-          href="/admin/mensajes"
-          className="glass-card rounded-3xl px-8 py-6 flex items-center justify-between gap-5 border border-outline-variant/30 hover:border-primary/30 transition-colors"
-        >
-          <div>
-            <p className="text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-1">Mensajes de contacto</p>
-            <h2 className="font-headline text-xl font-black">Revisar mensajes recibidos</h2>
-          </div>
-          <span className="text-primary font-bold">Ver mensajes</span>
-        </Link>
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link
+            href="/admin/mensajes"
+            className="glass-card rounded-3xl px-8 py-6 flex items-center justify-between gap-5 border border-outline-variant/30 hover:border-primary/30 transition-colors"
+          >
+            <div>
+              <p className="text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-1">Mensajes de contacto</p>
+              <h2 className="font-headline text-xl font-black">Revisar mensajes recibidos</h2>
+            </div>
+            <span className="text-primary font-bold">Ver mensajes</span>
+          </Link>
+
+          <Link
+            href="/admin/comentarios"
+            className="glass-card rounded-3xl px-8 py-6 flex items-center justify-between gap-5 border border-outline-variant/30 hover:border-tertiary/30 transition-colors"
+          >
+            <div>
+              <p className="text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-1">Comentarios</p>
+              <h2 className="font-headline text-xl font-black">Ver opiniones y estrellas</h2>
+            </div>
+            <span className="text-tertiary font-bold">Ver comentarios</span>
+          </Link>
+        </section>
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <article className="glass-card rounded-2xl p-6">
