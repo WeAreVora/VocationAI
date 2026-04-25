@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru";
+type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru" | "par" | "bol" | "ecu";
 
 const COUNTRY_OPTIONS: { code: CountryCode; label: string }[] = [
   { code: "arg", label: "Argentina" },
@@ -13,6 +13,9 @@ const COUNTRY_OPTIONS: { code: CountryCode; label: string }[] = [
   { code: "col", label: "Colombia" },
   { code: "chile", label: "Chile" },
   { code: "peru", label: "Perú" },
+  { code: "par", label: "Paraguay" },
+  { code: "bol", label: "Bolivia" },
+  { code: "ecu", label: "Ecuador" },
 ];
 
 const BLOCKS = [

@@ -415,12 +415,12 @@ function ResultadosContent() {
               <h2 className="font-headline text-3xl md:text-5xl font-black mb-6 leading-tight">Tu guía vocacional personalizada y completa</h2>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 {[
-                  "Más de 8 páginas de análisis profundo",
-                  "Top 10 carreras detalladas",
+                  "Más de 5 páginas de análisis profundo",
+                  "Top 3 carreras detalladas",
                   "Links a universidades en tu zona",
-                  "Roadmap de aprendizaje 2024",
+                  "Roadmap de aprendizaje 2026",
                   "Tus principales motivadores intrínsecos",
-                  "Tips para entrevistas y portfolios",
+                  "Cómo armar tu propio curriculum",
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-on-surface-variant">
                     <span className="material-symbols-outlined text-tertiary text-lg">check_circle</span>
@@ -455,19 +455,6 @@ function ResultadosContent() {
           </div>
         </section>
 
-        {/* Share */}
-        <section className="mt-20 text-center">
-          <h4 className="font-headline text-lg font-bold text-on-surface-variant mb-6 uppercase tracking-widest">Comparte tu resultado</h4>
-          <div className="flex justify-center gap-4">
-            <button onClick={handleShare} className="p-4 bg-surface-container-low rounded-full hover:bg-primary/20 transition-colors border border-outline-variant/10">
-              <span className="material-symbols-outlined text-primary">share</span>
-            </button>
-            <button onClick={handleCopyLink} className="flex items-center gap-2 px-6 py-4 bg-surface-container-low rounded-full hover:bg-on-surface/5 transition-colors border border-outline-variant/10 text-sm font-bold text-on-surface-variant">
-              <span className="material-symbols-outlined text-sm">content_copy</span>
-              {copied ? "¡Enlace copiado!" : "Copiar Enlace"}
-            </button>
-          </div>
-        </section>
       </main>
 
       <footer className="bg-[#0e0e13] w-full mt-20 pt-12 pb-8 border-t border-[#48474d]/15 text-sm">

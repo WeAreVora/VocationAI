@@ -33,7 +33,7 @@ type InformeData = {
   roadmap2026: R26Phase[];
 };
 
-type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru";
+type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru" | "par" | "bol" | "ecu";
 
 const COUNTRY_LABELS: Record<CountryCode, string> = {
   arg: "Argentina",
@@ -42,6 +42,9 @@ const COUNTRY_LABELS: Record<CountryCode, string> = {
   col: "Colombia",
   chile: "Chile",
   peru: "Perú",
+  par: "Paraguay",
+  bol: "Bolivia",
+  ecu: "Ecuador",
 };
 
 const UNIVERSITY_COUNTRY: Record<string, CountryCode> = {
@@ -108,10 +111,19 @@ const UNIVERSITY_COUNTRY: Record<string, CountryCode> = {
   "UPC (Perú)": "peru",
   "ESAN (Perú)": "peru",
   "UPCH (Perú)": "peru",
+  "UNA (Paraguay)": "par",
+  "UCA Paraguay": "par",
+  "Universidad Americana (Paraguay)": "par",
+  "UMSA (Bolivia)": "bol",
+  "UPSA (Bolivia)": "bol",
+  "UCB (Bolivia)": "bol",
+  "PUCE (Ecuador)": "ecu",
+  "ESPOL (Ecuador)": "ecu",
+  "U. de Cuenca (Ecuador)": "ecu",
 };
 
 function isCountryCode(value: string | null): value is CountryCode {
-  return value === "arg" || value === "mx" || value === "uru" || value === "col" || value === "chile" || value === "peru";
+  return value === "arg" || value === "mx" || value === "uru" || value === "col" || value === "chile" || value === "peru" || value === "par" || value === "bol" || value === "ecu";
 }
 
 const UNIVERSITY_URLS: Record<string, string> = {
@@ -140,7 +152,15 @@ const UNIVERSITY_URLS: Record<string, string> = {
   "UNLP (Argentina)": "https://unlp.edu.ar/",
   "UCEMA (Argentina)": "https://ucema.edu.ar/",
   "ITESM (México)": "https://tec.mx/",
-
+  "UNA (Paraguay)": "https://www.una.py/",
+  "UCA Paraguay": "https://www.uca.edu.py/",
+  "Universidad Americana (Paraguay)": "https://www.americana.edu.py/",
+  "UMSA (Bolivia)": "https://www.umsa.bo/",
+  "UPSA (Bolivia)": "https://www.upsa.edu.bo/",
+  "UCB (Bolivia)": "https://www.ucb.edu.bo/",
+  "PUCE (Ecuador)": "https://www.puce.edu.ec/",
+  "ESPOL (Ecuador)": "https://www.espol.edu.ec/",
+  "U. de Cuenca (Ecuador)": "https://www.ucuenca.edu.ec/",
 };
 
 
@@ -582,6 +602,20 @@ const INFORMES: Record<string, InformeData> = {
 
 const DEFAULT_KEY = "innovador-tech";
 
+function getMentorUrl(platform: string, handle: string): string {
+  const p = platform.toLowerCase();
+  if (p.includes("youtube")) {
+    if (handle.startsWith("@")) return `https://youtube.com/${handle}`;
+    return `https://youtube.com/@${handle}`;
+  }
+  if (p.includes("instagram")) return `https://instagram.com/${handle.replace("@", "")}`;
+  if (p.includes("x (twitter)") || p === "x" || p.includes("twitter")) return `https://x.com/${handle.replace("@", "")}`;
+  if (p.includes("linkedin")) return `https://linkedin.com/in/${handle.replace("@", "")}`;
+  if (handle.includes(".")) return `https://${handle}`;
+  if (handle.startsWith("@")) return `https://x.com/${handle.replace("@", "")}`;
+  return `https://www.google.com/search?q=${encodeURIComponent(handle)}`;
+}
+
 // ─── Share Modal ──────────────────────────────────────────────────────────────
 function ShareModal({ title, onClose }: { title: string; onClose: () => void }) {
   const [copied, setCopied] = useState(false);
@@ -730,6 +764,88 @@ function CareerCard({ career, isFirst, expanded, country, onToggle }: {
   );
 }
 
+// ─── Opinion Section ──────────────────────────────────────────────────────────
+function OpinionSection() {
+  const [rating, setRating] = useState(0);
+  const [hovered, setHovered] = useState(0);
+  const [comment, setComment] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    if (rating === 0) return;
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <section className="glass-card rounded-3xl p-12 text-center space-y-4 no-print">
+        <div className="text-5xl">🙌</div>
+        <h3 className="font-headline text-2xl font-black text-on-surface">¡Gracias por tu opinión!</h3>
+        <p className="text-on-surface-variant">Tu feedback nos ayuda a mejorar VocacionAI para miles de estudiantes.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="space-y-8 no-print">
+      <div className="text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-black uppercase tracking-tighter mb-4 border border-secondary/20">
+          <span className="material-symbols-outlined text-sm">reviews</span>
+          Tu opinión importa
+        </div>
+        <h2 className="font-headline text-3xl font-extrabold text-on-surface mb-2">¿Qué te pareció el informe?</h2>
+        <p className="text-on-surface-variant max-w-xl mx-auto">Contanos tu experiencia. Tu feedback nos ayuda a hacer VocacionAI cada vez mejor.</p>
+      </div>
+      <div className="glass-card rounded-3xl p-8 md:p-12 space-y-8 max-w-2xl mx-auto">
+        {/* Stars */}
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-sm font-bold text-on-surface-variant uppercase tracking-widest">Tu puntuación</p>
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                onClick={() => setRating(star)}
+                onMouseEnter={() => setHovered(star)}
+                onMouseLeave={() => setHovered(0)}
+                className="text-4xl transition-transform hover:scale-125 active:scale-110"
+              >
+                <span className={(hovered || rating) >= star ? "text-yellow-400" : "text-surface-container-highest"}>
+                  ★
+                </span>
+              </button>
+            ))}
+          </div>
+          {rating > 0 && (
+            <p className="text-sm text-on-surface-variant">
+              {["", "Muy malo", "Malo", "Regular", "Bueno", "¡Excelente!"][rating]}
+            </p>
+          )}
+        </div>
+        {/* Comment */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-on-surface-variant uppercase tracking-widest">Tu comentario (opcional)</label>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Contanos qué te gustó, qué mejorarías, o cualquier cosa que quieras compartir..."
+            rows={4}
+            className="w-full bg-surface-container rounded-2xl px-5 py-4 text-on-surface text-sm resize-none outline-none border border-outline-variant/20 focus:border-primary/40 transition-colors placeholder:text-on-surface-variant/50"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={rating === 0}
+          className="w-full bg-gradient-to-br from-secondary to-secondary-dim text-on-secondary font-black py-4 rounded-2xl hover:scale-[1.02] transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,109,136,0.2)]"
+        >
+          Enviar opinión
+        </button>
+      </div>
+    </section>
+  );
+}
+
 // ─── Main Content ─────────────────────────────────────────────────────────────
 function InformeContent() {
   const searchParams = useSearchParams();
@@ -819,16 +935,6 @@ function InformeContent() {
   };
 
   const handlePDF = () => window.print();
-  const handleShare = async () => {
-    const title = `${p.title} ${p.titleHighlight}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: `Mi perfil: ${title}`, text: `Descubrí mi perfil vocacional con VocacionAI: "${title}" 🚀`, url: window.location.href });
-        return;
-      } catch { /* cancelled, fall through */ }
-    }
-    setShowShare(true);
-  };
   const handleEmail = () => {
     const subject = `Mi perfil vocacional: ${p.title} ${p.titleHighlight}`;
     const body = `¡Hola!\n\nQuería compartirte mi perfil vocacional que descubrí con VocacionAI: "${p.title} ${p.titleHighlight}".\n\nMe pareció súper interesante y pensé que a vos también te podría gustar.\n\nPodés verlo aquí: ${window.location.href}\n\n¡Saludos!`;
@@ -914,10 +1020,6 @@ function InformeContent() {
           <button onClick={handleEmail} className="bg-surface-container-high text-on-surface px-3 py-2 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium text-xs md:text-sm">
             <span className="material-symbols-outlined">mail</span>
             <span className="whitespace-nowrap">Enviar por email</span>
-          </button>
-          <button onClick={handleShare} className="bg-surface-container-high text-on-surface px-3 py-2 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium text-xs md:text-sm">
-            <span className="material-symbols-outlined">share</span>
-            <span className="whitespace-nowrap">Compartir</span>
           </button>
           <button onClick={handlePDF} className="col-span-2 md:col-span-1 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-4 py-2 rounded-xl flex items-center justify-center gap-2 hover:scale-105 transition-all shadow-[0_0_20px_rgba(178,161,255,0.2)] active:scale-95 font-bold text-xs md:text-sm">
             <span className="material-symbols-outlined">picture_as_pdf</span>
@@ -1075,7 +1177,14 @@ function InformeContent() {
                 <p className="text-sm text-on-surface-variant leading-relaxed flex-1">{mentor.why}</p>
                 <div className="flex items-center justify-between pt-2 border-t border-outline-variant/10">
                   <span className="text-xs font-bold text-on-surface-variant">{mentor.platform}</span>
-                  <span className="text-xs bg-surface-container px-3 py-1 rounded-full text-on-surface-variant font-mono">{mentor.handle}</span>
+                  <a
+                    href={getMentorUrl(mentor.platform, mentor.handle)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-bold hover:bg-primary/20 transition-colors"
+                  >
+                    {mentor.handle} →
+                  </a>
                 </div>
               </div>
             ))}
@@ -1289,6 +1398,9 @@ function InformeContent() {
           </div>
         </section>
 
+        {/* Opinion */}
+        <OpinionSection />
+
         {/* Closing */}
         <footer className="pt-20 border-t border-outline-variant/15 text-center">
           <div className="max-w-2xl mx-auto space-y-8">
@@ -1296,10 +1408,6 @@ function InformeContent() {
             <h2 className="font-headline text-4xl font-black text-on-surface">Tu misión apenas comienza.</h2>
             <p className="text-on-surface-variant leading-relaxed text-lg">{p.closing}</p>
             <div className="flex justify-center gap-4 no-print">
-              <button onClick={handleShare} className="bg-primary/10 text-primary px-8 py-4 rounded-2xl font-black hover:bg-primary/20 transition-all flex items-center gap-2">
-                <span className="material-symbols-outlined">share</span>
-                Compartir
-              </button>
               <button onClick={handlePDF} className="bg-tertiary/10 text-tertiary px-8 py-4 rounded-2xl font-black hover:bg-tertiary/20 transition-all flex items-center gap-2">
                 <span className="material-symbols-outlined">picture_as_pdf</span>
                 Guardar PDF
