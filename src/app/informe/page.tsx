@@ -1313,8 +1313,8 @@ function InformeContent() {
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="text-lg font-bold text-[#b2a1ff]">VocacionAI</div>
           <div className="flex flex-wrap justify-center gap-6">
-            <a className="text-sm text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Privacy Policy</a>
-            <a className="text-sm text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Terms of Service</a>
+            <a className="text-sm text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/privacy-policy">Privacy Policy</a>
+            <a className="text-sm text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/terms-of-service">Terms of Service</a>
           </div>
           <div className="text-right text-sm text-[#acaab1]">© 2024 VocacionAI. Launch your mission.</div>
         </div>

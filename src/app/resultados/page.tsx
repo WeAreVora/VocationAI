@@ -480,13 +480,13 @@ function ResultadosContent() {
           </div>
           <div className="flex flex-col gap-3">
             <h5 className="text-on-surface font-bold mb-2">Plataforma</h5>
-            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Career Roadmap</a>
-            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Terms of Service</a>
-            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Privacy Policy</a>
+            <Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/informe">Career Roadmap</Link>
+            <Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/terms-of-service">Terms of Service</Link>
+            <Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/privacy-policy">Privacy Policy</Link>
           </div>
           <div className="flex flex-col gap-3">
             <h5 className="text-on-surface font-bold mb-2">Ayuda</h5>
-            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Contact Support</a>
+            <Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/#contacto">Contact Support</Link>
             <div className="mt-4 text-[#acaab1]">© 2024 VocacionAI. Launch your mission.</div>
           </div>
         </div>

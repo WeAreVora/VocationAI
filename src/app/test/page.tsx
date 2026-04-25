@@ -482,6 +482,7 @@ export default function TestPage() {
   const [phase, setPhase] = useState<"intro" | "quiz" | "outro">("intro");
   const [profileKey, setProfileKey] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<CountryCode | null>(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   // Intro state
   const [visibleMsgs, setVisibleMsgs] = useState(0);
@@ -627,27 +628,51 @@ export default function TestPage() {
                 <div className={`glass-panel p-4 sm:p-5 rounded-2xl rounded-tl-none border-l-4 border-tertiary/40 transition-all duration-500 ease-out ${
                   visibleMsgs >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}>
-                  <p className="text-on-surface leading-relaxed mb-4">
-                    Antes de arrancar, ¿de qué país sos? Voy a personalizar las universidades de tu informe final.
-                  </p>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
-                    {COUNTRY_OPTIONS.map((country) => {
-                      const isSelected = selectedCountry === country.code;
-                      return (
-                        <button
-                          key={country.code}
-                          type="button"
-                          onClick={() => setSelectedCountry(country.code)}
-                          className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border text-sm font-bold transition-all ${
-                            isSelected
-                              ? "bg-primary/15 border-primary text-primary"
-                              : "bg-surface-container-high border-outline-variant/20 text-on-surface-variant hover:border-primary/50"
-                          }`}
-                        >
-                          {country.label}
-                        </button>
-                      );
-                    })}
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3 rounded-2xl border border-outline-variant/15 bg-surface-container-high/50 p-4">
+                      <input
+                        id="accept-terms"
+                        type="checkbox"
+                        checked={acceptedTerms}
+                        onChange={(e) => setAcceptedTerms(e.target.checked)}
+                        className="mt-1 h-5 w-5 rounded border-outline-variant bg-surface text-primary focus:ring-2 focus:ring-primary/40"
+                      />
+                      <label htmlFor="accept-terms" className="text-sm leading-relaxed text-on-surface">
+                        Acepto los <Link href="/terms-of-service" className="text-primary font-bold hover:underline">Términos de Servicio</Link> y la <Link href="/privacy-policy" className="text-primary font-bold hover:underline">Política de Privacidad</Link>.
+                      </label>
+                    </div>
+
+                    {acceptedTerms ? (
+                      <>
+                        <p className="text-on-surface leading-relaxed">
+                          Antes de arrancar, ¿de qué país sos? Voy a personalizar las universidades de tu informe final.
+                        </p>
+
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+                          {COUNTRY_OPTIONS.map((country) => {
+                            const isSelected = selectedCountry === country.code;
+                            return (
+                              <button
+                                key={country.code}
+                                type="button"
+                                onClick={() => setSelectedCountry(country.code)}
+                                className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border text-sm font-bold transition-all ${
+                                  isSelected
+                                    ? "bg-primary/15 border-primary text-primary"
+                                    : "bg-surface-container-high border-outline-variant/20 text-on-surface-variant hover:border-primary/50"
+                                }`}
+                              >
+                                {country.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-sm text-on-surface-variant leading-relaxed">
+                        Aceptá los términos para habilitar la selección de país y continuar.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -658,10 +683,10 @@ export default function TestPage() {
                 <button
                   type="button"
                   onClick={() => setPhase("quiz")}
-                  disabled={!selectedCountry}
+                  disabled={!selectedCountry || !acceptedTerms}
                   className="group relative w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-base sm:text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  Sí, empezar el test
+                  Comenzar Test
                   <span className="ml-2 material-symbols-outlined align-middle transition-transform group-hover:translate-x-1">rocket_launch</span>
                 </button>
               </div>
@@ -904,12 +929,12 @@ export default function TestPage() {
           </div>
           <div className="flex flex-col space-y-2">
             <span className="font-bold text-on-surface mb-2">Legal</span>
-            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Privacy Policy</a>
-            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Terms of Service</a>
+            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/privacy-policy">Privacy Policy</a>
+            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/terms-of-service">Terms of Service</a>
           </div>
           <div className="flex flex-col space-y-2">
             <span className="font-bold text-on-surface mb-2">Soporte</span>
-            <a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="#">Contact Support</a>
+            <Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/#contacto">Contact Support</Link>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-8 mt-10 sm:mt-12 text-center text-[#acaab1]/50 text-xs">

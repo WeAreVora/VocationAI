@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Emoji3D from "@/app/components/Emoji3D";
 import ContactForm from "@/app/components/ContactForm";
 
@@ -376,10 +377,30 @@ export default function HomePage() {
           <div className="space-y-8">
             <h2 className="text-4xl font-black font-headline">Hablemos</h2>
             <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocacionAI en tu colegio o simplemente querés saludarnos?</p>
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
+            <div className="space-y-4">
+              <div className="rounded-2xl bg-surface-container-low border border-outline-variant/10 p-5 flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-secondary/15 flex items-center justify-center text-secondary shrink-0">
+                  <span className="material-symbols-outlined">support_agent</span>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-bold">Soporte, colegios y alianzas</div>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                    Usá el formulario para consultas sobre implementación, seguimiento del informe, experiencia de estudiantes o integración institucional.
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="rounded-2xl bg-surface-container-low border border-outline-variant/10 p-5 flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center text-primary shrink-0">
+                  <span className="material-symbols-outlined">database</span>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-bold">Qué guardamos al contactarnos</div>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                    El sitio registra nombre, email y mensaje para responderte y hacer seguimiento desde el panel interno.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 pt-2">
                 <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
                   <span className="material-symbols-outlined">share</span>
                 </div>
@@ -409,16 +430,15 @@ export default function HomePage() {
             <div className="space-y-4">
               <div className="font-bold text-on-surface">Plataforma</div>
               <ul className="space-y-2">
-                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/test">Test Vocacional</a></li>
-                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/informe">Ejemplo Informe</a></li>
-                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="#">Precios</a></li>
+                <li><Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/test">Test Vocacional</Link></li>
+                <li><Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/#contacto">Precios</Link></li>
               </ul>
             </div>
             <div className="space-y-4">
               <div className="font-bold text-on-surface">Legal</div>
               <ul className="space-y-2">
-                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="#">Privacy Policy</a></li>
-                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="#">Terms of Service</a></li>
+                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/privacy-policy">Privacy Policy</a></li>
+                <li><a className="text-[#acaab1] hover:text-[#66ffc7] transition-colors text-sm" href="/terms-of-service">Terms of Service</a></li>
               </ul>
             </div>
           </div>
