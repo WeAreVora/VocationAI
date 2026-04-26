@@ -221,7 +221,7 @@ const INFORMES: Record<string, InformeData> = {
       { icon: "self_improvement", color: "text-surface-tint", bg: "bg-surface-tint/10", badge: "Auto-Dir.", badgeColor: "text-surface-tint", title: "Schwartz: Autodirección", desc: "Tu valor central es la independencia intelectual. Necesitás libertad para elegir tus preguntas y tu ritmo. La conformidad y las reglas rígidas son tu mayor obstáculo." },
     ],
     aiAnalysis: [
-      "Tu perfil científico-analítico es consistente a través de los cuatro marcos de evaluación, lo que indica alta autenticidad vocacional. El sistema identifica una capacidad de procesamiento profundo rara incluso en perfiles universitarios avanzados, con lo que los psicólogos cognitivos llaman 'tolerancia a la ambigüedad epistemológica'.",
+      "Tu perfil científico-analítico es consistente a través de los cuatro marcos de evaluación, lo que indica alta autenticidad vocacional. El sistema identifica una capacidad de procesamiento profundo rara incluso en perfiles universitarios avanzados.",
       "El análisis también detecta un patrón de 'comunicación diferida': tu fortaleza está en el pensamiento individual profundo, pero tu mayor impacto vendrá cuando aprendas a traducir ese conocimiento para audiencias no técnicas. Los mejores científicos no solo descubren — también enseñan y publican.",
     ],
     workStyle: ["Laboratorios con autonomía metodológica completa.", "Trabajo de largo plazo orientado a publicaciones.", "Equipos pequeños con alta densidad intelectual.", "Acceso a literatura científica y herramientas estadísticas avanzadas."],
@@ -1064,7 +1064,7 @@ function InformeContent() {
         <section>
           <div className="flex items-end justify-between mb-10">
             <h2 className="font-headline text-3xl font-extrabold text-on-surface">Dimensiones del Perfil</h2>
-            <span className="text-on-surface-variant text-sm font-label italic hidden md:block">Basado en algoritmos psicométricos avanzados</span>
+            <span className="text-on-surface-variant text-sm font-label italic hidden md:block">Basado en algoritmos avanzados</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {p.dimensions.map(({ icon, color, bg, badge, badgeColor, title, desc }) => (

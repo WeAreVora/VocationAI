@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "VocacionAI | Descubrí tu Futuro con IA",
   description:
-    "Un análisis profundo basado en 40 preguntas y 4 marcos psicológicos validados. Obtené tu mapa profesional en minutos.",
+    "Un análisis profundo basado en 40 preguntas y 4 marcos teóricos validados. Obtené tu mapa profesional en minutos.",
 };
 
 export default function RootLayout({

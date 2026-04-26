@@ -945,24 +945,6 @@ export default function TestPage() {
         </div>
       </footer>
 
-      <nav className="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-outline-variant/10 px-4 py-2.5 flex justify-between items-center z-50">
-        <button className="flex flex-col items-center space-y-1 text-primary font-bold">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>assessment</span>
-          <span className="text-[10px]">Test</span>
-        </button>
-        <button className="flex flex-col items-center space-y-1 text-on-surface-variant">
-          <span className="material-symbols-outlined">explore</span>
-          <span className="text-[10px]">Explore</span>
-        </button>
-        <button className="flex flex-col items-center space-y-1 text-on-surface-variant">
-          <span className="material-symbols-outlined">school</span>
-          <span className="text-[10px]">Mentors</span>
-        </button>
-        <button className="flex flex-col items-center space-y-1 text-on-surface-variant">
-          <span className="material-symbols-outlined">person</span>
-          <span className="text-[10px]">Profile</span>
-        </button>
-      </nav>
     </>
   );
 }

@@ -350,7 +350,7 @@ function ResultadosContent() {
           <div className="md:col-span-7 bg-surface-container-low rounded-xl p-8 glass-border">
             <h3 className="font-headline text-2xl font-bold mb-8 flex items-center gap-3">
               <span className="material-symbols-outlined text-primary">bar_chart</span>
-              Tu Perfil Psicométrico
+              Tu Perfil de Afinidades
             </h3>
             <div className="space-y-6">
               {p.traits.map(({ label, pct }, i) => {

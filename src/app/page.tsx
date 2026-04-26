@@ -42,7 +42,7 @@ export default function HomePage() {
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-highest border border-outline-variant/20 text-primary text-sm font-semibold tracking-wide">
               <span className="material-symbols-outlined text-sm">auto_awesome</span>
-              ✦ TEST VOCACIONAL CON INTELIGENCIA ARTIFICIAL
+              ✦ QUIZ VOCACIONAL CON INTELIGENCIA ARTIFICIAL
             </div>
             <h1 className="text-6xl lg:text-7xl font-black font-headline leading-tight tracking-tight">
               Descubrí qué{" "}
@@ -52,7 +52,7 @@ export default function HomePage() {
               para vos
             </h1>
             <p className="text-xl text-on-surface-variant max-w-xl leading-relaxed">
-              Un análisis profundo basado en 40 preguntas y 4 marcos psicológicos validados. Obtené un mapa detallado de tu futuro profesional en minutos.
+              Una herramienta inicial e interactiva que, mediante 40 preguntas, te ayuda a descubrir tus afinidades académicas, diseñada para darte el primer empujón en tu búsqueda.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <a href="/test" className="px-8 py-4 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-bold rounded-xl text-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(178,161,255,0.3)]">
@@ -80,29 +80,29 @@ export default function HomePage() {
               <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary">
                 <span className="material-symbols-outlined">psychology</span>
               </div>
-              <h3 className="text-lg font-bold">RIASEC</h3>
-              <p className="text-sm text-on-surface-variant">Teoría de Holland sobre ambientes laborales.</p>
+              <h3 className="text-lg font-bold">Tipologías de Holland (RIASEC)</h3>
+              <p className="text-sm text-on-surface-variant">Para identificar los ambientes laborales que mejor hacen "match" con tu personalidad.</p>
             </div>
             <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
               <div className="w-12 h-12 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary">
                 <span className="material-symbols-outlined">lightbulb</span>
               </div>
-              <h3 className="text-lg font-bold">Gardner</h3>
-              <p className="text-sm text-on-surface-variant">Mapeo de las 8 inteligencias múltiples.</p>
+              <h3 className="text-lg font-bold">Inteligencias Múltiples (Gardner)</h3>
+              <p className="text-sm text-on-surface-variant">Para mapear tus áreas de mayor facilidad y talento natural.</p>
             </div>
             <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
               <div className="w-12 h-12 rounded-2xl bg-tertiary/20 flex items-center justify-center text-tertiary">
                 <span className="material-symbols-outlined">schema</span>
               </div>
-              <h3 className="text-lg font-bold">Kolb</h3>
-              <p className="text-sm text-on-surface-variant">Identificación de estilos de aprendizaje.</p>
+              <h3 className="text-lg font-bold">Estilos de Aprendizaje (Kolb)</h3>
+              <p className="text-sm text-on-surface-variant">Para entender cómo absorbés mejor la información (haciendo, leyendo, experimentando).</p>
             </div>
             <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
               <div className="w-12 h-12 rounded-2xl bg-primary-fixed/20 flex items-center justify-center text-primary-fixed">
                 <span className="material-symbols-outlined">balance</span>
               </div>
-              <h3 className="text-lg font-bold">Schwartz</h3>
-              <p className="text-sm text-on-surface-variant">Valores humanos básicos y motivación.</p>
+              <h3 className="text-lg font-bold">Valores Básicos (Schwartz)</h3>
+              <p className="text-sm text-on-surface-variant">Para alinear tus motivaciones personales con tu futura rutina profesional.</p>
             </div>
           </div>
         </section>
@@ -121,7 +121,7 @@ export default function HomePage() {
                   <span className="material-symbols-outlined text-3xl">assignment</span>
                 </div>
                 <h4 className="text-2xl font-bold">Test Gratuito</h4>
-                <p className="text-on-surface-variant">Respondé 40 preguntas rápidas diseñadas por expertos en pedagogía y psicología.</p>
+                <p className="text-on-surface-variant">Respondé 40 preguntas rápidas diseñadas por marcos teóricos reconocidos.</p>
               </div>
             </div>
             <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
@@ -154,7 +154,7 @@ export default function HomePage() {
               <div className="space-y-8">
                 <h2 className="text-4xl lg:text-5xl font-black font-headline tracking-tight">Tu mapa profesional personalizado</h2>
                 <p className="text-on-surface-variant text-lg leading-relaxed">
-                  No te damos solo una lista de carreras. Te entregamos un análisis psicológico detallado de por qué encajás en cada área y qué universidades son las mejores para vos.
+                  No te damos solo una lista de carreras. Te entregamos un análisis de por qué encajás en cada área y qué universidades son las mejores para vos.
                 </p>
                 <ul className="space-y-6">
                   {[
@@ -240,7 +240,7 @@ export default function HomePage() {
             <div className="lg:col-span-2 space-y-8">
               <h2 className="text-4xl font-black font-headline">Por qué VocacionAI es diferente</h2>
               <p className="text-lg text-on-surface-variant leading-relaxed">
-                Nacimos de la frustración de ver a miles de jóvenes elegir carreras por inercia o presión social. Combinamos la precisión de la Inteligencia Artificial con los marcos psicológicos más respetados del mundo para darte una respuesta real y accionable.
+                Nacimos de la frustración de ver a miles de jóvenes elegir carreras por inercia o presión social. Combinamos la precisión de la Inteligencia Artificial con los marcos teóricos más respetados del mundo para darte una respuesta real y accionable.
               </p>
               <p className="text-lg text-on-surface-variant leading-relaxed">
                 No somos un simple cuestionario; somos tu primer paso hacia una vida profesional satisfactoria y exitosa.
@@ -254,7 +254,7 @@ export default function HomePage() {
 
             <div className="lg:col-span-3 grid md:grid-cols-2 gap-4">
               {[
-                { icon: "psychology_alt", color: "text-primary", title: "Psicología Real", desc: "Basado en test de Holland y las 8 inteligencias de Gardner." },
+                { icon: "psychology_alt", color: "text-primary", title: "Modelos de Referencias", desc: "Basado en las tipologias de Holland y las inteligencias multiples de Gardner entre otros." },
                 { icon: "auto_graph", color: "text-secondary", title: "Reporte AI", desc: "Análisis profundo generado por modelos de lenguaje avanzados." },
                 { icon: "bolt", color: "text-tertiary", title: "Resultados Instantáneos", desc: "Nada de esperar días. Tu futuro está listo en 5 minutos." },
                 { icon: "savings", color: "text-primary", title: "Precio Accesible", desc: "Mucho más económico que una sesión de orientación privada." },
@@ -329,16 +329,28 @@ export default function HomePage() {
             {[
               {
                 q: "¿El test es realmente gratis?",
-                a: "Sí, el test de 40 preguntas y los resultados básicos de afinidad son gratuitos. El reporte Elite con análisis profundo de IA tiene un costo único muy accesible.",
+                a: "Sí, el cuestionario interactivo de 40 preguntas y tu resultado básico de afinidad son 100% gratuitos. Si querés ir un paso más allá, ofrecemos un 'Reporte Elite' de pago, donde nuestra IA analiza tu perfil en profundidad y te entrega un mapa detallado de carreras y universidades.",
               },
               {
-                q: "¿Qué tan preciso es el análisis de IA?",
-                a: "Utilizamos modelos entrenados con bases de datos psicopedagógicas y perfiles profesionales reales. Nuestra precisión es del 98% según el feedback de nuestros usuarios.",
+                q: "¿Cómo funciona el análisis de la IA?",
+                a: "Nuestro motor cruza tus respuestas con modelos de datos educativos y cuatro marcos teóricos reconocidos mundialmente (como las tipologías de Holland y las inteligencias múltiples de Gardner). A partir de ahí, la IA encuentra patrones de afinidad para recomendarte los caminos académicos que mejor hacen match con tu forma de ser.",
+              },
+              {
+                q: "¿Esto reemplaza a un orientador vocacional humano?",
+                a: "No, y no busca hacerlo. VocacionAI es una brújula inicial excelente para descubrir tus intereses, explorar opciones que quizás no conocías y dar el primer paso. Es una herramienta complementaria, pero no reemplaza el acompañamiento profundo de un profesional de la salud mental o la educación.",
+              },  
+              {
+                q: "¿Tengo que crearme una cuenta para participar?",
+                a: "¡Para nada! Sabemos que querés respuestas, no llenar formularios. Podés hacer el test completo y ver tus resultados iniciales sin necesidad de registrarte ni dejar contraseñas."
               },
               {
                 q: "¿Sirve para cualquier país?",
-                a: "Sí, aunque nuestro catálogo de universidades está enfocado inicialmente en Latinoamérica y España, los perfiles vocacionales son universales.",
+                a: "Sí. Los perfiles vocacionales, los intereses y las habilidades son universales. Tené en cuenta que nuestro catálogo específico de recomendaciones de universidades está enfocado inicialmente en Latinoamérica y España, pero el análisis de tu perfil te servirá estés donde estés.",
               },
+              {
+                q: "¿Qué hacen con mis datos y mis respuestas?",
+                a: "Tu privacidad es prioridad. No almacenamos las respuestas individuales de tu cuestionario ni las asociamos a tu identidad. El algoritmo procesa la información en el momento para darte tu resultado y luego la descarta. No vendemos tus datos ni los usamos para entrenar modelos de IA de terceros sin tu permiso."
+              }
             ].map(({ q, a }) => (
               <details key={q} className="group bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/10">
                 <summary className="flex justify-between items-center p-6 cursor-pointer list-none">
@@ -423,7 +435,7 @@ export default function HomePage() {
           <div className="space-y-4">
             <div className="text-lg font-bold text-[#b2a1ff] font-headline">VocacionAI</div>
             <p className="text-[#acaab1] text-sm leading-relaxed">
-              Potenciando la próxima generación de profesionales a través de la inteligencia artificial y la psicología aplicada.
+              Conectando a la próxima generación de profesionales con su vocación a través de IA.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">

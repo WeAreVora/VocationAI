@@ -127,7 +127,7 @@ export default function TermsOfServicePage() {
           </p>
           <p>
             El uso del sitio implica aceptar que los contenidos son una guía orientativa basada en datos y marcos
-            psicológicos, no una promesa de empleo, ingreso académico o éxito profesional.
+            teóricos, no una promesa de empleo, ingreso académico o éxito profesional.
           </p>
         </SectionCard>
 
