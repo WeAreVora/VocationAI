@@ -8,6 +8,36 @@ type CreatePreferenceBody = {
 
 const ALLOWED_COUNTRIES = new Set(["arg", "mx", "uru", "col", "chile", "peru"]);
 
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 5;
+const rateLimitBuckets = new Map<string, number[]>();
+
+function getClientIp(req: NextRequest): string {
+  const fwd = req.headers.get("x-forwarded-for");
+  if (fwd) return fwd.split(",")[0].trim();
+  return req.headers.get("x-real-ip") ?? "unknown";
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const cutoff = now - RATE_LIMIT_WINDOW_MS;
+  const hits = (rateLimitBuckets.get(ip) ?? []).filter((t) => t > cutoff);
+  if (hits.length >= RATE_LIMIT_MAX) {
+    rateLimitBuckets.set(ip, hits);
+    return true;
+  }
+  hits.push(now);
+  rateLimitBuckets.set(ip, hits);
+  if (rateLimitBuckets.size > 5000) {
+    for (const [key, value] of rateLimitBuckets) {
+      const fresh = value.filter((t) => t > cutoff);
+      if (fresh.length === 0) rateLimitBuckets.delete(key);
+      else rateLimitBuckets.set(key, fresh);
+    }
+  }
+  return false;
+}
+
 function normalizeBaseUrl(candidate: string): string | null {
   try {
     const parsedUrl = new URL(candidate);
@@ -49,6 +79,14 @@ function resolveBaseUrl(req: NextRequest): string {
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = getClientIp(req);
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: "Demasiadas solicitudes. Intentá de nuevo en un minuto." },
+        { status: 429, headers: { "Retry-After": "60" } },
+      );
+    }
+
     const accessToken = process.env.MP_ACCESS_TOKEN;
 
     if (!accessToken) {
