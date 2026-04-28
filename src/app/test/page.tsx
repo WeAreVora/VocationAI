@@ -448,7 +448,7 @@ function BotAvatar() {
         <h2 className="font-headline font-bold text-xl leading-tight">VocaIA</h2>
         <p className="text-on-surface-variant text-sm flex items-center">
           <span className="w-2 h-2 bg-tertiary rounded-full mr-2 inline-block" />
-          AI Counselor Online
+          Asesor IA en línea
         </p>
       </div>
     </div>

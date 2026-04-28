@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import VercelAnalytics from "../components/VercelAnalytics";
+import VercelSpeedInsights from "../components/VercelSpeedInsights";
 
 export const metadata: Metadata = {
   title: "VocacionAI | Descubrí tu Futuro con IA",
@@ -22,6 +24,8 @@ export default function RootLayout({
       </head>
       <body className="bg-background text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary-fixed">
         {children}
+        <VercelAnalytics />
+        <VercelSpeedInsights />
       </body>
     </html>
   );
