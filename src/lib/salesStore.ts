@@ -1,5 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
+import { getRedis } from "@/lib/redisClient";
 
 export type ApprovedSale = {
   paymentId: string;
@@ -17,107 +16,110 @@ export type PendingPayment = {
   createdAt: string;
 };
 
-type SalesDb = {
-  approvedSales: ApprovedSale[];
-  pendingPayments: PendingPayment[];
-};
-
-const DATA_DIR = path.join(process.cwd(), ".data");
-const SALES_DB_PATH = path.join(DATA_DIR, "sales-db.json");
+const APPROVED_SALES_KEY = "approved_sales";
+const PENDING_PAYMENTS_KEY = "pending_payments";
 
 function normalizeCountry(value: string): string {
   return value.trim().toLowerCase();
 }
 
-function defaultDb(): SalesDb {
-  return { approvedSales: [], pendingPayments: [] };
-}
-
-async function ensureDbFile(): Promise<void> {
-  await mkdir(DATA_DIR, { recursive: true });
-
-  try {
-    await readFile(SALES_DB_PATH, "utf8");
-  } catch {
-    await writeFile(SALES_DB_PATH, JSON.stringify(defaultDb(), null, 2), "utf8");
-  }
-}
-
-async function readDb(): Promise<SalesDb> {
-  await ensureDbFile();
-  const raw = await readFile(SALES_DB_PATH, "utf8");
-
-  try {
-    const parsed = JSON.parse(raw) as Partial<SalesDb>;
-
-    return {
-      approvedSales: Array.isArray(parsed.approvedSales) ? parsed.approvedSales : [],
-      pendingPayments: Array.isArray(parsed.pendingPayments) ? parsed.pendingPayments : [],
-    };
-  } catch {
-    return defaultDb();
-  }
-}
-
-async function writeDb(db: SalesDb): Promise<void> {
-  await ensureDbFile();
-  await writeFile(SALES_DB_PATH, JSON.stringify(db, null, 2), "utf8");
-}
-
 export async function recordApprovedSale(sale: Omit<ApprovedSale, "approvedAt">): Promise<boolean> {
-  const db = await readDb();
-  const exists = db.approvedSales.some((item) => item.paymentId === sale.paymentId);
+  const redis = await getRedis();
+  const raw = await redis.lRange(APPROVED_SALES_KEY, 0, -1);
+  const exists = raw.some((item) => {
+    const parsed = JSON.parse(item) as ApprovedSale;
+    return parsed.paymentId === sale.paymentId;
+  });
 
   if (exists) {
     return false;
   }
 
-  db.approvedSales.push({
+  const entry: ApprovedSale = {
     ...sale,
     pais: normalizeCountry(sale.pais),
     approvedAt: new Date().toISOString(),
-  });
+  };
 
-  await writeDb(db);
+  await redis.lPush(APPROVED_SALES_KEY, JSON.stringify(entry));
   return true;
 }
 
 export async function getApprovedSaleByPaymentId(paymentId: string): Promise<ApprovedSale | null> {
-  const db = await readDb();
-  return db.approvedSales.find((item) => item.paymentId === paymentId) ?? null;
+  const redis = await getRedis();
+  const raw = await redis.lRange(APPROVED_SALES_KEY, 0, -1);
+
+  for (const item of raw) {
+    const parsed = JSON.parse(item) as ApprovedSale;
+    if (parsed.paymentId === paymentId) {
+      return parsed;
+    }
+  }
+
+  return null;
 }
 
 export async function recordPendingPayment(payment: Omit<PendingPayment, "createdAt">): Promise<void> {
-  const db = await readDb();
-  db.pendingPayments = db.pendingPayments.filter(
-    (item) => item.ref !== payment.ref && item.preferenceId !== payment.preferenceId,
-  );
+  const redis = await getRedis();
+  const raw = await redis.lRange(PENDING_PAYMENTS_KEY, 0, -1);
 
-  db.pendingPayments.push({
+  const filtered = raw.filter((item) => {
+    const parsed = JSON.parse(item) as PendingPayment;
+    return parsed.ref !== payment.ref && parsed.preferenceId !== payment.preferenceId;
+  });
+
+  const pipeline = redis.multi();
+
+  pipeline.del(PENDING_PAYMENTS_KEY);
+
+  const entry: PendingPayment = {
     ...payment,
     perfil: payment.perfil.trim(),
     pais: normalizeCountry(payment.pais),
     createdAt: new Date().toISOString(),
-  });
+  };
 
-  await writeDb(db);
+  for (const item of filtered) {
+    pipeline.rPush(PENDING_PAYMENTS_KEY, item);
+  }
+
+  pipeline.rPush(PENDING_PAYMENTS_KEY, JSON.stringify(entry));
+  await pipeline.exec();
 }
 
 export async function getPendingPaymentByRef(ref: string): Promise<PendingPayment | null> {
-  const db = await readDb();
-  return db.pendingPayments.find((item) => item.ref === ref) ?? null;
+  const redis = await getRedis();
+  const raw = await redis.lRange(PENDING_PAYMENTS_KEY, 0, -1);
+
+  for (const item of raw) {
+    const parsed = JSON.parse(item) as PendingPayment;
+    if (parsed.ref === ref) {
+      return parsed;
+    }
+  }
+
+  return null;
 }
 
 export async function removePendingPaymentByRef(ref: string): Promise<void> {
-  const db = await readDb();
-  const nextPendingPayments = db.pendingPayments.filter((item) => item.ref !== ref);
+  const redis = await getRedis();
+  const raw = await redis.lRange(PENDING_PAYMENTS_KEY, 0, -1);
 
-  if (nextPendingPayments.length === db.pendingPayments.length) {
+  const filtered = raw.filter((item) => {
+    const parsed = JSON.parse(item) as PendingPayment;
+    return parsed.ref !== ref;
+  });
+
+  if (filtered.length === raw.length) {
     return;
   }
 
-  db.pendingPayments = nextPendingPayments;
-  await writeDb(db);
+  const pipeline = redis.multi();
+  pipeline.del(PENDING_PAYMENTS_KEY);
+  for (const item of filtered) {
+    pipeline.rPush(PENDING_PAYMENTS_KEY, item);
+  }
+  await pipeline.exec();
 }
 
 function toProfileLabel(key: string): string {
@@ -142,12 +144,14 @@ function toCountryLabel(code: string): string {
 }
 
 export async function getAdminSalesStats() {
-  const db = await readDb();
+  const redis = await getRedis();
+  const raw = await redis.lRange(APPROVED_SALES_KEY, 0, -1);
+  const approvedSales = raw.map((item) => JSON.parse(item) as ApprovedSale);
 
   const profileCounts = new Map<string, number>();
   const countryCounts = new Map<string, number>();
 
-  for (const sale of db.approvedSales) {
+  for (const sale of approvedSales) {
     profileCounts.set(sale.perfil, (profileCounts.get(sale.perfil) ?? 0) + 1);
     countryCounts.set(sale.pais, (countryCounts.get(sale.pais) ?? 0) + 1);
   }
@@ -161,10 +165,10 @@ export async function getAdminSalesStats() {
     .sort((a, b) => b.count - a.count);
 
   return {
-    totalSold: db.approvedSales.length,
+    totalSold: approvedSales.length,
     profiles,
     countries,
-    recentSales: db.approvedSales
+    recentSales: approvedSales
       .slice()
       .sort((a, b) => b.approvedAt.localeCompare(a.approvedAt))
       .slice(0, 20),
