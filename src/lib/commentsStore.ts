@@ -1,5 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
+import { getRedis } from "@/lib/redisClient";
 
 export type CommentEntry = {
   id: string;
@@ -8,67 +7,25 @@ export type CommentEntry = {
   createdAt: string;
 };
 
-type CommentsDb = {
-  comments: CommentEntry[];
-};
-
-const DATA_DIR = path.join(process.cwd(), ".data");
-const COMMENTS_DB_PATH = path.join(DATA_DIR, "comments.json");
-
-function defaultDb(): CommentsDb {
-  return { comments: [] };
-}
-
-async function ensureDbFile(): Promise<void> {
-  await mkdir(DATA_DIR, { recursive: true });
-
-  try {
-    await readFile(COMMENTS_DB_PATH, "utf8");
-  } catch {
-    await writeFile(COMMENTS_DB_PATH, JSON.stringify(defaultDb(), null, 2), "utf8");
-  }
-}
-
-async function readDb(): Promise<CommentsDb> {
-  await ensureDbFile();
-  const raw = await readFile(COMMENTS_DB_PATH, "utf8");
-
-  try {
-    const parsed = JSON.parse(raw) as Partial<CommentsDb>;
-
-    return {
-      comments: Array.isArray(parsed.comments) ? parsed.comments : [],
-    };
-  } catch {
-    return defaultDb();
-  }
-}
-
-async function writeDb(db: CommentsDb): Promise<void> {
-  await ensureDbFile();
-  await writeFile(COMMENTS_DB_PATH, JSON.stringify(db, null, 2), "utf8");
-}
+const KEY = "comments";
 
 export async function recordComment(input: { rating: number; message: string }): Promise<CommentEntry> {
-  const db = await readDb();
-
-  const created: CommentEntry = {
+  const entry: CommentEntry = {
     id: crypto.randomUUID(),
     rating: input.rating,
     message: input.message.trim(),
     createdAt: new Date().toISOString(),
   };
 
-  db.comments.push(created);
-  await writeDb(db);
+  const redis = await getRedis();
+  await redis.lPush(KEY, JSON.stringify(entry));
 
-  return created;
+  return entry;
 }
 
 export async function getCommentsNewestFirst(): Promise<CommentEntry[]> {
-  const db = await readDb();
+  const redis = await getRedis();
+  const raw = await redis.lRange(KEY, 0, -1);
 
-  return db.comments
-    .slice()
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return raw.map((item) => JSON.parse(item) as CommentEntry);
 }

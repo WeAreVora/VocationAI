@@ -1,5 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
+import { getRedis } from "@/lib/redisClient";
 
 export type ContactMessage = {
   id: string;
@@ -9,55 +8,14 @@ export type ContactMessage = {
   createdAt: string;
 };
 
-type ContactDb = {
-  messages: ContactMessage[];
-};
-
-const DATA_DIR = path.join(process.cwd(), ".data");
-const CONTACT_DB_PATH = path.join(DATA_DIR, "contact-messages.json");
-
-function defaultDb(): ContactDb {
-  return { messages: [] };
-}
-
-async function ensureDbFile(): Promise<void> {
-  await mkdir(DATA_DIR, { recursive: true });
-
-  try {
-    await readFile(CONTACT_DB_PATH, "utf8");
-  } catch {
-    await writeFile(CONTACT_DB_PATH, JSON.stringify(defaultDb(), null, 2), "utf8");
-  }
-}
-
-async function readDb(): Promise<ContactDb> {
-  await ensureDbFile();
-  const raw = await readFile(CONTACT_DB_PATH, "utf8");
-
-  try {
-    const parsed = JSON.parse(raw) as Partial<ContactDb>;
-
-    return {
-      messages: Array.isArray(parsed.messages) ? parsed.messages : [],
-    };
-  } catch {
-    return defaultDb();
-  }
-}
-
-async function writeDb(db: ContactDb): Promise<void> {
-  await ensureDbFile();
-  await writeFile(CONTACT_DB_PATH, JSON.stringify(db, null, 2), "utf8");
-}
+const KEY = "contact_messages";
 
 export async function recordContactMessage(input: {
   name: string;
   email: string;
   message: string;
 }): Promise<ContactMessage> {
-  const db = await readDb();
-
-  const created: ContactMessage = {
+  const entry: ContactMessage = {
     id: crypto.randomUUID(),
     name: input.name.trim(),
     email: input.email.trim().toLowerCase(),
@@ -65,16 +23,15 @@ export async function recordContactMessage(input: {
     createdAt: new Date().toISOString(),
   };
 
-  db.messages.push(created);
-  await writeDb(db);
+  const redis = await getRedis();
+  await redis.lPush(KEY, JSON.stringify(entry));
 
-  return created;
+  return entry;
 }
 
 export async function getContactMessagesNewestFirst(): Promise<ContactMessage[]> {
-  const db = await readDb();
+  const redis = await getRedis();
+  const raw = await redis.lRange(KEY, 0, -1);
 
-  return db.messages
-    .slice()
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return raw.map((item) => JSON.parse(item) as ContactMessage);
 }
