@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     const payload: Record<string, unknown> = {
       items: [
         {
-          title: "Informe vocacional completo - VocacionAI",
+          title: "Informe vocacional completo - VocacionIA",
           quantity: 1,
           currency_id: "ARS",
           unit_price: 15000,

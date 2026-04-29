@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Terms of Service | VocacionAI",
-  description: "Condiciones de uso de VocacionAI para el test vocacional, el informe y el flujo de pago.",
+  title: "Terms of Service | VocacionIA",
+  description: "Condiciones de uso de VocacionIA para el test vocacional, el informe y el flujo de pago.",
 };
 
 function SectionCard({
@@ -35,7 +35,7 @@ export default function TermsOfServicePage() {
           <div className="space-y-4">
             <h1 className="text-4xl sm:text-5xl font-black font-headline leading-tight">Terms of Service</h1>
             <p className="text-on-surface-variant text-lg leading-relaxed max-w-3xl">
-              Estas condiciones regulan el uso de VocacionAI, el test vocacional, el informe generado por IA y la
+              Estas condiciones regulan el uso de VocacionIA, el test vocacional, el informe generado por IA y la
               compra del reporte completo a través de Mercado Pago. Estos términos se rigen por las leyes de la
               República Argentina.
             </p>
@@ -44,7 +44,7 @@ export default function TermsOfServicePage() {
 
         <SectionCard title="Uso del servicio">
           <p>
-            VocacionAI está pensado para personas que quieren explorar opciones académicas y profesionales. El test y
+            VocacionIA está pensado para personas que quieren explorar opciones académicas y profesionales. El test y
             los resultados gratuitos son informativos y no reemplazan el criterio de un orientador, docente o
             profesional de la salud mental.
           </p>
@@ -65,7 +65,7 @@ export default function TermsOfServicePage() {
             transacción queda pendiente o rechazada, el acceso al informe no se libera hasta verificar el estado final.
           </p>
           <p>
-            El reporte digital se entrega para uso personal, privado y no transferible. VocacionAI conserva la
+            El reporte digital se entrega para uso personal, privado y no transferible. VocacionIA conserva la
             titularidad del software, el algoritmo, la interfaz, la marca y los materiales del servicio. El usuario no
             adquiere derechos de explotación comercial sobre la plataforma ni sobre sus componentes.
           </p>
@@ -74,7 +74,7 @@ export default function TermsOfServicePage() {
         <SectionCard title="Propiedad intelectual">
           <p>
             Todo el software, el algoritmo de recomendación, el diseño de la plataforma, los textos, gráficos y la
-            marca VocacionAI están protegidos por el Derecho de Autor y demás normas aplicables. Cualquier uso no
+            marca VocacionIA están protegidos por el Derecho de Autor y demás normas aplicables. Cualquier uso no
             autorizado, copia, ingeniería inversa o redistribución queda prohibido.
           </p>
           <p>
@@ -86,7 +86,7 @@ export default function TermsOfServicePage() {
 
         <SectionCard title="Edad mínima y consentimiento">
           <p>
-            Debés tener al menos 16 años para usar VocacionAI. Si tenés entre 16 y 17 años, declarás contar con la
+            Debés tener al menos 16 años para usar VocacionIA. Si tenés entre 16 y 17 años, declarás contar con la
             autorización de tu padre, madre o tutor legal para aceptar estos términos y, si corresponde, realizar la
             compra del informe.
           </p>

@@ -46,7 +46,7 @@ export default async function AdminCommentsPage() {
       <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         <header className="glass-card rounded-3xl px-8 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
           <div>
-            <p className="text-xs uppercase tracking-wider text-primary font-black">Backoffice VocacionAI</p>
+            <p className="text-xs uppercase tracking-wider text-primary font-black">Backoffice VocacionIA</p>
             <h1 className="font-headline text-4xl font-black mt-2">Comentarios</h1>
             <p className="text-on-surface-variant text-sm mt-2">
               Opiniones del test con puntuacion de 1 a 5 estrellas.

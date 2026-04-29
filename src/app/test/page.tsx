@@ -582,7 +582,7 @@ export default function TestPage() {
       <header className="fixed top-0 left-0 w-full z-50 bg-[#0e0e13]/80 backdrop-blur-xl shadow-[0_0_40px_rgba(178,161,255,0.08)]">
         <nav className="flex justify-between items-center w-full px-4 sm:px-8 py-3 sm:py-4 max-w-7xl mx-auto font-headline tracking-tight">
           <Link href="/" className="text-xl sm:text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent">
-            VocacionAI
+            VocacionIA
           </Link>
           <div className="hidden md:flex gap-8 items-center">
             <Link className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors" href="/">Inicio</Link>
@@ -641,7 +641,7 @@ export default function TestPage() {
                         className="mt-1 h-5 w-5 rounded border-outline-variant bg-surface text-primary focus:ring-2 focus:ring-primary/40"
                       />
                       <label htmlFor="accept-terms" className="text-sm leading-relaxed text-on-surface">
-                        Acepto los <Link href="/terms-of-service" className="text-primary font-bold hover:underline">Términos de Servicio</Link> y la <Link href="/privacy-policy" className="text-primary font-bold hover:underline">Política de Privacidad</Link>.
+                        Acepto los <Link href="/terms-of-service" className="text-primary font-bold hover:underline">Terms of Service</Link> y la <Link href="/privacy-policy" className="text-primary font-bold hover:underline">Privacy Policy</Link>.
                       </label>
                     </div>
 
@@ -927,7 +927,7 @@ export default function TestPage() {
       <footer className="w-full mt-10 sm:mt-12 pt-10 sm:pt-12 pb-24 md:pb-8 bg-[#0e0e13] border-t border-[#48474d]/15 text-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <span className="text-lg font-bold text-[#b2a1ff]">VocacionAI</span>
+            <span className="text-lg font-bold text-[#b2a1ff]">VocacionIA</span>
             <p className="text-[#acaab1]">Tu futuro no es una probabilidad, es una misión.</p>
           </div>
           <div className="flex flex-col space-y-2">
@@ -941,7 +941,7 @@ export default function TestPage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-8 mt-10 sm:mt-12 text-center text-[#acaab1]/50 text-xs">
-          © 2024 VocacionAI. Launch your mission.
+          © 2024 VocacionIA. Launch your mission.
         </div>
       </footer>
 

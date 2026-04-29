@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
             <h1 className="font-headline text-4xl font-black leading-tight">
               Panel administrativo
               <br />
-              de VocacionAI
+              de VocacionIA
             </h1>
             <p className="text-on-surface-variant text-sm leading-relaxed max-w-sm">
               Ingresa con tus credenciales para ver ventas, perfiles mas elegidos y distribucion por pais.

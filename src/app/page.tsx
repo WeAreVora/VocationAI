@@ -8,7 +8,7 @@ export default function HomePage() {
       <nav className="bg-[#0e0e13]/80 backdrop-blur-xl top-0 sticky z-50 shadow-[0_0_40px_rgba(178,161,255,0.08)]">
         <div className="flex justify-between items-center w-full px-4 sm:px-8 py-3 sm:py-4 max-w-7xl mx-auto gap-2 sm:gap-4">
           <div className="text-xl sm:text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent font-headline whitespace-nowrap">
-            VocacionAI
+            VocacionIA
           </div>
           <div className="hidden md:flex gap-8 items-center">
             <a className="text-[#acaab1] hover:text-[#b2a1ff] transition-colors font-label font-medium" href="#como-funciona">Cómo funciona</a>
@@ -238,7 +238,7 @@ export default function HomePage() {
         <section className="max-w-7xl mx-auto px-8 py-24">
           <div className="grid lg:grid-cols-5 gap-16">
             <div className="lg:col-span-2 space-y-8">
-              <h2 className="text-4xl font-black font-headline">Por qué VocacionAI es diferente</h2>
+              <h2 className="text-4xl font-black font-headline">Por qué VocacionIA es diferente</h2>
               <p className="text-lg text-on-surface-variant leading-relaxed">
                 Nacimos de la frustración de ver a miles de jóvenes elegir carreras por inercia o presión social. Combinamos la precisión de la Inteligencia Artificial con los marcos teóricos más respetados del mundo para darte una respuesta real y accionable.
               </p>
@@ -292,7 +292,7 @@ export default function HomePage() {
                   img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDKxeodKPTQysugxiR8Ti60n0NAf2xAYELX3gh7JNRZ9Vs4C9O4HEOS5s4ICGqGFbQ7UmHIBLQz2H_YZ3blskqo-56se_xJZ-8O9fJNE0daYtOFJlcOvFZS9xTPakfoHBvNvTi1BZIwHgQEiUgYRPNiDkkFwbG_ZLAkVuc7X2koLX8VQkbatQTdsxqe6bQ-yNv2zIvYRCa9tr3kkE9z67XbyI_Zt9_Jqtd1mApjHO1Z3gHUQmK9rmtwT4snJHWXjPIqGQxvS0k1DK4",
                 },
                 {
-                  text: "\"No creía que una IA pudiera conocerme tanto. El análisis de mis inteligencias fue spot-on. Gracias VocacionAI por la claridad.\"",
+                  text: "\"No creía que una IA pudiera conocerme tanto. El análisis de mis inteligencias fue spot-on. Gracias VocacionIA por la claridad.\"",
                   name: "Martina Díaz",
                   role: "Ingeniería Industrial",
                   img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD4rjwM8iYX37XNPeyGmkeG_rO2FfVhrxJr87fVRSmS947JW0PtQjl-zcqeen6shX6xEab0ZKehapDUbzXakNvJxR7UAdJpZmF6FhFBA1fRO6KLO78W-QuqCl2wWMz-yfg18bs_MoosNG7CEqcNd-RK6td4TOSgP2qIUU5esn9E0v5nIo3bnKanN-y8sYwWguCtXPNJkFfxGEBIs7s9r2xPMrSbKmp0cV9j-d_u0V4Tbhzxw5KkmS071MVMly8KdeUZuq0CDP7smss",
@@ -337,7 +337,7 @@ export default function HomePage() {
               },
               {
                 q: "¿Esto reemplaza a un orientador vocacional humano?",
-                a: "No, y no busca hacerlo. VocacionAI es una brújula inicial excelente para descubrir tus intereses, explorar opciones que quizás no conocías y dar el primer paso. Es una herramienta complementaria, pero no reemplaza el acompañamiento profundo de un profesional de la salud mental o la educación.",
+                a: "No, y no busca hacerlo. VocacionIA es una brújula inicial excelente para descubrir tus intereses, explorar opciones que quizás no conocías y dar el primer paso. Es una herramienta complementaria, pero no reemplaza el acompañamiento profundo de un profesional de la salud mental o la educación.",
               },  
               {
                 q: "¿Tengo que crearme una cuenta para participar?",
@@ -388,7 +388,7 @@ export default function HomePage() {
         <section id="contacto" className="max-w-7xl mx-auto px-8 py-24 grid lg:grid-cols-2 gap-16">
           <div className="space-y-8">
             <h2 className="text-4xl font-black font-headline">Hablemos</h2>
-            <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocacionAI en tu colegio o simplemente querés saludarnos?</p>
+            <p className="text-on-surface-variant text-lg">¿Tenés dudas sobre cómo implementar VocacionIA en tu colegio o simplemente querés saludarnos?</p>
             <div className="space-y-4">
               <div className="rounded-2xl bg-surface-container-low border border-outline-variant/10 p-5 flex items-start gap-4">
                 <div className="w-12 h-12 rounded-full bg-secondary/15 flex items-center justify-center text-secondary shrink-0">
@@ -418,7 +418,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <div className="text-sm text-on-surface-variant">Seguinos en</div>
-                  <div className="font-bold">@vocacionai</div>
+                  <div className="font-bold">@vocacionia</div>
                 </div>
               </div>
             </div>
@@ -433,7 +433,7 @@ export default function HomePage() {
       <footer className="bg-[#0e0e13] w-full mt-20 pt-12 pb-8 border-t border-[#48474d]/15">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div className="space-y-4">
-            <div className="text-lg font-bold text-[#b2a1ff] font-headline">VocacionAI</div>
+            <div className="text-lg font-bold text-[#b2a1ff] font-headline">VocacionIA</div>
             <p className="text-[#acaab1] text-sm leading-relaxed">
               Conectando a la próxima generación de profesionales con su vocación a través de IA.
             </p>
@@ -455,7 +455,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-8 text-center text-[#acaab1] text-xs border-t border-outline-variant/10 pt-8">
-          © 2024 VocacionAI. Launch your mission.
+          © 2024 VocacionIA. Launch your mission.
         </div>
       </footer>
     </>

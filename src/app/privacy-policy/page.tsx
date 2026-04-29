@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Privacy Policy | VocacionAI",
-  description: "Cómo VocacionAI recopila, usa y protege los datos del test, del contacto y del pago.",
+  title: "Privacy Policy | VocacionIA",
+  description: "Cómo VocacionIA recopila, usa y protege los datos del test, del contacto y del pago.",
 };
 
 function SectionCard({
@@ -35,8 +35,8 @@ export default function PrivacyPolicyPage() {
           <div className="space-y-4">
             <h1 className="text-4xl sm:text-5xl font-black font-headline leading-tight">Privacy Policy</h1>
             <p className="text-on-surface-variant text-lg leading-relaxed max-w-3xl">
-              Esta política explica qué datos recolecta VocacionAI, para qué los usamos y cómo los protegemos cuando
-              completás el test, nos escribís desde el formulario o iniciás el pago del informe. VocacionAI opera bajo
+              Esta política explica qué datos recolecta VocacionIA, para qué los usamos y cómo los protegemos cuando
+              completás el test, nos escribís desde el formulario o iniciás el pago del informe. VocacionIA opera bajo
               la Ley 25.326 de Protección de los Datos Personales de la República Argentina.
             </p>
           </div>

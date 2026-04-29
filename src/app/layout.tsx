@@ -4,7 +4,7 @@ import VercelAnalytics from "../components/VercelAnalytics";
 import VercelSpeedInsights from "../components/VercelSpeedInsights";
 
 export const metadata: Metadata = {
-  title: "VocacionAI | Descubrí tu Futuro con IA",
+  title: "VocacionIA | Descubrí tu Futuro con IA",
   description:
     "Un análisis profundo basado en 40 preguntas y 4 marcos teóricos validados. Obtené tu mapa profesional en minutos.",
 };

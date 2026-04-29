@@ -620,7 +620,7 @@ function getMentorUrl(platform: string, handle: string): string {
 function ShareModal({ title, onClose }: { title: string; onClose: () => void }) {
   const [copied, setCopied] = useState(false);
   const url = typeof window !== "undefined" ? window.location.href : "";
-  const text = `Descubrí mi perfil vocacional: "${title}" con VocacionAI 🚀`;
+  const text = `Descubrí mi perfil vocacional: "${title}" con VocacionIA 🚀`;
 
   const copy = () => {
     navigator.clipboard.writeText(url).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
@@ -778,7 +778,7 @@ function OpinionSection() {
       <section className="glass-card rounded-3xl p-12 text-center space-y-4 no-print">
         <div className="text-5xl">🙌</div>
         <h3 className="font-headline text-2xl font-black text-on-surface">¡Gracias por tu opinión!</h3>
-        <p className="text-on-surface-variant">Tu feedback nos ayuda a mejorar VocacionAI para miles de estudiantes.</p>
+        <p className="text-on-surface-variant">Tu feedback nos ayuda a mejorar VocacionIA para miles de estudiantes.</p>
       </section>
     );
   }
@@ -791,7 +791,7 @@ function OpinionSection() {
           Tu opinión importa
         </div>
         <h2 className="font-headline text-3xl font-extrabold text-on-surface mb-2">¿Qué te pareció el informe?</h2>
-        <p className="text-on-surface-variant max-w-xl mx-auto">Contanos tu experiencia. Tu feedback nos ayuda a hacer VocacionAI cada vez mejor.</p>
+        <p className="text-on-surface-variant max-w-xl mx-auto">Contanos tu experiencia. Tu feedback nos ayuda a hacer VocacionIA cada vez mejor.</p>
       </div>
       <div className="glass-card rounded-3xl p-8 md:p-12 space-y-8 max-w-2xl mx-auto">
         {/* Stars */}
@@ -935,7 +935,7 @@ function InformeContent() {
   const handlePDF = () => window.print();
   const handleEmail = () => {
     const subject = `Mi perfil vocacional: ${p.title} ${p.titleHighlight}`;
-    const body = `¡Hola!\n\nQuería compartirte mi perfil vocacional que descubrí con VocacionAI: "${p.title} ${p.titleHighlight}".\n\nMe pareció súper interesante y pensé que a vos también te podría gustar.\n\nPodés verlo aquí: ${window.location.href}\n\n¡Saludos!`;
+    const body = `¡Hola!\n\nQuería compartirte mi perfil vocacional que descubrí con VocacionIA: "${p.title} ${p.titleHighlight}".\n\nMe pareció súper interesante y pensé que a vos también te podría gustar.\n\nPodés verlo aquí: ${window.location.href}\n\n¡Saludos!`;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
@@ -1417,12 +1417,12 @@ function InformeContent() {
 
       <footer className="w-full mt-20 pt-12 pb-8 bg-[#0e0e13] border-t border-[#48474d]/15 no-print">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          <div className="text-lg font-bold text-[#b2a1ff]">VocacionAI</div>
+          <div className="text-lg font-bold text-[#b2a1ff]">VocacionIA</div>
           <div className="flex flex-wrap justify-center gap-6">
             <a className="text-sm text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/privacy-policy">Privacy Policy</a>
             <a className="text-sm text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/terms-of-service">Terms of Service</a>
           </div>
-          <div className="text-right text-sm text-[#acaab1]">© 2024 VocacionAI. Launch your mission.</div>
+          <div className="text-right text-sm text-[#acaab1]">© 2024 VocacionIA. Launch your mission.</div>
         </div>
       </footer>
     </>

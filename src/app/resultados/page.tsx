@@ -318,7 +318,7 @@ function ResultadosContent() {
     <>
       <header className="bg-[#0e0e13]/80 backdrop-blur-xl top-0 sticky z-50 shadow-[0_0_40px_rgba(178,161,255,0.08)]">
         <div className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto font-headline tracking-tight">
-          <div className="text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent">VocacionAI</div>
+          <div className="text-2xl font-black bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] bg-clip-text text-transparent">VocacionIA</div>
           <div className="flex items-center gap-4">
             <Link href="/" className="bg-gradient-to-br from-[#b2a500] to-[#7857f8] text-on-primary-fixed font-bold px-6 py-2 rounded-xl hover:scale-105 transition-transform active:scale-95 duration-200 inline-block">
               Inicio
@@ -460,7 +460,7 @@ function ResultadosContent() {
       <footer className="bg-[#0e0e13] w-full mt-20 pt-12 pb-8 border-t border-[#48474d]/15 text-sm">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="text-lg font-bold text-[#b2a1ff] mb-4">VocacionAI</div>
+            <div className="text-lg font-bold text-[#b2a1ff] mb-4">VocacionIA</div>
             <p className="text-[#acaab1] mb-4 leading-relaxed">
               Orientación vocacional potenciada por Inteligencia Artificial para la próxima generación de profesionales globales.
             </p>
@@ -474,7 +474,7 @@ function ResultadosContent() {
           <div className="flex flex-col gap-3">
             <h5 className="text-on-surface font-bold mb-2">Ayuda</h5>
             <Link className="text-[#acaab1] hover:text-[#66ffc7] transition-colors" href="/#contacto">Contact Support</Link>
-            <div className="mt-4 text-[#acaab1]">© 2024 VocacionAI. Launch your mission.</div>
+            <div className="mt-4 text-[#acaab1]">© 2024 VocacionIA. Launch your mission.</div>
           </div>
         </div>
       </footer>
