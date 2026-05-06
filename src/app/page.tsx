@@ -141,7 +141,7 @@ export default function HomePage() {
                   <span className="material-symbols-outlined text-3xl">article</span>
                 </div>
                 <h4 className="text-2xl font-bold">Informe Elite</h4>
-                <p className="text-on-surface-variant">Recibís un PDF de 15 páginas con carreras, universidades y consejos personalizados.</p>
+                <p className="text-on-surface-variant">Veras una pagina con informes detallados sobre carreras, universidades y consejos personalizados.</p>
               </div>
             </div>
           </div>

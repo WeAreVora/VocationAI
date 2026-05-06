@@ -1015,7 +1015,7 @@ function InformeContent() {
           <span className="text-on-surface-variant text-sm font-label hidden lg:block truncate">Informe de Resultados • {p.title} {p.titleHighlight}</span>
         </div>
         <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:gap-3 w-full md:w-auto">
-          <button onClick={handleEmail} className="bg-surface-container-high text-on-surface px-3 py-2 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium text-xs md:text-sm">
+          <button onClick={handleEmail} className="col-span-2 md:col-span-1 bg-surface-container-high text-on-surface px-3 py-2 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all active:scale-95 font-medium text-xs md:text-sm">
             <span className="material-symbols-outlined">mail</span>
             <span className="whitespace-nowrap">Enviar por email</span>
           </button>
@@ -1039,17 +1039,17 @@ function InformeContent() {
             <span className={`bg-gradient-to-r ${p.fromColor} ${p.toColor} bg-clip-text text-transparent`}>{p.titleHighlight}</span>
           </h1>
           <p className="text-on-surface-variant text-xl md:text-2xl max-w-2xl mx-auto mb-12">&ldquo;{p.tagline}&rdquo;</p>
-          <div className="flex flex-wrap justify-center gap-8 text-left border-t border-outline-variant/15 pt-8 w-full max-w-xl">
+          <div className="flex flex-col items-center gap-6 text-center border-t border-outline-variant/15 pt-8 w-full max-w-xl md:flex-row md:flex-wrap md:justify-center md:gap-8 md:text-left">
             <div>
               <p className="text-outline text-xs uppercase tracking-widest font-bold">PERFIL</p>
               <p className="text-on-surface font-headline font-bold text-lg">{p.title} {p.titleHighlight}</p>
             </div>
-            <div className="h-10 w-px bg-outline-variant/15"></div>
+            <div className="h-10 w-px bg-outline-variant/15 hidden md:block"></div>
             <div>
               <p className="text-outline text-xs uppercase tracking-widest font-bold">FECHA</p>
               <p className="text-on-surface font-headline font-bold text-lg">{reportDate || "--"}</p>
             </div>
-            <div className="h-10 w-px bg-outline-variant/15"></div>
+            <div className="h-10 w-px bg-outline-variant/15 hidden md:block"></div>
             <div>
               <p className="text-outline text-xs uppercase tracking-widest font-bold">ID DE MISIÓN</p>
               <p className="text-on-surface font-headline font-bold text-lg">{missionId}</p>
