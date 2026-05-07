@@ -213,7 +213,7 @@ const QUESTIONS: Q[] = [
   },
   {
     block: 1,
-    q: "¿Qué describís mejor la forma en que pensás?",
+    q: "¿Qué describe mejor la forma en que pensás?",
     opts: [
       { icon: "chat_bubble", label: "Pienso en palabras y frases", desc: "Tu mente trabaja en lenguaje verbal." },
       { icon: "image_search", label: "Pienso en imágenes y espacios", desc: "Tu mente crea representaciones visuales." },
