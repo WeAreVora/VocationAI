@@ -1129,7 +1129,7 @@ export default function TestPage() {
                   <div className="text-right">
                     <span className="text-2xl sm:text-3xl font-black font-headline tabular-nums">
                       {String(qNum).padStart(2, "0")}
-                      <span className="text-on-surface-variant text-lg">/40</span>
+                      <span className="text-on-surface-variant text-lg">/{QUESTIONS.length}</span>
                     </span>
                   </div>
                 </div>
