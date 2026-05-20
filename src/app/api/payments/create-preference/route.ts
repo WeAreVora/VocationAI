@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
           title: "Informe vocacional completo - VocacionIA",
           quantity: 1,
           currency_id: "ARS",
-          unit_price: 50,
+          unit_price: 15000,
         },
       ],
       external_reference: externalReference,
