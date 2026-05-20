@@ -6,7 +6,7 @@ type CreatePreferenceBody = {
   pais?: string;
 };
 
-const ALLOWED_COUNTRIES = new Set(["arg", "mx", "uru", "col", "chile", "peru"]);
+const ALLOWED_COUNTRIES = new Set(["arg"]);
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 5;

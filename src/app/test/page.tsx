@@ -4,18 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type CountryCode = "arg" | "mx" | "uru" | "col" | "chile" | "peru" | "par" | "bol" | "ecu";
+type CountryCode = "arg";
 
 const COUNTRY_OPTIONS: { code: CountryCode; label: string }[] = [
   { code: "arg", label: "Argentina" },
-  { code: "mx", label: "México" },
-  { code: "uru", label: "Uruguay" },
-  { code: "col", label: "Colombia" },
-  { code: "chile", label: "Chile" },
-  { code: "peru", label: "Perú" },
-  { code: "par", label: "Paraguay" },
-  { code: "bol", label: "Bolivia" },
-  { code: "ecu", label: "Ecuador" },
 ];
 
 const BLOCKS = [
@@ -433,6 +425,250 @@ const QUESTIONS: Q[] = [
       { icon: "shield", label: "\"La seguridad es la base de todo\"", desc: "La estabilidad es tu valor fundamental." },
     ],
   },
+  // --- Bloque 1: Holland RIASEC (Argentina extension) ---
+  {
+    block: 0,
+    q: "Si pudieras armar tu propio proyecto o negocio independiente, ¿a qué área apuntaría principalmente?",
+    opts: [
+      { icon: "smart_toy", label: "Software, app móvil o IA", desc: "Brindar servicios tecnológicos o de inteligencia artificial." },
+      { icon: "gavel", label: "Estudio profesional legal", desc: "Asesorar, defender clientes o mediar en conflictos normativos." },
+      { icon: "storefront", label: "Marca, e-commerce o consultoría", desc: "Administrar un negocio digital o brindar consultoría financiera." },
+      { icon: "medical_services", label: "Consultorio o clínica privada", desc: "Atención médica, nutrición o kinesiología." },
+    ],
+  },
+  {
+    block: 0,
+    q: "¿En cuál de estos entornos laborales sentís que tu personalidad encajaría mejor en el día a día?",
+    opts: [
+      { icon: "biotech", label: "Hospital, clínica o laboratorio", desc: "Investigar y cuidar la salud biológica." },
+      { icon: "account_balance", label: "Estudio contable o financiera", desc: "Analizar inversiones, costos y estados corporativos." },
+      { icon: "sports_basketball", label: "Escuela, club o universidad", desc: "Enseñar, entrenar o capacitar grupos." },
+      { icon: "campaign", label: "Agencia de marketing o estudio creativo", desc: "Diseñar contenido visual y campañas digitales." },
+    ],
+  },
+  {
+    block: 0,
+    q: "Cuando consumís contenido en medios digitales por puro interés, ¿qué temática te atrapa más?",
+    opts: [
+      { icon: "forum", label: "Psicología, sociología o política", desc: "Análisis de comportamiento humano e historia social." },
+      { icon: "rocket_launch", label: "Startups, marcas y negocios", desc: "Detrás de escena de inversiones y negocios digitales." },
+      { icon: "construction", label: "Obras, planos y automatización", desc: "Construcción, arquitectura o automatización industrial." },
+      { icon: "code", label: "Programación, ciberseguridad y datos", desc: "Software, modelos de IA y lanzamientos tecnológicos." },
+    ],
+  },
+  {
+    block: 0,
+    q: "Si te dieran un presupuesto libre para hacer un curso corto de especialización, ¿cuál elegirías?",
+    opts: [
+      { icon: "trending_up", label: "Marketing digital y growth", desc: "Dirección de negocios online y growth hacking." },
+      { icon: "psychology_alt", label: "Neuromarketing o terapia actual", desc: "Comportamiento del consumidor y psicología aplicada." },
+      { icon: "videogame_asset", label: "Videojuegos, 3D o cine", desc: "Modelado 3D y edición cinematográfica profesional." },
+      { icon: "eco", label: "Sustentabilidad y agro tech", desc: "Gestión ambiental y tecnologías aplicadas al agro." },
+    ],
+  },
+  {
+    block: 0,
+    q: "Si tuvieras la oportunidad de hacer una pasantía mañana mismo, ¿cuál elegirías sin dudar?",
+    opts: [
+      { icon: "precision_manufacturing", label: "Robótica o ingeniería automotriz", desc: "Diseño mecánico, automatización o automotriz." },
+      { icon: "science", label: "Laboratorio biotecnológico o farmacia", desc: "Análisis de compuestos químicos y genéticos." },
+      { icon: "shield", label: "Ciberseguridad corporativa", desc: "Auditar riesgos y proteger datos sensibles." },
+      { icon: "inventory", label: "Logística y procesos industriales", desc: "Gestión de distribución y optimización operativa." },
+    ],
+  },
+  {
+    block: 0,
+    q: "Pensando en tu futuro profesional, ¿cuál de estas dinámicas te resultaría más insoportable a largo plazo?",
+    opts: [
+      { icon: "request_quote", label: "Planillas, balances y auditorías", desc: "100% aislado con presupuestos y auditorías fiscales." },
+      { icon: "local_hospital", label: "Hospital, cirugías y dolor físico", desc: "Contacto diario con enfermedades y emergencias." },
+      { icon: "palette", label: "Crear ideas visuales bajo presión", desc: "Diseño creativo obligatorio todos los días." },
+      { icon: "agriculture", label: "Esfuerzo físico, campo o tierra", desc: "Trabajar al aire libre con herramientas pesadas." },
+    ],
+  },
+  // --- Bloque 2: Gardner (Argentina extension) ---
+  {
+    block: 1,
+    q: "¿En cuál de estas tareas cotidianas sentís que tu mente trabaja con mayor facilidad?",
+    opts: [
+      { icon: "favorite", label: "Contener emociones de otros", desc: "Detectar y acompañar problemas psicológicos cercanos." },
+      { icon: "record_voice_over", label: "Argumentar y debatir normas", desc: "Expresarte oralmente o por escrito con lógica." },
+      { icon: "calculate", label: "Organizar cuentas y presupuestos", desc: "Calcular y detectar variables económicas." },
+      { icon: "fitness_center", label: "Entrenamiento, nutrición y kinesiología", desc: "Entender el funcionamiento biológico del cuerpo." },
+    ],
+  },
+  {
+    block: 1,
+    q: "Si tuvieras que liderar un equipo de urgencia, ¿de qué rol te harías cargo?",
+    opts: [
+      { icon: "monitoring", label: "Viabilidad comercial y costos", desc: "Controlar rentabilidad y modelo económico." },
+      { icon: "terminal", label: "Programar la herramienta digital", desc: "Configurar el sistema o resolver fallas de código." },
+      { icon: "description", label: "Informe legal y argumental", desc: "Defender, redactar y cumplir normativas." },
+      { icon: "design_services", label: "Diseño y comunicación visual", desc: "Estética, interfaces y comunicación estratégica." },
+    ],
+  },
+  {
+    block: 1,
+    q: "Si tuvieras que rendir una prueba práctica ante un jurado, ¿en cuál tendrías más éxito?",
+    opts: [
+      { icon: "code", label: "Resolver problema de programación", desc: "Lógica de software o minería de datos en computadora." },
+      { icon: "architecture", label: "Diseñar un plano o croquis 3D", desc: "Espacio urbano, casa u objeto tridimensional." },
+      { icon: "sports", label: "Coordinar clase de entrenamiento", desc: "Evaluar movilidad y planificar una rutina física." },
+      { icon: "school", label: "Explicar tema teórico complejo", desc: "Didáctica clara frente a un auditorio lleno." },
+    ],
+  },
+  {
+    block: 1,
+    q: "Frente a un accidente imprevisto en la vía pública, ¿cuál es tu primera reacción mental?",
+    opts: [
+      { icon: "medical_services", label: "Aplicar primeros auxilios", desc: "Mantener la calma y asistir médicamente." },
+      { icon: "balance", label: "Evaluar responsabilidad legal", desc: "Qué normas se rompieron y registrar el hecho." },
+      { icon: "build", label: "Reparar técnicamente lo dañado", desc: "Solución inmediata desarmando o manipulando." },
+      { icon: "diversity_3", label: "Contener y coordinar al grupo", desc: "Apoyar emocionalmente y organizar la ayuda." },
+    ],
+  },
+  {
+    block: 1,
+    q: "¿Qué habilidad con las manos o el cuerpo dominás con mayor naturalidad?",
+    opts: [
+      { icon: "keyboard", label: "Tipeo veloz y atajos de PC", desc: "Comandos lógicos y herramientas de software." },
+      { icon: "draw", label: "Dibujo, retoque y diseño fino", desc: "Precisión manual para arte, foto o moda." },
+      { icon: "directions_run", label: "Coordinación deportiva o quirúrgica", desc: "Fuerza, agilidad y destreza médica." },
+      { icon: "biotech", label: "Muestras de laboratorio o agro", desc: "Manipular instrumental químico, plantas o biología." },
+    ],
+  },
+  {
+    block: 1,
+    q: "Cuando analizás un dispositivo o tecnología nueva, ¿en qué se enfoca tu mente?",
+    opts: [
+      { icon: "palette", label: "Estética y UX/UI", desc: "Colores, interfaz y diseño visual." },
+      { icon: "settings", label: "Hardware: placas y motores", desc: "Ingeniería interna mecánica y electrónica." },
+      { icon: "memory", label: "Algoritmo de IA y backend", desc: "Código que procesa los datos y la lógica." },
+      { icon: "lock", label: "Privacidad y términos legales", desc: "Seguridad de la información y compliance." },
+    ],
+  },
+  // --- Bloque 3: Kolb (Argentina extension) ---
+  {
+    block: 2,
+    q: "Cuando empezás una materia nueva, ¿qué tipo de ejemplos prácticos necesitás para entender rápido?",
+    opts: [
+      { icon: "medical_services", label: "Casos clínicos y anatomía", desc: "Diagnósticos médicos y biología celular." },
+      { icon: "show_chart", label: "Balances y métricas de startups", desc: "Modelos comerciales y números reales." },
+      { icon: "architecture", label: "Planos, maquetas o motores", desc: "Estructuras arquitectónicas y despieces técnicos." },
+      { icon: "gavel", label: "Juicios, fallos y debates", desc: "Leyes vigentes e historia de la sociedad." },
+    ],
+  },
+  {
+    block: 2,
+    q: "¿Qué tipo de error te genera más molestia y buscás corregir de inmediato?",
+    opts: [
+      { icon: "savings", label: "Diferencia en las cuentas", desc: "Ineficiencia en la administración del dinero." },
+      { icon: "bug_report", label: "Un bug en el código", desc: "Error de sintaxis que frena un sistema." },
+      { icon: "sports_gymnastics", label: "Postura o técnica corporal mala", desc: "Riesgo de lesión por mala ejecución." },
+      { icon: "groups", label: "Malentendido o injusticia grupal", desc: "Problema de comunicación o ética social." },
+    ],
+  },
+  {
+    block: 2,
+    q: "¿Qué formato de examen final te resulta más cómodo para demostrar lo que sabés?",
+    opts: [
+      { icon: "record_voice_over", label: "Defensa oral con debate", desc: "Argumentar leyes y convencer al jurado." },
+      { icon: "code", label: "Entrega de software funcional", desc: "Código limpio o sistema de datos estructurado." },
+      { icon: "psychology", label: "Casos de psicología o pedagogía", desc: "Analizar la mente y metodologías humanas." },
+      { icon: "trending_up", label: "Plan de negocios o campaña", desc: "Costos, rentabilidad y estrategia comercial." },
+    ],
+  },
+  {
+    block: 2,
+    q: "Si tuvieras que leer una guía extensa de capacitación, ¿qué sección irías a buscar primero?",
+    opts: [
+      { icon: "psychology", label: "Teoría psicológica del consumidor", desc: "Comportamiento humano y social." },
+      { icon: "schema", label: "Diagramas y arquitectura técnica", desc: "Flujos lógicos y líneas de código." },
+      { icon: "gavel", label: "Marco regulatorio y contratos", desc: "Leyes aplicables y normativas legales." },
+      { icon: "trending_up", label: "Casos de éxito comercial", desc: "Estrategias de ventas y balances económicos." },
+    ],
+  },
+  {
+    block: 2,
+    q: "Cuando te trabás resolviendo un problema complejo, ¿cuál es tu método para destrabarte?",
+    opts: [
+      { icon: "account_tree", label: "Mapas conceptuales o esquemas", desc: "Dibujar y maquetar la idea de forma visual." },
+      { icon: "calculate", label: "Lógica pura y fórmulas", desc: "Descomponer en datos duros y patrones." },
+      { icon: "forum", label: "Explicárselo a otra persona", desc: "Discutir el impacto humano de la solución." },
+      { icon: "build_circle", label: "Probar directo en la práctica", desc: "Prueba y error con herramientas o código." },
+    ],
+  },
+  {
+    block: 2,
+    q: "En un equipo de estudio o trabajo, ¿qué rol metodológico adoptás naturalmente?",
+    opts: [
+      { icon: "dashboard", label: "Organizar herramientas digitales", desc: "Drive, Notion, Trello y software del equipo." },
+      { icon: "description", label: "Redactar documentación formal", desc: "Lenguaje técnico, contratos y estructura." },
+      { icon: "school", label: "Asegurar comprensión teórica", desc: "Verificar que todos entiendan los conceptos." },
+      { icon: "favorite", label: "Cuidar el clima emocional", desc: "Resolver tensiones y motivar al grupo." },
+    ],
+  },
+  // --- Bloque 4: Schwartz (Argentina extension) ---
+  {
+    block: 3,
+    q: "¿Cuál de estos legados profesionales te haría sentir que tu carrera valió la pena?",
+    opts: [
+      { icon: "medical_services", label: "Salvar vidas y curar pacientes", desc: "Rehabilitar y devolver bienestar de salud." },
+      { icon: "balance", label: "Garantizar justicia legal", desc: "Defender derechos y combatir corrupción." },
+      { icon: "memory", label: "Crear tecnología innovadora", desc: "Software o IA que simplifique vidas." },
+      { icon: "school", label: "Formar futuras generaciones", desc: "Transmitir conocimiento pedagógicamente." },
+    ],
+  },
+  {
+    block: 3,
+    q: "Al proyectar tu estilo de vida profesional a mediano plazo, ¿qué beneficio valorás por encima del resto?",
+    opts: [
+      { icon: "language", label: "Salida global y home office", desc: "Flexibilidad remota con herramientas del futuro." },
+      { icon: "trending_up", label: "Estabilidad y liderazgo corporativo", desc: "Crecer en finanzas o negocios digitales." },
+      { icon: "person", label: "Consultorio o estudio propio", desc: "Independencia atendiendo pacientes o clientes." },
+      { icon: "directions_run", label: "Rutina activa y al aire libre", desc: "Lejos de la oficina, ligada al cuerpo o la tierra." },
+    ],
+  },
+  {
+    block: 3,
+    q: "¿Cuál de estas situaciones laborales chocaría inmediatamente con tu ética profesional?",
+    opts: [
+      { icon: "gavel", label: "Manipulación de leyes o fondos", desc: "Injusticias institucionales o corrupción pública." },
+      { icon: "money_off", label: "Estafa financiera o balances falsos", desc: "Evasión de impuestos o fraude contable." },
+      { icon: "sentiment_dissatisfied", label: "Pacientes o alumnos como números", desc: "Sistema frío y automatizado de salud o educación." },
+      { icon: "visibility_off", label: "Software espía o ciberataques", desc: "Algoritmos para vulnerar usuarios ilegalmente." },
+    ],
+  },
+  {
+    block: 3,
+    q: "Si recibieras un premio nacional en tu profesión, ¿por qué logro preferirías que sea?",
+    opts: [
+      { icon: "science", label: "Descubrimiento científico clave", desc: "Patente biotecnológica o química medicinal." },
+      { icon: "apartment", label: "Obra arquitectónica icónica", desc: "Infraestructura urbana o producto industrial." },
+      { icon: "rocket_launch", label: "Startup disruptiva exitosa", desc: "Negocio digital innovador en el mercado." },
+      { icon: "diversity_3", label: "Programa social de impacto", desc: "Reducción de vulnerabilidad comunitaria nacional." },
+    ],
+  },
+  {
+    block: 3,
+    q: "¿Qué tipo de ambiente de trabajo apagaría por completo tu motivación diaria?",
+    opts: [
+      { icon: "palette", label: "Sin libertad creativa ni arte", desc: "Donde censuren propuestas estéticas y de media." },
+      { icon: "trending_down", label: "Organización ineficiente y analógica", desc: "Sin uso de tecnología, datos ni métricas." },
+      { icon: "chair", label: "100% sedentario y de oficina", desc: "Sin movimiento físico ni atención a la salud." },
+      { icon: "psychology_alt", label: "Sin foco en lo humano", desc: "Donde no importe el comportamiento o la pedagogía." },
+    ],
+  },
+  {
+    block: 3,
+    q: "Sobre las prioridades del desarrollo futuro de la Argentina, ¿qué postura defenderías con más fuerza?",
+    opts: [
+      { icon: "memory", label: "Inversión en IA y ciberseguridad", desc: "Software, datos y blindaje contra ciberataques." },
+      { icon: "agriculture", label: "Agro, alimentos y medio ambiente", desc: "Soberanía alimentaria y producción sustentable." },
+      { icon: "diversity_3", label: "Educación pública y salud mental", desc: "Acceso y contención de sectores vulnerables." },
+      { icon: "gavel", label: "Marco jurídico e institucional", desc: "Transparencia legal y atracción de inversiones." },
+    ],
+  },
 ];
 
 function BotAvatar() {
@@ -455,9 +691,167 @@ function BotAvatar() {
   );
 }
 
-function getProfileKey(answers: (number | null)[]): string {
+type OptionMapping = { slugs: string[]; negative?: boolean };
+
+const PROFILE_ALIASES: Record<string, string> = {
+  "protector-ambiental": "explorador-naturalista",
+  "bienestar-comunitario": "humanista-social",
+  "comunicador-estratego": "comunicador-estrategico",
+};
+
+const NEW_QUESTION_MAPPINGS: OptionMapping[][] = [
+  [ // Q41
+    { slugs: ["innovador-tech"] },
+    { slugs: ["agente-cambio"] },
+    { slugs: ["estratega-negocios", "lider-emprendedor"] },
+    { slugs: ["salud-clinica", "salud-rehabilitacion"] },
+  ],
+  [ // Q42
+    { slugs: ["salud-clinica", "tecnico-quimico-biologico"] },
+    { slugs: ["estratega-negocios"] },
+    { slugs: ["divulgador-humanistico", "deporte-bienestar-corporal"] },
+    { slugs: ["creativo-digital", "comunicador-estrategico"] },
+  ],
+  [ // Q43
+    { slugs: ["humanista-social", "bienestar-comunitario"] },
+    { slugs: ["lider-emprendedor", "estratega-negocios"] },
+    { slugs: ["disenador-tecnico-espacial", "constructor-pragmatico"] },
+    { slugs: ["innovador-tech", "cientifico-analitico"] },
+  ],
+  [ // Q44
+    { slugs: ["lider-emprendedor"] },
+    { slugs: ["humanista-social", "bienestar-comunitario"] },
+    { slugs: ["creador-contenido-media"] },
+    { slugs: ["protector-ambiental", "produccion-agro-tierra"] },
+  ],
+  [ // Q45
+    { slugs: ["desarrollador-mecanico-industrial"] },
+    { slugs: ["tecnico-quimico-biologico"] },
+    { slugs: ["analista-legal-datos"] },
+    { slugs: ["optimizador-logistico"] },
+  ],
+  [ // Q46 — descarta
+    { slugs: ["estratega-negocios"], negative: true },
+    { slugs: ["salud-clinica", "salud-rehabilitacion", "tecnico-quimico-biologico"], negative: true },
+    { slugs: ["creativo-digital", "artista-expresivo", "creador-contenido-media"], negative: true },
+    { slugs: ["produccion-agro-tierra", "desarrollador-mecanico-industrial"], negative: true },
+  ],
+  [ // Q47
+    { slugs: ["humanista-social"] },
+    { slugs: ["agente-cambio"] },
+    { slugs: ["estratega-negocios"] },
+    { slugs: ["deporte-bienestar-corporal", "salud-rehabilitacion"] },
+  ],
+  [ // Q48
+    { slugs: ["estratega-negocios"] },
+    { slugs: ["innovador-tech"] },
+    { slugs: ["agente-cambio"] },
+    { slugs: ["creativo-digital", "comunicador-estrategico"] },
+  ],
+  [ // Q49
+    { slugs: ["innovador-tech", "cientifico-analitico"] },
+    { slugs: ["disenador-tecnico-espacial"] },
+    { slugs: ["deporte-bienestar-corporal"] },
+    { slugs: ["divulgador-humanistico"] },
+  ],
+  [ // Q50
+    { slugs: ["salud-clinica"] },
+    { slugs: ["agente-cambio"] },
+    { slugs: ["desarrollador-mecanico-industrial"] },
+    { slugs: ["humanista-social", "bienestar-comunitario"] },
+  ],
+  [ // Q51
+    { slugs: ["innovador-tech"] },
+    { slugs: ["creativo-digital"] },
+    { slugs: ["deporte-bienestar-corporal", "salud-clinica"] },
+    { slugs: ["tecnico-quimico-biologico", "produccion-agro-tierra"] },
+  ],
+  [ // Q52
+    { slugs: ["creativo-digital"] },
+    { slugs: ["desarrollador-mecanico-industrial"] },
+    { slugs: ["innovador-tech", "cientifico-analitico"] },
+    { slugs: ["analista-legal-datos", "agente-cambio"] },
+  ],
+  [ // Q53
+    { slugs: ["salud-clinica", "tecnico-quimico-biologico"] },
+    { slugs: ["estratega-negocios", "lider-emprendedor"] },
+    { slugs: ["disenador-tecnico-espacial", "desarrollador-mecanico-industrial"] },
+    { slugs: ["agente-cambio", "bienestar-comunitario"] },
+  ],
+  [ // Q54
+    { slugs: ["estratega-negocios"] },
+    { slugs: ["innovador-tech"] },
+    { slugs: ["deporte-bienestar-corporal", "salud-rehabilitacion"] },
+    { slugs: ["humanista-social", "bienestar-comunitario"] },
+  ],
+  [ // Q55
+    { slugs: ["agente-cambio", "comunicador-estrategico"] },
+    { slugs: ["innovador-tech"] },
+    { slugs: ["humanista-social", "divulgador-humanistico"] },
+    { slugs: ["estratega-negocios", "lider-emprendedor"] },
+  ],
+  [ // Q56
+    { slugs: ["bienestar-comunitario", "humanista-social"] },
+    { slugs: ["innovador-tech", "cientifico-analitico"] },
+    { slugs: ["agente-cambio"] },
+    { slugs: ["estratega-negocios", "lider-emprendedor"] },
+  ],
+  [ // Q57
+    { slugs: ["creativo-digital", "disenador-tecnico-espacial"] },
+    { slugs: ["cientifico-analitico"] },
+    { slugs: ["divulgador-humanistico", "humanista-social"] },
+    { slugs: ["innovador-tech", "desarrollador-mecanico-industrial"] },
+  ],
+  [ // Q58
+    { slugs: ["innovador-tech"] },
+    { slugs: ["agente-cambio", "estratega-negocios"] },
+    { slugs: ["divulgador-humanistico"] },
+    { slugs: ["humanista-social", "bienestar-comunitario"] },
+  ],
+  [ // Q59
+    { slugs: ["salud-clinica", "salud-rehabilitacion"] },
+    { slugs: ["agente-cambio"] },
+    { slugs: ["innovador-tech"] },
+    { slugs: ["divulgador-humanistico"] },
+  ],
+  [ // Q60
+    { slugs: ["innovador-tech", "creativo-digital"] },
+    { slugs: ["estratega-negocios", "lider-emprendedor"] },
+    { slugs: ["humanista-social", "salud-clinica"] },
+    { slugs: ["deporte-bienestar-corporal", "produccion-agro-tierra"] },
+  ],
+  [ // Q61
+    { slugs: ["agente-cambio"] },
+    { slugs: ["estratega-negocios"] },
+    { slugs: ["salud-clinica", "divulgador-humanistico"] },
+    { slugs: ["innovador-tech", "analista-legal-datos"] },
+  ],
+  [ // Q62
+    { slugs: ["tecnico-quimico-biologico", "cientifico-analitico"] },
+    { slugs: ["disenador-tecnico-espacial", "constructor-pragmatico"] },
+    { slugs: ["lider-emprendedor"] },
+    { slugs: ["bienestar-comunitario"] },
+  ],
+  [ // Q63
+    { slugs: ["creativo-digital", "creador-contenido-media"] },
+    { slugs: ["estratega-negocios", "innovador-tech"] },
+    { slugs: ["deporte-bienestar-corporal", "salud-rehabilitacion"] },
+    { slugs: ["humanista-social", "divulgador-humanistico"] },
+  ],
+  [ // Q64
+    { slugs: ["innovador-tech", "analista-legal-datos"] },
+    { slugs: ["produccion-agro-tierra", "protector-ambiental"] },
+    { slugs: ["divulgador-humanistico", "humanista-social", "bienestar-comunitario"] },
+    { slugs: ["agente-cambio", "estratega-negocios"] },
+  ],
+];
+
+function getBaselineProfile(answers: (number | null)[]): string {
   const bc: number[][] = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-  answers.forEach((a, i) => { if (a !== null) bc[QUESTIONS[i].block][a]++; });
+  for (let i = 0; i < Math.min(40, answers.length); i++) {
+    const a = answers[i];
+    if (a !== null) bc[QUESTIONS[i].block][a]++;
+  }
   const d = bc.map(c => c.indexOf(Math.max(...c)));
   const [h, g, k, s] = d;
   if (h === 1) {
@@ -480,6 +874,32 @@ function getProfileKey(answers: (number | null)[]): string {
   return "constructor-pragmatico";
 }
 
+function getProfileKey(answers: (number | null)[]): string {
+  const baseline = getBaselineProfile(answers);
+  const tally = new Map<string, number>();
+  // Head start so baseline can still win for users whose extension answers are scattered.
+  tally.set(baseline, 3);
+
+  for (let i = 40; i < answers.length && i - 40 < NEW_QUESTION_MAPPINGS.length; i++) {
+    const a = answers[i];
+    if (a === null) continue;
+    const opt = NEW_QUESTION_MAPPINGS[i - 40][a];
+    const points = 1 / opt.slugs.length;
+    for (const raw of opt.slugs) {
+      const slug = PROFILE_ALIASES[raw] ?? raw;
+      const delta = opt.negative ? -points : points;
+      tally.set(slug, (tally.get(slug) ?? 0) + delta);
+    }
+  }
+
+  let best = baseline;
+  let max = -Infinity;
+  for (const [slug, score] of tally) {
+    if (score > max) { max = score; best = slug; }
+  }
+  return best;
+}
+
 export default function TestPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<"intro" | "quiz" | "outro">("intro");
@@ -493,7 +913,7 @@ export default function TestPage() {
 
   // Quiz state
   const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState<(number | null)[]>(Array(40).fill(null));
+  const [answers, setAnswers] = useState<(number | null)[]>(Array(QUESTIONS.length).fill(null));
 
   // Outro state
   const [outroStep, setOutroStep] = useState(0);
@@ -523,7 +943,7 @@ export default function TestPage() {
   const q = QUESTIONS[currentQ];
   const selected = answers[currentQ];
   const qNum = currentQ + 1;
-  const progressPct = `${Math.round((qNum / 40) * 100)}%`;
+  const progressPct = `${Math.round((qNum / QUESTIONS.length) * 100)}%`;
 
   const handleSelect = (idx: number) => {
     const next = [...answers];
@@ -533,7 +953,7 @@ export default function TestPage() {
 
   const handleNext = () => {
     if (selected === null) return;
-    if (currentQ < 39) {
+    if (currentQ < QUESTIONS.length - 1) {
       setCurrentQ((n) => n + 1);
     } else {
       setProfileKey(getProfileKey(answers));
@@ -613,7 +1033,7 @@ export default function TestPage() {
                 }`}>
                   <p className="text-on-surface leading-relaxed">
                     Tengo preparado un análisis profundo para vos:{" "}
-                    <span className="text-primary font-bold">40 preguntas</span> divididas en{" "}
+                    <span className="text-primary font-bold">64 preguntas</span> divididas en{" "}
                     <span className="text-primary font-bold">4 bloques</span> estratégicos.
                   </p>
                 </div>
@@ -780,7 +1200,7 @@ export default function TestPage() {
                       disabled={selected === null}
                       className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-primary rounded-xl font-headline font-bold text-on-primary shadow-lg hover:translate-y-[-2px] active:translate-y-0 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                     >
-                      {currentQ === 39 ? "Finalizar test →" : "Siguiente pregunta"}
+                      {currentQ === QUESTIONS.length - 1 ? "Finalizar test →" : "Siguiente pregunta"}
                     </button>
                   </div>
                 </div>
