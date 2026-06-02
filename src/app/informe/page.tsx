@@ -1019,14 +1019,14 @@ function InformeContent() {
           </div>
           <h1 className="font-headline text-3xl font-black mb-4">Informe completo bloqueado</h1>
           <p className="text-on-surface-variant mb-8">
-            Para acceder al informe completo primero necesitás completar el pago en Mercado Pago.
+            Para acceder al informe completo necesitás hacer el test y completar el pago en Mercado Pago.
           </p>
           <a
-            href={`/resultados?perfil=${encodeURIComponent(key)}&pais=${encodeURIComponent(country)}`}
+            href="/test"
             className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform active:scale-95"
           >
             <span className="material-symbols-outlined">arrow_back</span>
-            Ir a pagar ahora
+            Hacer el test
           </a>
         </section>
       </main>
@@ -1058,14 +1058,14 @@ function InformeContent() {
           </div>
           <h1 className="font-headline text-3xl font-black mb-4">Informe completo bloqueado</h1>
           <p className="text-on-surface-variant mb-8">
-            Para acceder al informe completo primero necesitás completar el pago en Mercado Pago.
+            Para acceder al informe completo necesitás hacer el test y completar el pago en Mercado Pago.
           </p>
           <a
-            href={`/resultados?perfil=${encodeURIComponent(key)}&pais=${encodeURIComponent(country)}`}
+            href="/test"
             className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform active:scale-95"
           >
             <span className="material-symbols-outlined">arrow_back</span>
-            Ir a pagar ahora
+            Hacer el test
           </a>
         </section>
       </main>

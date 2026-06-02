@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -900,8 +900,62 @@ function getProfileKey(answers: (number | null)[]): string {
   return best;
 }
 
+// ── Paywall a mitad del test + persistencia del progreso ──
+// El cobro ocurre tras la pregunta 10. Como el usuario se va a Mercado Pago y
+// vuelve, las respuestas (que viven solo en React state) se persisten en
+// localStorage para poder reanudar el test al regresar.
+const STORAGE_KEY = "vocacionia_test_progress";
+const PAYWALL_AFTER_Q = 10; // se pide el pago al pasar de la pregunta 10 (índice 9) a la 11
+const PRICE_LABEL = "ARS $10.000";
+
+type TestProgress = {
+  v: 1;
+  answers: (number | null)[];
+  currentQ: number;
+  country: CountryCode | null;
+  paid: boolean;
+  ref: string | null; // external_reference del pago aprobado
+  paymentId: string | null; // payment_id devuelto por Mercado Pago
+};
+
+function loadProgress(): TestProgress | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const p = JSON.parse(raw) as TestProgress;
+    if (p?.v !== 1 || !Array.isArray(p.answers) || p.answers.length !== QUESTIONS.length) {
+      return null;
+    }
+    return p;
+  } catch {
+    return null;
+  }
+}
+
+function saveProgress(p: TestProgress) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+  } catch {
+    /* localStorage no disponible (incógnito / deshabilitado): se ignora */
+  }
+}
+
+function clearProgress() {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* noop */
+  }
+}
+
 export default function TestPage() {
   const router = useRouter();
+  // El estado arranca con los valores por defecto (iguales en server y client
+  // para evitar mismatch de hidratación). La rehidratación desde localStorage
+  // ocurre en el useEffect de montaje, ya en el cliente.
   const [phase, setPhase] = useState<"intro" | "quiz" | "outro">("intro");
   const [profileKey, setProfileKey] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<CountryCode | null>(null);
@@ -914,6 +968,16 @@ export default function TestPage() {
   // Quiz state
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(QUESTIONS.length).fill(null));
+
+  // Payment / paywall state
+  const [paid, setPaid] = useState(false);
+  const [paymentRef, setPaymentRef] = useState<string | null>(null);
+  const [paymentId, setPaymentId] = useState<string | null>(null);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
+  const didProcessReturn = useRef(false);
 
   // Outro state
   const [outroStep, setOutroStep] = useState(0);
@@ -940,6 +1004,97 @@ export default function TestPage() {
     return () => clearTimeout(t);
   }, [phase]);
 
+  // Persistir el progreso del test mientras se responde el cuestionario.
+  useEffect(() => {
+    if (phase !== "quiz") return;
+    saveProgress({
+      v: 1,
+      answers,
+      currentQ,
+      country: selectedCountry,
+      paid,
+      ref: paymentRef,
+      paymentId,
+    });
+  }, [phase, answers, currentQ, selectedCountry, paid, paymentRef, paymentId]);
+
+  // Al volver de Mercado Pago, verificar el pago y reanudar el test.
+  useEffect(() => {
+    if (didProcessReturn.current) return;
+    didProcessReturn.current = true;
+
+    // Rehidratar el progreso guardado (ya en el cliente, tras la hidratación).
+    const saved = loadProgress();
+    if (saved) {
+      setAnswers(saved.answers);
+      setCurrentQ(saved.currentQ);
+      if (saved.country) setSelectedCountry(saved.country);
+      setPaid(saved.paid);
+      setPaymentRef(saved.ref);
+      setPaymentId(saved.paymentId);
+      setPhase("quiz");
+    }
+
+    const sp = new URLSearchParams(window.location.search);
+    const urlPaymentId = sp.get("payment_id") || sp.get("collection_id");
+    const urlRef = sp.get("ref") || sp.get("external_reference");
+    const pagoStatus = sp.get("pago");
+    const urlPais = sp.get("pais");
+    const devBypass = process.env.NODE_ENV === "development" && sp.get("bypass") === "1";
+
+    // Fallback de país si se perdió el progreso (otro navegador / localStorage borrado).
+    if (urlPais === "arg") setSelectedCountry((c) => c ?? "arg");
+
+    if (devBypass) {
+      setPaid(true);
+      setShowPaywall(false);
+      setPhase("quiz");
+      window.history.replaceState({}, "", "/test");
+      return;
+    }
+
+    if (urlPaymentId && urlRef) {
+      setPhase("quiz");
+      setShowPaywall(true);
+      setVerifying(true);
+      fetch("/api/payments/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentId: urlPaymentId, ref: urlRef }),
+      })
+        .then((r) => (r.ok ? r.json() : { paid: false }))
+        .then((data: { paid?: boolean }) => {
+          if (data.paid) {
+            setPaid(true);
+            setPaymentRef(urlRef);
+            setPaymentId(urlPaymentId);
+            setShowPaywall(false);
+            setPaymentError("");
+            // Si quedó trabado en la pregunta 10, avanzar a la 11.
+            setCurrentQ((c) => (c === PAYWALL_AFTER_Q - 1 ? PAYWALL_AFTER_Q : c));
+          } else {
+            setPaymentError(
+              "No pudimos confirmar tu pago. Si ya pagaste, esperá unos segundos y reintentá.",
+            );
+          }
+        })
+        .catch(() => setPaymentError("Hubo un error verificando el pago. Reintentá."))
+        .finally(() => {
+          setVerifying(false);
+          window.history.replaceState({}, "", "/test");
+        });
+    } else if (pagoStatus === "pendiente" || pagoStatus === "rechazado") {
+      setPhase("quiz");
+      setShowPaywall(true);
+      setPaymentError(
+        pagoStatus === "pendiente"
+          ? "Tu pago quedó pendiente de acreditación. Cuando se confirme, volvé a esta página para continuar."
+          : "El pago fue rechazado o cancelado. Probá nuevamente.",
+      );
+      window.history.replaceState({}, "", "/test");
+    }
+  }, []);
+
   const q = QUESTIONS[currentQ];
   const selected = answers[currentQ];
   const qNum = currentQ + 1;
@@ -953,6 +1108,20 @@ export default function TestPage() {
 
   const handleNext = () => {
     if (selected === null) return;
+    // Paywall: al intentar pasar de la pregunta 10 a la 11 sin haber pagado.
+    if (currentQ === PAYWALL_AFTER_Q - 1 && !paid) {
+      saveProgress({
+        v: 1,
+        answers,
+        currentQ,
+        country: selectedCountry,
+        paid,
+        ref: paymentRef,
+        paymentId,
+      });
+      setShowPaywall(true);
+      return;
+    }
     if (currentQ < QUESTIONS.length - 1) {
       setCurrentQ((n) => n + 1);
     } else {
@@ -963,6 +1132,53 @@ export default function TestPage() {
 
   const handlePrev = () => {
     if (currentQ > 0) setCurrentQ((n) => n - 1);
+  };
+
+  const handlePaywallCheckout = async () => {
+    try {
+      setIsPaying(true);
+      setPaymentError("");
+      // Persistir antes de salir a Mercado Pago para no perder las respuestas.
+      saveProgress({
+        v: 1,
+        answers,
+        currentQ,
+        country: selectedCountry,
+        paid,
+        ref: paymentRef,
+        paymentId,
+      });
+      const res = await fetch("/api/payments/create-preference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // Perfil placeholder: el real recién se calcula al terminar las 64
+        // preguntas. verify no valida el perfil de la URL del informe.
+        body: JSON.stringify({ perfil: "pendiente", pais: selectedCountry ?? "arg" }),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const checkoutUrl = data.checkoutUrl || data.checkoutSandboxUrl;
+      if (!checkoutUrl) throw new Error();
+      window.location.href = checkoutUrl;
+    } catch {
+      setPaymentError("No pudimos redirigirte a Mercado Pago. Intentá nuevamente.");
+      setIsPaying(false);
+    }
+  };
+
+  // Navegar al informe pago. El feedback final es opcional: un usuario que ya
+  // pagó siempre puede llegar a su informe sin depender de /api/contact.
+  const goToInforme = () => {
+    const country = selectedCountry ?? "arg";
+    const params = new URLSearchParams({ perfil: profileKey, pais: country });
+    if (paymentRef) params.set("ref", paymentRef);
+    if (paymentId) params.set("payment_id", paymentId);
+    // En dev sin pago real, permitir ver el informe con el bypass existente.
+    if (process.env.NODE_ENV === "development" && !paymentRef) {
+      params.set("bypass", "1");
+    }
+    clearProgress();
+    router.push(`/informe?${params.toString()}`);
   };
 
   const handleSendFeedback = async () => {
@@ -1291,6 +1507,17 @@ export default function TestPage() {
                         {feedbackError}
                       </div>
                     )}
+
+                    {/* El feedback es opcional: siempre se puede ir directo al informe. */}
+                    <div className="pt-1 text-center sm:text-left">
+                      <button
+                        type="button"
+                        onClick={goToInforme}
+                        className="text-sm font-bold text-on-surface-variant underline underline-offset-4 transition-colors hover:text-on-surface"
+                      >
+                        Prefiero ver mi informe ahora →
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -1325,10 +1552,7 @@ export default function TestPage() {
                 {outroStep >= 3 && (
                   <div className="pt-4 animate-fade-in-up">
                     <button
-                      onClick={() => {
-                        const country = selectedCountry ?? "arg";
-                        router.push(`/resultados?perfil=${profileKey}&pais=${country}`);
-                      }}
+                      onClick={goToInforme}
                       className="group w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-base sm:text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 flex items-center justify-center gap-3"
                     >
                       <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>person_check</span>
@@ -1343,6 +1567,52 @@ export default function TestPage() {
 
         </div>
       </main>
+
+      {/* ── PAYWALL (pregunta 10) ── */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+          <div className="glass-panel w-full max-w-md rounded-3xl border border-primary/30 p-7 sm:p-8 text-center shadow-2xl">
+            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4">
+              <span className="material-symbols-outlined text-3xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                lock
+              </span>
+            </div>
+            <h3 className="font-headline text-2xl font-black mb-3 text-on-surface">Desbloqueá tu informe completo</h3>
+            <p className="text-on-surface-variant leading-relaxed mb-2">
+              Llegaste a la mitad del test. Pagá{" "}
+              <span className="font-bold text-primary">{PRICE_LABEL}</span> para continuar con las
+              preguntas restantes y recibir tu informe vocacional completo.
+            </p>
+            {paymentError && <p className="text-sm text-error mb-2">{paymentError}</p>}
+            <button
+              type="button"
+              onClick={handlePaywallCheckout}
+              disabled={isPaying || verifying}
+              className="mt-4 w-full rounded-xl bg-gradient-to-br from-primary to-primary-dim py-4 font-headline font-black text-on-primary shadow-[0_10px_40px_rgba(120,87,248,0.3)] transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-60 disabled:hover:scale-100"
+            >
+              {isPaying
+                ? "Redirigiendo a Mercado Pago..."
+                : verifying
+                  ? "Verificando pago..."
+                  : "Pagar y continuar"}
+            </button>
+            {process.env.NODE_ENV === "development" && (
+              <button
+                type="button"
+                onClick={() => {
+                  setPaid(true);
+                  setShowPaywall(false);
+                  setPaymentError("");
+                  setCurrentQ((c) => Math.max(c, PAYWALL_AFTER_Q));
+                }}
+                className="mt-3 text-xs text-on-surface-variant underline hover:text-on-surface"
+              >
+                [dev] Saltar pago
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       <footer className="w-full mt-10 sm:mt-12 pt-10 sm:pt-12 pb-24 md:pb-8 bg-[#0e0e13] border-t border-[#48474d]/15 text-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">

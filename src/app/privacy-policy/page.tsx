@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
 
         <SectionCard title="Qué datos recolectamos">
           <p>
-            Durante el uso del sitio NO almacenamos las respuestas individuales de tus 40 preguntas del test. Solo guardamos de forma totalmente anónima tu valoración y comentarios finales sobre la herramienta.
+            Durante el uso del sitio NO almacenamos en nuestros servidores las respuestas individuales de las preguntas del test. Solo guardamos de forma totalmente anónima tu valoración y comentarios finales sobre la herramienta.
           </p>
           <p>
             Además, almacenamos el perfil vocacional resultante, el país seleccionado para el informe y los datos técnicos necesarios para verificar pagos y entregas.

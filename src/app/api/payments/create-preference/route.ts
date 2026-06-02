@@ -104,9 +104,13 @@ export async function POST(req: NextRequest) {
 
     const externalReference = `informe-${crypto.randomUUID()}`;
 
-    const successUrl = `${baseUrl}/informe?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&ref=${encodeURIComponent(externalReference)}`;
-    const pendingUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&pago=pendiente`;
-    const failureUrl = `${baseUrl}/resultados?perfil=${encodeURIComponent(perfil)}&pais=${encodeURIComponent(pais)}&pago=rechazado`;
+    // El pago ocurre a mitad del test (pregunta 10). Las back_urls vuelven a
+    // /test para reanudar las preguntas restantes; MP agrega payment_id/
+    // collection_id/external_reference automaticamente. pais se incluye como
+    // fallback por si el localStorage del progreso fue borrado.
+    const successUrl = `${baseUrl}/test?ref=${encodeURIComponent(externalReference)}&pais=${encodeURIComponent(pais)}`;
+    const pendingUrl = `${baseUrl}/test?pago=pendiente&ref=${encodeURIComponent(externalReference)}&pais=${encodeURIComponent(pais)}`;
+    const failureUrl = `${baseUrl}/test?pago=rechazado&ref=${encodeURIComponent(externalReference)}&pais=${encodeURIComponent(pais)}`;
 
     const payload: Record<string, unknown> = {
       items: [
@@ -114,7 +118,7 @@ export async function POST(req: NextRequest) {
           title: "Informe vocacional completo - VocacionIA",
           quantity: 1,
           currency_id: "ARS",
-          unit_price: 15000,
+          unit_price: 10000,
         },
       ],
       external_reference: externalReference,

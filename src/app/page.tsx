@@ -52,7 +52,7 @@ export default function HomePage() {
               para vos
             </h1>
             <p className="text-xl text-on-surface-variant max-w-xl leading-relaxed">
-              Una herramienta inicial e interactiva que, mediante 40 preguntas, te ayuda a descubrir tus afinidades académicas, diseñada para darte el primer empujón en tu búsqueda.
+              Una herramienta inicial e interactiva que, mediante un test guiado, te ayuda a descubrir tus afinidades académicas, diseñada para darte el primer empujón en tu búsqueda.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <a href="/test" className="px-8 py-4 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-bold rounded-xl text-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(178,161,255,0.3)]">
@@ -81,7 +81,7 @@ export default function HomePage() {
                 <span className="material-symbols-outlined">psychology</span>
               </div>
               <h3 className="text-lg font-bold">Tipologías de Holland (RIASEC)</h3>
-              <p className="text-sm text-on-surface-variant">Para identificar los ambientes laborales que mejor hacen "match" con tu personalidad.</p>
+              <p className="text-sm text-on-surface-variant">Para identificar los ambientes laborales que mejor hacen &quot;match&quot; con tu personalidad.</p>
             </div>
             <div className="glass-card p-6 rounded-3xl space-y-4 hover:-translate-y-2 transition-transform duration-300">
               <div className="w-12 h-12 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary">
@@ -120,8 +120,8 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                   <span className="material-symbols-outlined text-3xl">assignment</span>
                 </div>
-                <h4 className="text-2xl font-bold">Test Gratuito</h4>
-                <p className="text-on-surface-variant">Respondé 40 preguntas rápidas diseñadas por marcos teóricos reconocidos.</p>
+                <h4 className="text-2xl font-bold">Empezá el Test</h4>
+                <p className="text-on-surface-variant">Arrancá gratis respondiendo preguntas diseñadas por marcos teóricos reconocidos.</p>
               </div>
             </div>
             <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
@@ -328,8 +328,8 @@ export default function HomePage() {
           <div className="space-y-4">
             {[
               {
-                q: "¿El test es realmente gratis?",
-                a: "Sí, el cuestionario interactivo de 40 preguntas y tu resultado básico de afinidad son 100% gratuitos. Si querés ir un paso más allá, ofrecemos un 'Reporte Elite' de pago, donde nuestra IA analiza tu perfil en profundidad y te entrega un mapa detallado de carreras y universidades.",
+                q: "¿El test tiene algún costo?",
+                a: "Empezás gratis: las primeras preguntas no tienen costo. Para continuar con el resto del cuestionario y desbloquear tu informe vocacional completo —donde nuestra IA analiza tu perfil en profundidad y te entrega un mapa detallado de carreras y universidades— hay un único pago de ARS $10.000.",
               },
               {
                 q: "¿Cómo funciona el análisis de la IA?",
@@ -341,7 +341,7 @@ export default function HomePage() {
               },  
               {
                 q: "¿Tengo que crearme una cuenta para participar?",
-                a: "¡Para nada! Sabemos que querés respuestas, no llenar formularios. Podés hacer el test completo y ver tus resultados iniciales sin necesidad de registrarte ni dejar contraseñas."
+                a: "¡Para nada! Sabemos que querés respuestas, no llenar formularios. Podés hacer el test sin necesidad de registrarte ni dejar contraseñas."
               },
               {
                 q: "¿Sirve para cualquier país?",
