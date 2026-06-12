@@ -104,8 +104,8 @@ export async function POST(req: NextRequest) {
 
     const externalReference = `informe-${crypto.randomUUID()}`;
 
-    // El pago ocurre a mitad del test (pregunta 10). Las back_urls vuelven a
-    // /test para reanudar las preguntas restantes; MP agrega payment_id/
+    // El pago ocurre antes de empezar el cuestionario. Las back_urls vuelven a
+    // /test para arrancar las preguntas; MP agrega payment_id/
     // collection_id/external_reference automaticamente. pais se incluye como
     // fallback por si el localStorage del progreso fue borrado.
     const successUrl = `${baseUrl}/test?ref=${encodeURIComponent(externalReference)}&pais=${encodeURIComponent(pais)}`;
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
           title: "Informe vocacional completo - VocacionIA",
           quantity: 1,
           currency_id: "ARS",
-          unit_price: 10000,
+          unit_price: 7999,
         },
       ],
       external_reference: externalReference,

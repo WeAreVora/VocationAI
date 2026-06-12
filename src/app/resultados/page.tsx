@@ -666,7 +666,7 @@ function ResultadosContent() {
                 <p className="text-on-surface-variant text-sm font-bold uppercase tracking-widest mb-1">Inversión única</p>
                 <div className="flex flex-col items-center">
                   {country === "arg" ? (
-                    <span className="text-4xl font-black text-on-surface">ARS $10.000</span>
+                    <span className="text-4xl font-black text-on-surface">ARS $7.999</span>
                   ) : (
                     <span className="text-4xl font-black text-on-surface">USD $5</span>
                   )}

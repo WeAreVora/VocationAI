@@ -19,7 +19,7 @@ export default function HomePage() {
           <div className="flex items-center gap-2 sm:gap-4">
             <a href="/test" className="bg-gradient-to-br from-[#b2a1ff] to-[#7857f8] text-on-primary-fixed font-bold py-3 px-8 sm:px-6 rounded-xl text-xs sm:text-base hover:scale-105 transition-transform active:scale-95 whitespace-nowrap">
               <span className="sm:hidden">Empezar</span>
-              <span className="hidden sm:inline">Empezar test gratis</span>
+              <span className="hidden sm:inline">Hacer el test</span>
             </a>
           </div>
         </div>
@@ -54,10 +54,15 @@ export default function HomePage() {
             <p className="text-xl text-on-surface-variant max-w-xl leading-relaxed">
               Una herramienta inicial e interactiva que, mediante un test guiado, te ayuda a descubrir tus afinidades académicas, diseñada para darte el primer empujón en tu búsqueda.
             </p>
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="flex flex-wrap items-center gap-4 pt-4">
               <a href="/test" className="px-8 py-4 bg-gradient-to-br from-primary to-primary-dim text-on-primary-fixed font-bold rounded-xl text-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(178,161,255,0.3)]">
-                Empezar test gratis
+                Descubrir mi vocación
               </a>
+              <div className="text-sm text-on-surface-variant">
+                <span className="line-through opacity-60">ARS $10.000</span>{" "}
+                <span className="font-black text-on-surface">ARS $7.999</span> · pago único
+                <div className="text-xs">Informe completo + roadmap + universidades + guía de CV</div>
+              </div>
             </div>
             <div className="flex items-center gap-12 pt-8 border-t border-outline-variant/10">
               <div>
@@ -120,8 +125,8 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                   <span className="material-symbols-outlined text-3xl">assignment</span>
                 </div>
-                <h4 className="text-2xl font-bold">Empezá el Test</h4>
-                <p className="text-on-surface-variant">Arrancá gratis respondiendo preguntas diseñadas por marcos teóricos reconocidos.</p>
+                <h4 className="text-2xl font-bold">Desbloqueá tu acceso</h4>
+                <p className="text-on-surface-variant">Con un único pago de ARS $7.999 vía Mercado Pago activás el test completo y tu informe personalizado. Sin suscripciones ni costos ocultos.</p>
               </div>
             </div>
             <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
@@ -130,8 +135,8 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary">
                   <span className="material-symbols-outlined text-3xl">hub</span>
                 </div>
-                <h4 className="text-2xl font-bold">Análisis AI</h4>
-                <p className="text-on-surface-variant">Nuestros algoritmos cruzan tus datos con miles de perfiles exitosos en el mercado laboral.</p>
+                <h4 className="text-2xl font-bold">Respondé las 64 preguntas</h4>
+                <p className="text-on-surface-variant">Un cuestionario guiado de ~8 minutos basado en 4 marcos científicos: Holland, Gardner, Kolb y Schwartz. Nuestra IA cruza tus respuestas para identificar tu perfil.</p>
               </div>
             </div>
             <div className="glass-card p-10 rounded-[2.5rem] relative overflow-hidden group">
@@ -140,8 +145,8 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-tertiary/10 rounded-2xl flex items-center justify-center text-tertiary">
                   <span className="material-symbols-outlined text-3xl">article</span>
                 </div>
-                <h4 className="text-2xl font-bold">Informe Elite</h4>
-                <p className="text-on-surface-variant">Veras una pagina con informes detallados sobre carreras, universidades y consejos personalizados.</p>
+                <h4 className="text-2xl font-bold">Recibí tu informe completo</h4>
+                <p className="text-on-surface-variant">Al instante: tu perfil vocacional, las 3 carreras ideales con universidades argentinas, roadmap de acción, plan 2026, mentores a seguir y guía para armar tu primer CV.</p>
               </div>
             </div>
           </div>
@@ -152,21 +157,29 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-8">
             <div className="grid lg:grid-cols-2 gap-20 items-center">
               <div className="space-y-8">
-                <h2 className="text-4xl lg:text-5xl font-black font-headline tracking-tight">Tu mapa profesional personalizado</h2>
+                <h2 className="text-4xl lg:text-5xl font-black font-headline tracking-tight">Todo lo que incluye tu informe</h2>
                 <p className="text-on-surface-variant text-lg leading-relaxed">
-                  No te damos solo una lista de carreras. Te entregamos un análisis de por qué encajás en cada área y qué universidades son las mejores para vos.
+                  No te damos solo una lista de carreras. Al terminar el cuestionario recibís un informe completo y 100% personalizado según tu perfil, listo para descargar en PDF:
                 </p>
-                <ul className="space-y-6">
+                <ul className="space-y-5">
                   {[
-                    "Ranking de 5 carreras con mayor afinidad.",
-                    "Gráficos de radar sobre tus inteligencias dominantes.",
-                    "Links directos a planes de estudio de universidades reales.",
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-4">
+                    { title: "Tu perfil vocacional con análisis de IA", desc: "Quién sos profesionalmente según 4 marcos científicos: tu código Holland, tus inteligencias dominantes (Gardner), tu estilo de aprendizaje (Kolb) y tus valores centrales (Schwartz)." },
+                    { title: "Las 3 carreras con mayor compatibilidad", desc: "Cada una con % de match, qué se estudia, qué hace un profesional en el día a día, duración y proyección laboral a futuro." },
+                    { title: "Universidades de Argentina con links directos", desc: "Dónde estudiar cada carrera recomendada: UBA, ITBA, UTN, UNLP, Di Tella y muchas más, con acceso directo a cada institución." },
+                    { title: "Roadmap de acción inmediato", desc: "Qué hacer hoy mismo desde el colegio: cursos gratuitos, proyectos y experiencias concretas para arrancar antes de la universidad." },
+                    { title: "Plan 2026 trimestre a trimestre", desc: "Objetivos claros para cada trimestre del año: habilidades, portfolio, comunidad y decisión universitaria." },
+                    { title: "Guía para armar tu primer CV", desc: "Paso a paso con ejemplo visual: estructura ideal sin experiencia previa, resumen profesional, proyectos y formato que pasa los filtros de reclutamiento." },
+                    { title: "Mentores y referentes para seguir", desc: "Las personas indicadas de tu área en YouTube, X e Instagram para aprender de los mejores desde el día uno." },
+                    { title: "Tu estilo de trabajo ideal", desc: "En qué entornos rendís al máximo, para que elijas carreras y empleos alineados con tu forma de ser." },
+                  ].map(({ title, desc }) => (
+                    <li key={title} className="flex items-start gap-4">
                       <div className="mt-1 w-6 h-6 bg-tertiary/20 text-tertiary rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="material-symbols-outlined text-xs">check</span>
                       </div>
-                      <span className="text-on-surface">{item}</span>
+                      <div>
+                        <span className="text-on-surface font-bold">{title}</span>
+                        <p className="text-sm text-on-surface-variant leading-relaxed">{desc}</p>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -256,8 +269,8 @@ export default function HomePage() {
               {[
                 { icon: "psychology_alt", color: "text-primary", title: "Modelos de Referencias", desc: "Basado en las tipologias de Holland y las inteligencias multiples de Gardner entre otros." },
                 { icon: "auto_graph", color: "text-secondary", title: "Reporte AI", desc: "Análisis profundo generado por modelos de lenguaje avanzados." },
-                { icon: "bolt", color: "text-tertiary", title: "Resultados Instantáneos", desc: "Nada de esperar días. Tu futuro está listo en 5 minutos." },
-                { icon: "savings", color: "text-primary", title: "Precio Accesible", desc: "Mucho más económico que una sesión de orientación privada." },
+                { icon: "bolt", color: "text-tertiary", title: "Resultados Instantáneos", desc: "Nada de esperar días: terminás las 64 preguntas y tu informe aparece al instante." },
+                { icon: "savings", color: "text-primary", title: "Precio Accesible", desc: "Un único pago de ARS $7.999. Mucho más económico que una sesión de orientación privada." },
                 { icon: "school", color: "text-secondary", title: "Unis Reales", desc: "Conectamos tus resultados con ofertas académicas vigentes." },
                 { icon: "picture_as_pdf", color: "text-tertiary", title: "Formato PDF", desc: "Descargá tu reporte y compartilo con tus padres o amigos." },
               ].map(({ icon, color, title, desc }) => (
@@ -329,7 +342,15 @@ export default function HomePage() {
             {[
               {
                 q: "¿El test tiene algún costo?",
-                a: "Empezás gratis: las primeras preguntas no tienen costo. Para continuar con el resto del cuestionario y desbloquear tu informe vocacional completo —donde nuestra IA analiza tu perfil en profundidad y te entrega un mapa detallado de carreras y universidades— hay un único pago de ARS $10.000.",
+                a: "Sí, un único pago de ARS $7.999 (precio de lanzamiento, antes $10.000) que se abona por Mercado Pago antes de empezar el cuestionario. Ese pago desbloquea todo: las 64 preguntas del test y tu informe vocacional completo, sin suscripciones ni cargos extra.",
+              },
+              {
+                q: "¿Qué incluye exactamente el informe?",
+                a: "Todo lo que necesitás para decidir tu futuro: tu perfil vocacional analizado por IA según 4 marcos científicos (Holland, Gardner, Kolb y Schwartz), las 3 carreras con mayor compatibilidad con tu forma de ser (con % de match, qué se estudia y salida laboral), las universidades de Argentina donde estudiarlas con links directos, un roadmap de acción para arrancar hoy, un plan 2026 con objetivos trimestre a trimestre, una guía para armar tu primer CV según tu perfil, mentores y referentes de tu área para seguir, y tu estilo de trabajo ideal. Además lo podés descargar en PDF y compartirlo.",
+              },
+              {
+                q: "¿Cómo y cuándo pago?",
+                a: "Al apretar \"Comenzar Test\" te mostramos todo lo que incluye tu informe y te llevamos a Mercado Pago, donde podés pagar con tarjeta, dinero en cuenta o los medios que tengas habilitados. Apenas se acredita el pago, volvés automáticamente al sitio y arranca tu cuestionario.",
               },
               {
                 q: "¿Cómo funciona el análisis de la IA?",
@@ -373,11 +394,12 @@ export default function HomePage() {
                 ¿Listo para lanzar tu <br />misión profesional?
               </h2>
               <p className="text-on-primary-fixed/80 text-xl max-w-2xl mx-auto font-medium">
-                No dejes tu futuro al azar. Dejá que la ciencia y la tecnología te guíen.
+                No dejes tu futuro al azar. Tu perfil vocacional, carreras, universidades, roadmap y guía de CV: todo en un solo informe por ARS $7.999.
               </p>
               <a href="/test" className="inline-block bg-on-surface text-surface-dim px-12 py-5 rounded-2xl text-xl font-black hover:scale-110 transition-transform active:scale-95 shadow-2xl">
                 Empezar mi test ahora
               </a>
+              <p className="text-on-primary-fixed/70 text-sm">Pago único y seguro con Mercado Pago · Informe al instante</p>
             </div>
             <div className="absolute -top-12 -right-12 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
             <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl"></div>

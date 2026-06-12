@@ -900,13 +900,23 @@ function getProfileKey(answers: (number | null)[]): string {
   return best;
 }
 
-// ── Paywall a mitad del test + persistencia del progreso ──
-// El cobro ocurre tras la pregunta 10. Como el usuario se va a Mercado Pago y
-// vuelve, las respuestas (que viven solo en React state) se persisten en
-// localStorage para poder reanudar el test al regresar.
+// ── Paywall antes de empezar el cuestionario + persistencia del progreso ──
+// El cobro ocurre al apretar "Comenzar Test", antes de la primera pregunta.
+// Como el usuario se va a Mercado Pago y vuelve, el estado del test (que vive
+// solo en React state) se persiste en localStorage para poder retomar al regresar.
 const STORAGE_KEY = "vocacionia_test_progress";
-const PAYWALL_AFTER_Q = 10; // se pide el pago al pasar de la pregunta 10 (índice 9) a la 11
-const PRICE_LABEL = "ARS $10.000";
+const PRICE_LABEL = "ARS $7.999";
+const ANCHOR_PRICE_LABEL = "ARS $10.000"; // precio anterior, mostrado tachado en el paywall
+
+const PAYWALL_BENEFITS: { icon: string; title: string; desc: string }[] = [
+  { icon: "psychology", title: "Tu perfil vocacional completo", desc: "Análisis con IA basado en 4 marcos científicos: Holland, Gardner, Kolb y Schwartz." },
+  { icon: "school", title: "Las 3 carreras ideales para vos", desc: "Con % de compatibilidad, qué se estudia, qué hace un profesional y proyección laboral." },
+  { icon: "account_balance", title: "Universidades de Argentina", desc: "Dónde estudiar cada carrera, con links directos a UBA, ITBA, UTN y muchas más." },
+  { icon: "map", title: "Roadmap de acción + Plan 2026", desc: "Pasos concretos para arrancar hoy y objetivos trimestre a trimestre para todo el año." },
+  { icon: "description", title: "Guía para armar tu primer CV", desc: "Paso a paso con ejemplo visual: estructura, resumen profesional, proyectos y formato que pasa filtros de reclutamiento." },
+  { icon: "group", title: "Mentores y referentes", desc: "A quiénes seguir en tu área para aprender de los mejores desde el día uno." },
+  { icon: "picture_as_pdf", title: "Informe descargable en PDF", desc: "Guardalo, imprimilo y compartilo con tu familia cuando quieras." },
+];
 
 type TestProgress = {
   v: 1;
@@ -1024,6 +1034,8 @@ export default function TestPage() {
     didProcessReturn.current = true;
 
     // Rehidratar el progreso guardado (ya en el cliente, tras la hidratación).
+    // Solo se entra directo al cuestionario si el pago ya está confirmado;
+    // si no, el usuario queda en la intro y el paywall se muestra al continuar.
     const saved = loadProgress();
     if (saved) {
       setAnswers(saved.answers);
@@ -1032,7 +1044,10 @@ export default function TestPage() {
       setPaid(saved.paid);
       setPaymentRef(saved.ref);
       setPaymentId(saved.paymentId);
-      setPhase("quiz");
+      if (saved.paid) {
+        setAcceptedTerms(true);
+        setPhase("quiz");
+      }
     }
 
     const sp = new URLSearchParams(window.location.search);
@@ -1054,7 +1069,6 @@ export default function TestPage() {
     }
 
     if (urlPaymentId && urlRef) {
-      setPhase("quiz");
       setShowPaywall(true);
       setVerifying(true);
       fetch("/api/payments/verify", {
@@ -1070,8 +1084,9 @@ export default function TestPage() {
             setPaymentId(urlPaymentId);
             setShowPaywall(false);
             setPaymentError("");
-            // Si quedó trabado en la pregunta 10, avanzar a la 11.
-            setCurrentQ((c) => (c === PAYWALL_AFTER_Q - 1 ? PAYWALL_AFTER_Q : c));
+            // Pago confirmado: arranca (o retoma) el cuestionario.
+            setAcceptedTerms(true);
+            setPhase("quiz");
           } else {
             setPaymentError(
               "No pudimos confirmar tu pago. Si ya pagaste, esperá unos segundos y reintentá.",
@@ -1084,7 +1099,6 @@ export default function TestPage() {
           window.history.replaceState({}, "", "/test");
         });
     } else if (pagoStatus === "pendiente" || pagoStatus === "rechazado") {
-      setPhase("quiz");
       setShowPaywall(true);
       setPaymentError(
         pagoStatus === "pendiente"
@@ -1108,20 +1122,6 @@ export default function TestPage() {
 
   const handleNext = () => {
     if (selected === null) return;
-    // Paywall: al intentar pasar de la pregunta 10 a la 11 sin haber pagado.
-    if (currentQ === PAYWALL_AFTER_Q - 1 && !paid) {
-      saveProgress({
-        v: 1,
-        answers,
-        currentQ,
-        country: selectedCountry,
-        paid,
-        ref: paymentRef,
-        paymentId,
-      });
-      setShowPaywall(true);
-      return;
-    }
     if (currentQ < QUESTIONS.length - 1) {
       setCurrentQ((n) => n + 1);
     } else {
@@ -1132,6 +1132,26 @@ export default function TestPage() {
 
   const handlePrev = () => {
     if (currentQ > 0) setCurrentQ((n) => n - 1);
+  };
+
+  // "Comenzar Test": si ya pagó, arranca el cuestionario; si no, abre el
+  // paywall. El progreso se persiste por si se va a Mercado Pago y vuelve.
+  const handleStartTest = () => {
+    if (paid) {
+      setPhase("quiz");
+      return;
+    }
+    saveProgress({
+      v: 1,
+      answers,
+      currentQ,
+      country: selectedCountry,
+      paid,
+      ref: paymentRef,
+      paymentId,
+    });
+    setPaymentError("");
+    setShowPaywall(true);
   };
 
   const handlePaywallCheckout = async () => {
@@ -1321,13 +1341,20 @@ export default function TestPage() {
               }`}>
                 <button
                   type="button"
-                  onClick={() => setPhase("quiz")}
+                  onClick={handleStartTest}
                   disabled={!selectedCountry || !acceptedTerms}
                   className="group relative w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 bg-gradient-to-br from-primary to-primary-dim rounded-xl font-headline font-black text-on-primary text-base sm:text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] hover:scale-[1.03] transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   Comenzar Test
                   <span className="ml-2 material-symbols-outlined align-middle transition-transform group-hover:translate-x-1">rocket_launch</span>
                 </button>
+                {!paid && (
+                  <p className="mt-3 text-xs text-on-surface-variant">
+                    Acceso único al informe completo:{" "}
+                    <span className="line-through opacity-60">{ANCHOR_PRICE_LABEL}</span>{" "}
+                    <span className="font-bold text-primary">{PRICE_LABEL}</span> · Pago seguro con Mercado Pago
+                  </p>
+                )}
               </div>
             </section>
           )}
@@ -1568,47 +1595,101 @@ export default function TestPage() {
         </div>
       </main>
 
-      {/* ── PAYWALL (pregunta 10) ── */}
+      {/* ── PAYWALL (antes de empezar el cuestionario) ── */}
       {showPaywall && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
-          <div className="glass-panel w-full max-w-md rounded-3xl border border-primary/30 p-7 sm:p-8 text-center shadow-2xl">
-            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4">
-              <span className="material-symbols-outlined text-3xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
-                lock
-              </span>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-6">
+          <div className="glass-panel w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-3xl border border-primary/30 p-6 sm:p-8 shadow-2xl">
+            {/* Cerrar */}
+            {!verifying && (
+              <button
+                type="button"
+                onClick={() => setShowPaywall(false)}
+                aria-label="Cerrar"
+                className="float-right -mt-1 -mr-1 flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+              >
+                <span className="material-symbols-outlined text-xl">close</span>
+              </button>
+            )}
+
+            <div className="text-center">
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 mb-3">
+                <span className="material-symbols-outlined text-3xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  workspace_premium
+                </span>
+              </div>
+              <h3 className="font-headline text-2xl sm:text-3xl font-black mb-2 text-on-surface leading-tight">
+                Desbloqueá tu informe vocacional completo
+              </h3>
+              <p className="text-sm text-on-surface-variant leading-relaxed">
+                Un solo pago y arrancás las <span className="font-bold text-on-surface">64 preguntas</span> (~8 min).
+                Al terminar, recibís al instante un informe 100% personalizado con:
+              </p>
             </div>
-            <h3 className="font-headline text-2xl font-black mb-3 text-on-surface">Desbloqueá tu informe completo</h3>
-            <p className="text-on-surface-variant leading-relaxed mb-2">
-              Llegaste a la mitad del test. Pagá{" "}
-              <span className="font-bold text-primary">{PRICE_LABEL}</span> para continuar con las
-              preguntas restantes y recibir tu informe vocacional completo.
-            </p>
-            {paymentError && <p className="text-sm text-error mb-2">{paymentError}</p>}
+
+            {/* Qué incluye el informe */}
+            <ul className="mt-5 space-y-3 text-left">
+              {PAYWALL_BENEFITS.map((b) => (
+                <li key={b.title} className="flex items-start gap-3 rounded-2xl bg-surface-container-high/60 border border-outline-variant/10 p-3">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-tertiary/10 text-tertiary">
+                    <span className="material-symbols-outlined text-xl">{b.icon}</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-on-surface leading-snug">{b.title}</p>
+                    <p className="text-xs text-on-surface-variant leading-relaxed">{b.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            {/* Precio */}
+            <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-center">
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-sm text-on-surface-variant line-through">{ANCHOR_PRICE_LABEL}</span>
+                <span className="font-headline text-3xl font-black text-primary">{PRICE_LABEL}</span>
+                <span className="rounded-full bg-tertiary/15 px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-tertiary">20% OFF</span>
+              </div>
+              <p className="mt-1 text-xs text-on-surface-variant">
+                Pago único · Sin suscripción · Mucho menos que una sesión de orientación privada
+              </p>
+            </div>
+
+            {paymentError && (
+              <p className="mt-3 rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error">{paymentError}</p>
+            )}
+
             <button
               type="button"
               onClick={handlePaywallCheckout}
               disabled={isPaying || verifying}
-              className="mt-4 w-full rounded-xl bg-gradient-to-br from-primary to-primary-dim py-4 font-headline font-black text-on-primary shadow-[0_10px_40px_rgba(120,87,248,0.3)] transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-60 disabled:hover:scale-100"
+              className="mt-4 w-full rounded-xl bg-gradient-to-br from-primary to-primary-dim py-4 font-headline font-black text-on-primary text-lg shadow-[0_10px_40px_rgba(120,87,248,0.3)] transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-60 disabled:hover:scale-100"
             >
               {isPaying
                 ? "Redirigiendo a Mercado Pago..."
                 : verifying
                   ? "Verificando pago..."
-                  : "Pagar y continuar"}
+                  : "Pagar y empezar el test →"}
             </button>
+
+            <div className="mt-3 flex items-center justify-center gap-2 text-xs text-on-surface-variant">
+              <span className="material-symbols-outlined text-sm text-tertiary">lock</span>
+              Pago 100% seguro procesado por Mercado Pago
+            </div>
+
             {process.env.NODE_ENV === "development" && (
-              <button
-                type="button"
-                onClick={() => {
-                  setPaid(true);
-                  setShowPaywall(false);
-                  setPaymentError("");
-                  setCurrentQ((c) => Math.max(c, PAYWALL_AFTER_Q));
-                }}
-                className="mt-3 text-xs text-on-surface-variant underline hover:text-on-surface"
-              >
-                [dev] Saltar pago
-              </button>
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPaid(true);
+                    setShowPaywall(false);
+                    setPaymentError("");
+                    setPhase("quiz");
+                  }}
+                  className="mt-3 text-xs text-on-surface-variant underline hover:text-on-surface"
+                >
+                  [dev] Saltar pago
+                </button>
+              </div>
             )}
           </div>
         </div>
